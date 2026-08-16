@@ -1,7 +1,4 @@
-"use client";
-
 import { useState, useMemo } from "react";
-import { CoverflowCarousel, type CoverflowSlide } from "@/components/ui/coverflow-carousel";
 import { Pricing, useEvergreenTimer } from "@/components/ui/single-pricing-card-1";
 import { SketchUpShowcaseVideo } from "@/components/ui/sketchup-showcase-video";
 import { CategoryPostersSlider } from "@/components/ui/category-posters-slider";
@@ -14,7 +11,7 @@ import {
 } from "@/components/ui/animated-state-icons";
 import manifestData from "@/data/modelsManifest.json";
 import publicModels from "@/data/publicModelsImages.json";
-import { handleStripePayment, chargeSavedCardUpsell } from "@/lib/stripe";
+import { chargeSavedCardUpsell } from "@/lib/stripe";
 import {
   Building2,
   Bath,
@@ -24,14 +21,11 @@ import {
   Droplets,
   Box,
   Sparkles,
-  Search,
   X,
-  ChevronRight,
   Zap,
   Timer,
   ShieldCheck,
   Eye,
-  Lock,
   ArrowRight,
   Plus,
   Armchair,
@@ -164,12 +158,11 @@ interface UpsellPageProps {
 export function UpsellPage({ onSkipToStarter, onSuccessVIP, onSkip }: UpsellPageProps) {
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [selectedSubCategory, setSelectedSubCategory] = useState<string>("all-furniture");
-  const [searchQuery, setSearchQuery] = useState<string>("");
   const [visibleCount, setVisibleCount] = useState(6);
-  const [activeModel, setActiveModel] = useState<ModelItem | null>(null);
   const [likedModels, setLikedModels] = useState<Record<string, boolean>>({});
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [showSubscriptionModal, setShowSubscriptionModal] = useState(false);
+  const [isUpgrading, setIsUpgrading] = useState(false);
 
   const countdown = useEvergreenTimer();
 
@@ -181,6 +174,7 @@ export function UpsellPage({ onSkipToStarter, onSuccessVIP, onSkip }: UpsellPage
   };
 
   const handleUpgradeAction = async () => {
+    setIsUpgrading(true);
     try {
       await chargeSavedCardUpsell(2900);
       localStorage.removeItem("avada_just_bought_1dollar");
@@ -188,8 +182,10 @@ export function UpsellPage({ onSkipToStarter, onSuccessVIP, onSkip }: UpsellPage
       else window.location.href = "/#success-vip";
     } catch (err: any) {
       console.error("Upsell charging error:", err);
-      // Open the modal if 1-click fails
+      // Fallback: If 1-click fails (e.g. no card saved or testing fresh incognito), open modal
       setShowSubscriptionModal(true);
+    } finally {
+      setIsUpgrading(false);
     }
   };
 
@@ -210,7 +206,7 @@ export function UpsellPage({ onSkipToStarter, onSuccessVIP, onSkip }: UpsellPage
       featured: model.featured || false,
     }));
 
-    const rawModels = (publicModels as any[]).map((model: any, idx: number) => {
+    const rawModels = (publicModels as any[]).map((model: any) => {
       let categoryKey = model.title?.split(" ")[0]?.toLowerCase() || "apartment";
       let categoryName = categoryKey.charAt(0).toUpperCase() + categoryKey.slice(1);
       let subCategoryKey: string | undefined = undefined;
@@ -251,16 +247,9 @@ export function UpsellPage({ onSkipToStarter, onSuccessVIP, onSkip }: UpsellPage
         selectedSubCategory === "all-furniture" ||
         model.subCategoryKey === selectedSubCategory;
 
-      const matchesSearch =
-        searchQuery === "" ||
-        model.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        model.rawName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        model.categoryName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        model.renderEngine.toLowerCase().includes(searchQuery.toLowerCase());
-
-      return matchesCategory && matchesSubCategory && matchesSearch;
+      return matchesCategory && matchesSubCategory;
     });
-  }, [ALL_MODELS, selectedCategory, selectedSubCategory, searchQuery]);
+  }, [ALL_MODELS, selectedCategory, selectedSubCategory]);
 
   const visibleModels = filteredModels.slice(0, visibleCount);
   const hasMore = visibleCount < filteredModels.length;
@@ -296,7 +285,10 @@ export function UpsellPage({ onSkipToStarter, onSuccessVIP, onSkip }: UpsellPage
       await chargeSavedCardUpsell(2900);
       localStorage.removeItem("avada_just_bought_1dollar");
       alert("🎉 Success! Your $29 Lifetime VIP Pass has been charged & activated. Access granted to 3,000+ SketchUp models!");
-      onSkip();
+      if (onSuccessVIP) onSuccessVIP();
+      else if (onSkip) onSkip();
+      else if (onSkipToStarter) onSkipToStarter();
+      else window.location.href = "/#success-vip";
     } catch (err: any) {
       console.error("Upsell charging error:", err);
       // If 1-click off-session fails, open the checkout modal with the card form
@@ -639,8 +631,8 @@ export function UpsellPage({ onSkipToStarter, onSuccessVIP, onSkip }: UpsellPage
         </div>
       </section>
 
-      {/* SINGLE PRICING CARD COMPONENT */}
-      <Pricing onSelectPlan={handleUpgradeAction} />
+      {/* SINGLE PRICING CARD COMPONENT — 1-CLICK UPGRADE */}
+      <Pricing onSelectPlan={handleUpgradeAction} onSkip={handleSkipAction} isProcessing={isUpgrading} />
 
       {/* ══════ BOTTOM FINAL YES/NO CTA ══════ */}
       <section className="py-12 px-4 sm:px-6 lg:px-8">

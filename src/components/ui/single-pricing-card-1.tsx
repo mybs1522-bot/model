@@ -1,19 +1,15 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { PlusIcon, ShieldCheckIcon, Sparkles, Timer, Check, Zap } from 'lucide-react';
+import { PlusIcon, Sparkles, Timer, Check, Zap, CreditCard, ShieldCheck } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Badge } from './badge';
-import { Button } from './button';
-import { cn } from '@/lib/utils';
 import { BorderTrail } from './border-trail';
-
 import publicModels from '@/data/publicModelsImages.json';
-import { saveLeadEmail } from '@/lib/supabase';
-import { handleStripePayment } from '@/lib/stripe';
-import { CardPaymentForm } from './card-payment-form';
 
 export interface PricingProps {
-  onSelectPlan?: (plan: string) => void;
+  onSelectPlan?: (plan?: string) => void;
+  onSkip?: () => void;
+  isProcessing?: boolean;
 }
 
 // 2-Hour Evergreen Countdown Timer Hook
@@ -60,8 +56,10 @@ export function useEvergreenTimer() {
   return formattedTime;
 }
 
-export function Pricing({ onSelectPlan }: PricingProps) {
+export function Pricing({ onSelectPlan, onSkip, isProcessing = false }: PricingProps) {
   const countdown = useEvergreenTimer();
+  const savedLast4 = typeof window !== 'undefined' ? (localStorage.getItem('avada_user_last4') || '4242') : '4242';
+  const savedEmail = typeof window !== 'undefined' ? (localStorage.getItem('avada_user_email') || '') : '';
 
   return (
     <section id="pricing" className="relative overflow-hidden py-16 sm:py-24 text-slate-900 border-t border-slate-200">
@@ -179,21 +177,53 @@ export function Pricing({ onSelectPlan }: PricingProps) {
                 ))}
               </div>
 
-              {/* Embedded Stripe Card Details Payment Form */}
-              <div className="pt-2">
-                <CardPaymentForm
-                  sourceLocation="pricing_page_lifetime_29"
-                  buttonText="Claim $29 Lifetime Pass Now"
-                  allowSavedCard={true}
-                  amountInCents={2900}
-                  itemTotal="$99.00"
-                  deliveryFee="$0.00"
-                  discountAmount="-$70.00"
-                  totalPrice="$29.00"
-                  deliveryAddressLine1="Lifetime VIP Access: 3,000+ SketchUp (.SKP) Models"
-                  deliveryAddressLine2="Instant Master Vault Download Access + Weekly Updates"
-                  onSuccess={() => onSelectPlan?.('lifetime')}
-                />
+              {/* 1-Click Upgrade CTA Action */}
+              <div className="pt-3 space-y-3 text-center">
+                <button
+                  type="button"
+                  onClick={() => onSelectPlan?.('lifetime')}
+                  disabled={isProcessing}
+                  className="w-full py-4 px-6 rounded-2xl bg-[#10b981] hover:bg-[#059669] text-black font-black text-sm sm:text-base shadow-lg hover:shadow-xl transition-all active:scale-[0.98] disabled:opacity-50 flex items-center justify-center gap-2.5 cursor-pointer border-2 border-emerald-400"
+                >
+                  {isProcessing ? (
+                    <span className="flex items-center gap-2">
+                      <span className="size-4 border-2 border-black border-t-transparent rounded-full animate-spin" />
+                      Charging Card on File...
+                    </span>
+                  ) : (
+                    <>
+                      <Zap className="size-5 fill-current" />
+                      <span>⚡️ 1-Click Upgrade • Charge $29</span>
+                    </>
+                  )}
+                </button>
+
+                {/* Card on file indicator */}
+                <div className="flex items-center justify-center gap-2 text-xs text-slate-600 font-medium">
+                  <CreditCard className="size-3.5 text-emerald-600" />
+                  <span>Charge to card on file: <strong className="font-mono text-slate-900">•••• {savedLast4}</strong></span>
+                  {savedEmail && (
+                    <span className="hidden sm:inline text-slate-400">({savedEmail})</span>
+                  )}
+                </div>
+
+                <div className="flex items-center justify-center gap-2 text-[11px] text-slate-400">
+                  <ShieldCheck className="size-3.5 text-emerald-600" />
+                  <span>Instant 1-Click Activation • 256-Bit Encrypted</span>
+                </div>
+
+                {/* Decline Link */}
+                {onSkip && (
+                  <div className="pt-2 border-t border-slate-100">
+                    <button
+                      type="button"
+                      onClick={onSkip}
+                      className="text-xs text-slate-500 hover:text-slate-800 font-mono underline transition cursor-pointer"
+                    >
+                      No thanks, I'll keep my 20 models and continue to my download →
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           </motion.div>

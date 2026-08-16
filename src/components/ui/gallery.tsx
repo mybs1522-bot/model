@@ -1,6 +1,4 @@
-"use client";
-
-import { Ref, forwardRef, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { motion, useMotionValue } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -50,7 +48,7 @@ export const PhotoGallery = ({
   type Direction = "left" | "right";
 
   // Animation variants for each photo
-  const photoVariants = {
+  const photoVariants: any = {
     hidden: () => ({
       x: 0,
       y: 0,
@@ -140,7 +138,7 @@ export const PhotoGallery = ({
           className="relative mx-auto flex w-full max-w-7xl justify-center"
           initial={{ opacity: 0 }}
           animate={{ opacity: isVisible ? 1 : 0 }}
-          transition={{ duration: 0.4, ease: "easeOut" }}
+          transition={{ duration: 0.4, ease: "easeOut" as const }}
         >
           <motion.div
             className="relative flex w-full justify-center"

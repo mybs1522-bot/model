@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 
 // Official D5 Render SVG Brand Logo
 export function D5RenderLogo({ className = "h-6 w-auto" }: { className?: string }) {

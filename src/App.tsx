@@ -1,7 +1,5 @@
-import { useState, useMemo } from "react";
-import { CoverflowCarousel, type CoverflowSlide } from "@/components/ui/coverflow-carousel";
+import { useState, useMemo, useEffect } from "react";
 import { Pricing, useEvergreenTimer } from "@/components/ui/single-pricing-card-1";
-import { PhotoGallery } from "@/components/ui/gallery";
 import { SketchUpShowcaseVideo } from "@/components/ui/sketchup-showcase-video";
 import { CategoryPostersSlider } from "@/components/ui/category-posters-slider";
 import { CardPaymentForm } from "@/components/ui/card-payment-form";
@@ -11,17 +9,12 @@ import { SuccessPage } from "@/pages/SuccessPage";
 import DemoOne from "@/demo";
 import { RenderEngineTrustBanner } from "@/components/ui/render-engine-logos";
 import {
-  LockUnlockIcon,
   CopiedIcon,
   HeartIcon,
   DownloadDoneIcon,
-  SendIcon,
-  EyeToggleIcon,
 } from "@/components/ui/animated-state-icons";
 import manifestData from "@/data/modelsManifest.json";
 import publicModels from "@/data/publicModelsImages.json";
-import { saveLeadEmail } from "@/lib/supabase";
-import { handleStripePayment } from "@/lib/stripe";
 import {
   Building2,
   Bath,
@@ -31,14 +24,10 @@ import {
   Droplets,
   Box,
   Sparkles,
-  Search,
   X,
-  ChevronRight,
   Zap,
   Timer,
-  ShieldCheck,
   Eye,
-  Lock,
   ArrowRight,
   Plus,
   Armchair,
@@ -163,21 +152,35 @@ const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
 };
 
 export function App() {
-  const [currentRoute, setCurrentRoute] = useState<string>(() => {
+  const computeRoute = () => {
     const path = window.location.pathname.toLowerCase();
     const hash = window.location.hash.toLowerCase();
-    if (path.includes("start") || hash.includes("start")) return "start";
+    if (path.includes("upsell") || hash.includes("upsell")) return "more";
     if (path.includes("more") || hash.includes("more")) return "more";
+    if (path.includes("start") || hash.includes("start")) return "start";
     if (path.includes("vip") || hash.includes("vip")) return "success-vip";
     if (path.includes("success") || hash.includes("success")) return "success-starter";
     if (path.includes("demo") || hash.includes("demo")) return "demo";
     if (path.includes("checkout") || hash.includes("checkout")) return "checkout";
     return "main";
-  });
+  };
+
+  const [currentRoute, setCurrentRoute] = useState<string>(computeRoute);
+
+  useEffect(() => {
+    const handleLocationChange = () => {
+      setCurrentRoute(computeRoute());
+    };
+    window.addEventListener("hashchange", handleLocationChange);
+    window.addEventListener("popstate", handleLocationChange);
+    return () => {
+      window.removeEventListener("hashchange", handleLocationChange);
+      window.removeEventListener("popstate", handleLocationChange);
+    };
+  }, []);
 
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [selectedSubCategory, setSelectedSubCategory] = useState<string>("all-furniture");
-  const [searchQuery, setSearchQuery] = useState<string>("");
   const [visibleCount, setVisibleCount] = useState(6);
   const [activeModel, setActiveModel] = useState<ModelItem | null>(null);
   const [likedModels, setLikedModels] = useState<Record<string, boolean>>({});
@@ -203,7 +206,7 @@ export function App() {
       featured: model.featured || false,
     }));
 
-    const normalizedRaw = (publicModels as any[]).map((model: any, idx: number) => {
+    const normalizedRaw = (publicModels as any[]).map((model: any) => {
       let categoryKey = model.title?.split(" ")[0]?.toLowerCase() || "apartment";
       let categoryName = categoryKey.charAt(0).toUpperCase() + categoryKey.slice(1);
       let subCategoryKey: string | undefined = undefined;
@@ -234,7 +237,7 @@ export function App() {
     return [...scannedModels, ...DEDICATED_FURNITURE, ...normalizedRaw];
   }, []);
 
-  // Filtered models based on category, sub-category, and search
+  // Filtered models based on category and sub-category
   const filteredModels = useMemo(() => {
     return ALL_MODELS.filter((model) => {
       const matchesCategory =
@@ -245,16 +248,9 @@ export function App() {
         selectedSubCategory === "all-furniture" ||
         model.subCategoryKey === selectedSubCategory;
 
-      const matchesSearch =
-        searchQuery === "" ||
-        model.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        model.rawName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        model.categoryName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        model.renderEngine.toLowerCase().includes(searchQuery.toLowerCase());
-
-      return matchesCategory && matchesSubCategory && matchesSearch;
+      return matchesCategory && matchesSubCategory;
     });
-  }, [ALL_MODELS, selectedCategory, selectedSubCategory, searchQuery]);
+  }, [ALL_MODELS, selectedCategory, selectedSubCategory]);
 
   const visibleModels = filteredModels.slice(0, visibleCount);
   const hasMore = visibleCount < filteredModels.length;

@@ -4,15 +4,12 @@ import { useState } from "react";
 import {
   CheckCircle2,
   Download,
-  FolderArchive,
   ExternalLink,
   ShieldCheck,
   Sparkles,
   ArrowRight,
   Copy,
   Check,
-  FileBox,
-  HardDrive,
   Cloud,
 } from "lucide-react";
 import publicModels from "@/data/publicModelsImages.json";
@@ -42,16 +39,6 @@ export function SuccessPage({
     navigator.clipboard.writeText(`AVADA-VIP-${email.split("@")[0].toUpperCase()}-2026`);
     setCopiedKey(true);
     setTimeout(() => setCopiedKey(false), 2500);
-  };
-
-  const handleDownloadFile = (filename: string, fallbackUrl?: string) => {
-    // Triggers direct download
-    const link = document.createElement("a");
-    link.href = fallbackUrl || `/models/${filename}`;
-    link.download = filename;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
   };
 
   return (
@@ -218,32 +205,35 @@ export function SuccessPage({
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-              {starterModels.map((model, idx) => (
-                <div
-                  key={idx}
-                  className="rounded-2xl bg-white border border-slate-200 overflow-hidden flex flex-col justify-between shadow-xs hover:shadow-md transition"
-                >
-                  <div className="relative aspect-[4/3] bg-slate-100">
-                    <img src={model.relPath} alt={model.title || `Model ${idx + 1}`} className="w-full h-full object-cover" />
-                    <div className="absolute top-2 left-2 bg-white/90 text-[9px] font-mono font-bold px-2 py-0.5 rounded-full border border-slate-200 text-slate-800 shadow-2xs">
-                      #{idx + 1}
+              {starterModels.map((model, idx) => {
+                const modelTitle = `${model.category || "3D"} Scene #${idx + 1}`;
+                return (
+                  <div
+                    key={idx}
+                    className="rounded-2xl bg-white border border-slate-200 overflow-hidden flex flex-col justify-between shadow-xs hover:shadow-md transition"
+                  >
+                    <div className="relative aspect-[4/3] bg-slate-100">
+                      <img src={model.relPath} alt={modelTitle} className="w-full h-full object-cover" />
+                      <div className="absolute top-2 left-2 bg-white/90 text-[9px] font-mono font-bold px-2 py-0.5 rounded-full border border-slate-200 text-slate-800 shadow-2xs">
+                        #{idx + 1}
+                      </div>
+                    </div>
+                    <div className="p-3 space-y-2 flex-1 flex flex-col justify-between">
+                      <div>
+                        <h4 className="text-xs font-bold text-slate-900 line-clamp-1">{modelTitle}</h4>
+                        <p className="text-[10px] text-slate-500 font-mono">SketchUp 2024 (.SKP)</p>
+                      </div>
+                      <a
+                        href={model.relPath}
+                        download={model.name}
+                        className="w-full py-1.5 rounded-xl bg-slate-50 hover:bg-[#10b981] text-slate-800 hover:text-black font-bold text-[11px] border border-slate-200 hover:border-[#10b981] transition flex items-center justify-center gap-1 shadow-2xs"
+                      >
+                        <Download className="size-3" /> Download .SKP
+                      </a>
                     </div>
                   </div>
-                  <div className="p-3 space-y-2 flex-1 flex flex-col justify-between">
-                    <div>
-                      <h4 className="text-xs font-bold text-slate-900 line-clamp-1">{model.title || model.name}</h4>
-                      <p className="text-[10px] text-slate-500 font-mono">SketchUp 2024 (.SKP)</p>
-                    </div>
-                    <a
-                      href={model.relPath}
-                      download={model.name}
-                      className="w-full py-1.5 rounded-xl bg-slate-50 hover:bg-[#10b981] text-slate-800 hover:text-black font-bold text-[11px] border border-slate-200 hover:border-[#10b981] transition flex items-center justify-center gap-1 shadow-2xs"
-                    >
-                      <Download className="size-3" /> Download .SKP
-                    </a>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
 
             {/* UPGRADE TEASER BANNER */}

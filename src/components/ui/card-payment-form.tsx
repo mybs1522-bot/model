@@ -4,9 +4,8 @@ import { useState, useEffect, useRef } from "react";
 import {
   CreditCard,
   Lock,
-  MapPin,
+  Package,
   Tag,
-  ArrowRight,
   ShieldCheck,
   Check,
   AlertCircle,
@@ -15,38 +14,31 @@ import { getStripe, chargeSavedCardUpsell } from "@/lib/stripe";
 import { saveLeadEmail } from "@/lib/supabase";
 import { Separator } from "@/components/ui/separator";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+// Real brand logos — sourced from aaronfagan/svg-credit-card-payment-icons & payrexx/payment-logos
+import visaSvg from "@/assets/card-logos/visa.svg";
+import mastercardSvg from "@/assets/card-logos/mastercard.svg";
+import amexSvg from "@/assets/card-logos/amex.svg";
+import applepaySvg from "@/assets/card-logos/applepay.svg";
+import googlepaySvg from "@/assets/card-logos/googlepay.svg";
 
-// Official Real Visa SVG Logo
-export function VisaLogo({ className = "h-4 w-auto" }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 38 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect width="38" height="24" rx="4" fill="#FFFFFF" stroke="#E2E8F0" strokeWidth="1"/>
-      <path d="M15.8 16.5H13.6L15 7.5H17.2L15.8 16.5ZM22.5 7.7C22 7.5 21.2 7.3 20.2 7.3C17.9 7.3 16.3 8.5 16.3 10.2C16.3 11.5 17.5 12.2 18.4 12.6C19.3 13 19.6 13.3 19.6 13.7C19.6 14.3 18.9 14.6 18.2 14.6C17.2 14.6 16.6 14.4 15.9 14.1L15.6 13.9L15.3 15.8C15.9 16.1 17 16.4 18.1 16.4C20.5 16.4 22.1 15.2 22.1 13.4C22.1 12.3 21.4 11.4 19.9 10.7C19 10.3 18.5 10 18.5 9.5C18.5 9 19.1 8.6 20.1 8.6C21 8.6 21.6 8.8 22.1 9L22.3 9.1L22.5 7.7ZM28.4 7.5H26.7C26.2 7.5 25.8 7.6 25.6 8.1L22 16.5H24.3L24.8 15.1H27.6L27.9 16.5H30L28.4 7.5ZM25.4 13.4L26.5 10.4C26.5 10.4 26.8 9.6 26.9 9.3H27C27.1 9.6 27.2 10.2 27.3 10.4L27.9 13.4H25.4ZM12.4 7.5L10.2 13.6L9.9 12.1C9.4 10.4 7.9 8.6 6.2 7.7L8.2 16.5H10.6L14.3 7.5H12.4Z" fill="#1434CB"/>
-      <path d="M8.3 7.5H4.7L4.6 7.7C7.4 8.4 9.6 10.4 10.4 12.5L9.6 8.3C9.4 7.7 8.9 7.5 8.3 7.5Z" fill="#F7B600"/>
-    </svg>
-  );
+export function VisaLogo({ className = "h-5 w-auto" }: { className?: string }) {
+  return <img src={visaSvg} alt="Visa" className={className} />;
 }
 
-// Official Real Mastercard SVG Logo
-export function MastercardLogo({ className = "h-4 w-auto" }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 38 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect width="38" height="24" rx="4" fill="#FFFFFF" stroke="#E2E8F0" strokeWidth="1"/>
-      <circle cx="15" cy="12" r="6.5" fill="#EB001B"/>
-      <circle cx="23" cy="12" r="6.5" fill="#F79E1B"/>
-      <path d="M19 7.3A6.47 6.47 0 0 0 16.5 12c0 1.9.9 3.7 2.5 4.7A6.47 6.47 0 0 0 21.5 12c0-1.9-.9-3.7-2.5-4.7Z" fill="#FF5F00"/>
-    </svg>
-  );
+export function MastercardLogo({ className = "h-5 w-auto" }: { className?: string }) {
+  return <img src={mastercardSvg} alt="Mastercard" className={className} />;
 }
 
-// Official Real American Express (Amex) SVG Logo
-export function AmexLogo({ className = "h-4 w-auto" }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 38 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect width="38" height="24" rx="4" fill="#006FCF"/>
-      <path d="M7 16L8.8 12L10.6 16H12.5L9.8 10L12.5 4H10.6L8.8 8L7 4H5L7.8 10L5 16H7ZM13.5 4V16H19.5V14H15.5V11H19V9H15.5V6H19.5V4H13.5ZM21 4V16H23V7.5L25.5 14H26.5L29 7.5V16H31V4H28.5L26 11.5L23.5 4H21Z" fill="#FFFFFF"/>
-    </svg>
-  );
+export function AmexLogo({ className = "h-5 w-auto" }: { className?: string }) {
+  return <img src={amexSvg} alt="American Express" className={className} />;
+}
+
+export function ApplePayLogo({ className = "h-5 w-auto" }: { className?: string }) {
+  return <img src={applepaySvg} alt="Apple Pay" className={className} />;
+}
+
+export function GooglePayLogo({ className = "h-5 w-auto" }: { className?: string }) {
+  return <img src={googlepaySvg} alt="Google Pay" className={className} />;
 }
 
 interface CardPaymentFormProps {
@@ -85,14 +77,17 @@ export function CardPaymentForm({
   const cardNumberRef = useRef<HTMLDivElement>(null);
   const cardExpiryRef = useRef<HTMLDivElement>(null);
   const cardCvcRef = useRef<HTMLDivElement>(null);
+  const paymentRequestButtonRef = useRef<HTMLDivElement>(null);
   const elementsRef = useRef<any>(null);
   const cardNumberElementRef = useRef<any>(null);
+  const paymentRequestRef = useRef<any>(null);
+  const [walletAvailable, setWalletAvailable] = useState(false);
 
   const savedEmail = localStorage.getItem("avada_user_email");
   const savedLast4 = localStorage.getItem("avada_user_last4") || "4242";
   const hasSavedCard = Boolean(allowSavedCard && savedEmail && localStorage.getItem("avada_has_saved_card") === "true");
 
-  // Mount Official Stripe Elements
+  // Mount Official Stripe Elements + Payment Request Button (Apple Pay / Google Pay)
   useEffect(() => {
     if (hasSavedCard) return;
 
@@ -100,6 +95,89 @@ export function CardPaymentForm({
     getStripe()?.then((stripe) => {
       if (!stripe || !isMounted) return;
 
+      // ── Payment Request Button (Apple Pay / Google Pay) ──
+      if (!paymentRequestRef.current) {
+        const pr = stripe.paymentRequest({
+          country: "US",
+          currency: "usd",
+          total: {
+            label: sourceLocation === "upsell_lifetime" ? "VIP Lifetime Pass" : "SketchUp Starter Pack",
+            amount: amountInCents,
+          },
+          requestPayerEmail: true,
+          requestPayerName: true,
+        });
+
+        paymentRequestRef.current = pr;
+
+        // Check if the browser supports Apple Pay or Google Pay
+        pr.canMakePayment().then((result: any) => {
+          if (result && isMounted) {
+            setWalletAvailable(true);
+
+            // Mount the official Stripe Payment Request Button element
+            if (paymentRequestButtonRef.current) {
+              const prButton = (elementsRef.current || stripe.elements()).create("paymentRequestButton", {
+                paymentRequest: pr,
+                style: {
+                  paymentRequestButton: {
+                    type: "default",
+                    theme: "dark",
+                    height: "44px",
+                  },
+                },
+              });
+              prButton.mount(paymentRequestButtonRef.current);
+            }
+          }
+        });
+
+        // Handle the paymentmethod event — process the payment
+        pr.on("paymentmethod", async (ev: any) => {
+          try {
+            const payerEmail = ev.payerEmail || email || "customer@wallet.pay";
+
+            const response = await fetch("/api/create-payment-intent", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                amount: amountInCents,
+                email: payerEmail.trim().toLowerCase(),
+                payment_method_id: ev.paymentMethod.id,
+                plan: sourceLocation,
+              }),
+            });
+
+            const data = await response.json();
+
+            if (!response.ok || !data.success) {
+              ev.complete("fail");
+              setErrorMessage(data.error || "Payment failed. Please try again.");
+              return;
+            }
+
+            ev.complete("success");
+
+            const last4 = ev.paymentMethod.card?.last4 || "0000";
+
+            // Save session for 1-click upsell
+            localStorage.setItem("avada_user_email", payerEmail.trim().toLowerCase());
+            localStorage.setItem("avada_user_last4", last4);
+            localStorage.setItem("avada_has_saved_card", "true");
+            if (data.customerId) localStorage.setItem("avada_stripe_customer_id", data.customerId);
+            if (data.paymentMethodId) localStorage.setItem("avada_stripe_payment_method_id", data.paymentMethodId);
+
+            try { await saveLeadEmail(payerEmail, sourceLocation); } catch (_e) {}
+
+            if (onSuccess) onSuccess({ email: payerEmail, last4 });
+          } catch (err: any) {
+            ev.complete("fail");
+            setErrorMessage(err.message || "Wallet payment failed.");
+          }
+        });
+      }
+
+      // ── Standard Card Elements ──
       if (!elementsRef.current) {
         elementsRef.current = stripe.elements();
 
@@ -135,6 +213,24 @@ export function CardPaymentForm({
       isMounted = false;
     };
   }, [hasSavedCard]);
+
+  const handleWalletPay = async (walletType: "apple" | "google") => {
+    setErrorMessage(null);
+    if (paymentRequestRef.current) {
+      try {
+        paymentRequestRef.current.show();
+      } catch (err: any) {
+        console.warn("Direct wallet show error:", err);
+        setErrorMessage(
+          `${walletType === "apple" ? "Apple Pay" : "Google Pay"} is not configured in this browser. Please use the card form below.`
+        );
+      }
+    } else {
+      setErrorMessage(
+        `${walletType === "apple" ? "Apple Pay" : "Google Pay"} is initializing. Please enter card details below.`
+      );
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -229,11 +325,11 @@ export function CardPaymentForm({
         </CardHeader>
         
         <CardContent className="space-y-5 text-left pt-0">
-          {/* Shipping / Digital Delivery Section */}
+          {/* Digital Delivery / Order Details Section */}
           <div>
             <div className="flex items-center gap-2 mb-2">
-              <MapPin className="h-4 w-4 text-muted-foreground" />
-              <span className="text-sm font-medium text-slate-900">Delivery Address</span>
+              <Package className="h-4 w-4 text-muted-foreground" />
+              <span className="text-sm font-medium text-slate-900">Order Details</span>
             </div>
             <p className="text-sm text-muted-foreground">{deliveryAddressLine1}</p>
             <p className="text-sm text-muted-foreground">{deliveryAddressLine2}</p>
@@ -246,13 +342,15 @@ export function CardPaymentForm({
             <div className="flex items-center justify-between gap-2 mb-3">
               <div className="flex items-center gap-2">
                 <CreditCard className="h-4 w-4 text-muted-foreground" />
-                <span className="text-sm font-medium text-slate-900">Billing Method</span>
+                <span className="text-sm font-medium text-slate-900">Payment Method</span>
               </div>
-              {/* REAL OFFICIAL VISA, MASTERCARD & AMEX LOGOS */}
+              {/* REAL PAYMENT LOGOS */}
               <div className="flex items-center gap-1.5">
-                <VisaLogo className="h-4.5 w-auto shadow-2xs rounded" />
-                <MastercardLogo className="h-4.5 w-auto shadow-2xs rounded" />
-                <AmexLogo className="h-4.5 w-auto shadow-2xs rounded" />
+                <VisaLogo className="h-4.5 w-auto rounded shadow-2xs" />
+                <MastercardLogo className="h-4.5 w-auto rounded shadow-2xs" />
+                <AmexLogo className="h-4.5 w-auto rounded shadow-2xs" />
+                <ApplePayLogo className="h-4.5 w-auto rounded shadow-2xs" />
+                <GooglePayLogo className="h-4.5 w-auto rounded shadow-2xs" />
               </div>
             </div>
 
@@ -268,8 +366,36 @@ export function CardPaymentForm({
                 <p className="text-[11px] text-slate-600 font-medium">1-Click charge to <span className="font-mono font-bold text-slate-800">{savedEmail}</span></p>
               </div>
             ) : (
-              /* Official Stripe Elements Containers */
-              <div className="space-y-2.5">
+              <div className="space-y-3">
+                {/* ── Native Stripe Payment Request Element Container (when supported by browser) ── */}
+                <div ref={paymentRequestButtonRef} id="payment-request-button" className={walletAvailable ? "w-full min-h-[44px]" : "hidden"} />
+
+                {/* ── Direct 1-Click Express Checkout Buttons ── */}
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    type="button"
+                    onClick={() => handleWalletPay("apple")}
+                    className="flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-lg bg-black hover:bg-zinc-800 text-white text-sm font-semibold transition active:scale-[0.98] shadow-sm cursor-pointer border border-black"
+                  >
+                    <ApplePayLogo className="h-5 w-auto" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleWalletPay("google")}
+                    className="flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-lg bg-white hover:bg-slate-50 text-slate-900 text-sm font-semibold border border-slate-300 transition active:scale-[0.98] shadow-2xs cursor-pointer"
+                  >
+                    <GooglePayLogo className="h-5 w-auto" />
+                  </button>
+                </div>
+
+                {/* ── Divider ── */}
+                <div className="flex items-center gap-3">
+                  <div className="flex-1 h-px bg-slate-200" />
+                  <span className="text-[11px] font-medium text-slate-400 uppercase tracking-wide">or pay with card</span>
+                  <div className="flex-1 h-px bg-slate-200" />
+                </div>
+
+                {/* ── Card Entry ── */}
                 {/* Email Input */}
                 <div>
                   <input
@@ -342,7 +468,12 @@ export function CardPaymentForm({
 
           {/* Payment / Order Total Summary */}
           <div>
-            <span className="text-sm font-medium text-slate-900">Order Total</span>
+            <div className="flex items-center justify-between">
+              <span className="text-sm font-medium text-slate-900">Order Total</span>
+              <span className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                One-Time Payment • No Subscription
+              </span>
+            </div>
             <div className="grid grid-cols-2 gap-y-2 text-sm mt-2.5">
               <span className="text-muted-foreground">Item Total:</span>
               <span className="text-right font-medium text-slate-900">{itemTotal}</span>
@@ -371,11 +502,14 @@ export function CardPaymentForm({
 
       {/* ══════ DETACHED FOOTER CHECKOUT BAR ══════ */}
       <div className="w-full max-w-md mt-4 flex items-center justify-between rounded-xl border border-slate-200 px-4 py-3 bg-white shadow-lg">
-        <span className="text-lg font-bold text-slate-900">{totalPrice}</span>
+        <div className="text-left">
+          <div className="text-lg font-black text-slate-900 leading-none">{totalPrice}</div>
+          <span className="text-[10px] text-muted-foreground font-medium">One-time payment</span>
+        </div>
         <button
           type="submit"
           disabled={isProcessing}
-          className="px-6 py-2.5 rounded-lg bg-[#059669] hover:bg-[#047857] text-white font-semibold text-sm shadow-sm transition active:scale-95 disabled:opacity-50 flex items-center gap-2 cursor-pointer"
+          className="px-6 py-2.5 rounded-lg bg-[#059669] hover:bg-[#047857] text-white font-bold text-sm shadow-sm transition active:scale-95 disabled:opacity-50 flex items-center gap-2 cursor-pointer"
         >
           {isProcessing ? (
             <span className="flex items-center gap-2">
@@ -383,15 +517,30 @@ export function CardPaymentForm({
               Securing Payment...
             </span>
           ) : (
-            buttonText
+            <>
+              <Lock className="size-3.5" />
+              <span>{buttonText}</span>
+            </>
           )}
         </button>
       </div>
 
-      {/* SSL Encryption Indicator */}
-      <div className="text-muted-foreground flex items-center justify-center gap-1.5 text-[11px] font-medium pt-3">
-        <ShieldCheck className="size-3.5 text-emerald-600" />
-        <span>256-Bit SSL Encrypted • Powered by Stripe</span>
+      {/* SSL Encryption & Guarantee Indicator */}
+      <div className="space-y-1.5 pt-3 text-center">
+        <div className="text-muted-foreground flex items-center justify-center gap-2 text-[11px] font-medium flex-wrap">
+          <span className="inline-flex items-center gap-1">
+            <ShieldCheck className="size-3.5 text-emerald-600" /> 256-Bit SSL Encrypted
+          </span>
+          <span>•</span>
+          <span className="inline-flex items-center gap-1">
+            <Check className="size-3.5 text-emerald-600" /> Instant .ZIP Delivery
+          </span>
+          <span>•</span>
+          <span className="inline-flex items-center gap-1">
+            <Check className="size-3.5 text-emerald-600" /> 30-Day Guarantee
+          </span>
+        </div>
+        <p className="text-[10px] text-slate-400">Strictly 1-time charge. Powered by Stripe.</p>
       </div>
     </form>
   );

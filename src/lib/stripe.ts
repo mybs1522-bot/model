@@ -51,7 +51,7 @@ export async function processOnPageCardPayment(details: CardDetails) {
   }
 
   // 3. Create Stripe PaymentMethod securely
-  const { paymentMethod, error: pmError } = await stripe.createPaymentMethod({
+  const { paymentMethod, error: pmError } = await (stripe as any).createPaymentMethod({
     type: "card",
     card: {
       number: cleanCardNumber,

@@ -1,11 +1,11 @@
 "use client"
 
-import { CreditCard, MapPin, Tag } from "lucide-react"
+import { CreditCard, Package, Tag } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
-import { VisaLogo, MastercardLogo, AmexLogo } from "@/components/ui/card-payment-form"
+import { VisaLogo, MastercardLogo, AmexLogo, ApplePayLogo, GooglePayLogo } from "@/components/ui/card-payment-form"
 
 export default function CheckoutForm() {
   return (
@@ -15,14 +15,14 @@ export default function CheckoutForm() {
           <CardTitle className="text-lg font-semibold tracking-tight text-slate-900">Order Summary</CardTitle>
         </CardHeader>
         <CardContent className="space-y-6 text-left pt-0">
-          {/* Shipping Section */}
+          {/* Order Details Section */}
           <div>
             <div className="flex items-center gap-2 mb-2">
-              <MapPin className="h-4 w-4 text-muted-foreground" />
-              <span className="text-sm font-medium text-slate-900">Delivery Address</span>
+              <Package className="h-4 w-4 text-muted-foreground" />
+              <span className="text-sm font-medium text-slate-900">Order Details</span>
             </div>
-            <p className="text-sm text-muted-foreground">742 Evergreen Terrace</p>
-            <p className="text-sm text-muted-foreground">Springfield, USA</p>
+            <p className="text-sm text-muted-foreground">20 SketchUp (.SKP) Scenes + 8K Textures</p>
+            <p className="text-sm text-muted-foreground">Instant Download Access • Single Zip Archive</p>
           </div>
 
           <Separator className="bg-slate-100" />
@@ -32,12 +32,14 @@ export default function CheckoutForm() {
             <div className="flex items-center justify-between gap-2 mb-2">
               <div className="flex items-center gap-2">
                 <CreditCard className="h-4 w-4 text-muted-foreground" />
-                <span className="text-sm font-medium text-slate-900">Billing Method</span>
+                <span className="text-sm font-medium text-slate-900">Payment Method</span>
               </div>
               <div className="flex items-center gap-1.5">
-                <VisaLogo className="h-4.5 w-auto shadow-2xs rounded" />
-                <MastercardLogo className="h-4.5 w-auto shadow-2xs rounded" />
-                <AmexLogo className="h-4.5 w-auto shadow-2xs rounded" />
+                <VisaLogo className="h-4.5 w-auto rounded shadow-2xs" />
+                <MastercardLogo className="h-4.5 w-auto rounded shadow-2xs" />
+                <AmexLogo className="h-4.5 w-auto rounded shadow-2xs" />
+                <ApplePayLogo className="h-4.5 w-auto rounded shadow-2xs" />
+                <GooglePayLogo className="h-4.5 w-auto rounded shadow-2xs" />
               </div>
             </div>
             <p className="text-sm text-muted-foreground">Mastercard</p>

@@ -5,9 +5,11 @@ import path from 'path'
 import Stripe from 'stripe'
 
 function stripeApiPlugin(secretKey: string): Plugin {
-  const stripe = new Stripe(secretKey, {
-    apiVersion: '2025-02-24.acacia' as any,
-  })
+  const stripe = secretKey
+    ? new Stripe(secretKey, {
+        apiVersion: '2025-02-24.acacia' as any,
+      })
+    : null
 
   return {
     name: 'stripe-backend-api',
@@ -15,6 +17,11 @@ function stripeApiPlugin(secretKey: string): Plugin {
       server.middlewares.use(async (req, res, next) => {
         if (!req.url?.startsWith('/api/')) {
           return next()
+        }
+
+        if (!stripe) {
+          res.writeHead(500, { 'Content-Type': 'application/json' })
+          return res.end(JSON.stringify({ error: 'STRIPE_SECRET_KEY is not configured in .env' }))
         }
 
         // Helper to parse JSON body
