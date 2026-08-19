@@ -1,4 +1,5 @@
 import Stripe from 'stripe';
+import { sendDeliveryEmail } from './email-helper.js';
 
 const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
 const stripe = stripeSecretKey
@@ -38,14 +39,15 @@ export default async function handler(req, res) {
 
     // 1. Find or create Stripe customer
     let customerId = '';
-    if (email) {
-      const existing = await stripe.customers.list({ email: email.trim().toLowerCase(), limit: 1 });
+    const normalizedEmail = email ? email.trim().toLowerCase() : '';
+    if (normalizedEmail) {
+      const existing = await stripe.customers.list({ email: normalizedEmail, limit: 1 });
       if (existing.data.length > 0) {
         customerId = existing.data[0].id;
       } else {
         const created = await stripe.customers.create({
-          email: email.trim().toLowerCase(),
-          description: `AVADA 3D Customer (${email})`,
+          email: normalizedEmail,
+          description: `AVADA 3D Customer (${normalizedEmail})`,
         });
         customerId = created.id;
       }
@@ -77,9 +79,16 @@ export default async function handler(req, res) {
         enabled: true,
         allow_redirects: 'never',
       },
-      receipt_email: email || undefined,
+      receipt_email: normalizedEmail || undefined,
       description: `AVADA 3D - ${plan || '20 Models Starter Pack'} ($${(amount / 100).toFixed(2)})`,
     });
+
+    // 3. Send instant download delivery email via Resend (non-blocking)
+    if (normalizedEmail) {
+      sendDeliveryEmail(normalizedEmail, plan || 'starter').catch((emailErr) => {
+        console.error('Email sending error in create-payment-intent:', emailErr);
+      });
+    }
 
     return res.status(200).json({
       success: true,
