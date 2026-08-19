@@ -82,6 +82,8 @@ export function CardPaymentForm({
   const cardNumberElementRef = useRef<any>(null);
   const paymentRequestRef = useRef<any>(null);
   const [walletAvailable, setWalletAvailable] = useState(false);
+  // Track which wallet types are available (returned by canMakePayment)
+  const [walletType, setWalletType] = useState<{ applePay: boolean; googlePay: boolean }>({ applePay: false, googlePay: false });
 
   const savedEmail = localStorage.getItem("avada_user_email");
   const savedLast4 = localStorage.getItem("avada_user_last4") || "4242";
@@ -96,6 +98,9 @@ export function CardPaymentForm({
       if (!stripe || !isMounted) return;
 
       // ── Payment Request Button (Apple Pay / Google Pay) ──
+      // Per Stripe docs: use canMakePayment() to check browser/device wallet support.
+      // Only mount the native Stripe Payment Request Button when supported.
+      // The button auto-renders the correct wallet (Apple Pay on Safari, Google Pay on Chrome, etc.)
       if (!paymentRequestRef.current) {
         const pr = stripe.paymentRequest({
           country: "US",
@@ -110,12 +115,20 @@ export function CardPaymentForm({
 
         paymentRequestRef.current = pr;
 
-        // Check if the browser supports Apple Pay or Google Pay
+        // Check if the browser/device supports Apple Pay or Google Pay
+        // canMakePayment() returns null if no wallet is available, or an object like
+        // { applePay: true } or { googlePay: true } indicating which wallet is ready.
         pr.canMakePayment().then((result: any) => {
           if (result && isMounted) {
             setWalletAvailable(true);
+            setWalletType({
+              applePay: Boolean(result.applePay),
+              googlePay: Boolean(result.googlePay),
+            });
 
             // Mount the official Stripe Payment Request Button element
+            // Stripe auto-renders the correct button (Apple Pay / Google Pay / Link)
+            // based on the user's browser and saved payment methods.
             if (paymentRequestButtonRef.current) {
               const prButton = (elementsRef.current || stripe.elements()).create("paymentRequestButton", {
                 paymentRequest: pr,
@@ -213,24 +226,6 @@ export function CardPaymentForm({
       isMounted = false;
     };
   }, [hasSavedCard]);
-
-  const handleWalletPay = async (walletType: "apple" | "google") => {
-    setErrorMessage(null);
-    if (paymentRequestRef.current) {
-      try {
-        paymentRequestRef.current.show();
-      } catch (err: any) {
-        console.warn("Direct wallet show error:", err);
-        setErrorMessage(
-          `${walletType === "apple" ? "Apple Pay" : "Google Pay"} is not configured in this browser. Please use the card form below.`
-        );
-      }
-    } else {
-      setErrorMessage(
-        `${walletType === "apple" ? "Apple Pay" : "Google Pay"} is initializing. Please enter card details below.`
-      );
-    }
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -344,13 +339,13 @@ export function CardPaymentForm({
                 <CreditCard className="h-4 w-4 text-muted-foreground" />
                 <span className="text-sm font-medium text-slate-900">Payment Method</span>
               </div>
-              {/* REAL PAYMENT LOGOS */}
+              {/* Only show logos for payment methods that are actually available */}
               <div className="flex items-center gap-1.5">
                 <VisaLogo className="h-4.5 w-auto rounded shadow-2xs" />
                 <MastercardLogo className="h-4.5 w-auto rounded shadow-2xs" />
                 <AmexLogo className="h-4.5 w-auto rounded shadow-2xs" />
-                <ApplePayLogo className="h-4.5 w-auto rounded shadow-2xs" />
-                <GooglePayLogo className="h-4.5 w-auto rounded shadow-2xs" />
+                {walletType.applePay && <ApplePayLogo className="h-4.5 w-auto rounded shadow-2xs" />}
+                {walletType.googlePay && <GooglePayLogo className="h-4.5 w-auto rounded shadow-2xs" />}
               </div>
             </div>
 
@@ -367,33 +362,22 @@ export function CardPaymentForm({
               </div>
             ) : (
               <div className="space-y-3">
-                {/* ── Native Stripe Payment Request Element Container (when supported by browser) ── */}
+                {/* ── Native Stripe Payment Request Button (Apple Pay / Google Pay) ──
+                     This div is ONLY shown when canMakePayment() confirms a wallet is available.
+                     Stripe renders the correct button automatically based on the user's browser/device.
+                     On Safari with Apple Pay configured → shows Apple Pay button
+                     On Chrome with Google Pay configured → shows Google Pay button
+                     If no wallet is available → this div stays hidden, card form shows directly */}
                 <div ref={paymentRequestButtonRef} id="payment-request-button" className={walletAvailable ? "w-full min-h-[44px]" : "hidden"} />
 
-                {/* ── Direct 1-Click Express Checkout Buttons ── */}
-                <div className="grid grid-cols-2 gap-2">
-                  <button
-                    type="button"
-                    onClick={() => handleWalletPay("apple")}
-                    className="flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-lg bg-black hover:bg-zinc-800 text-white text-sm font-semibold transition active:scale-[0.98] shadow-sm cursor-pointer border border-black"
-                  >
-                    <ApplePayLogo className="h-5 w-auto" />
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleWalletPay("google")}
-                    className="flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-lg bg-white hover:bg-slate-50 text-slate-900 text-sm font-semibold border border-slate-300 transition active:scale-[0.98] shadow-2xs cursor-pointer"
-                  >
-                    <GooglePayLogo className="h-5 w-auto" />
-                  </button>
-                </div>
-
-                {/* ── Divider ── */}
-                <div className="flex items-center gap-3">
-                  <div className="flex-1 h-px bg-slate-200" />
-                  <span className="text-[11px] font-medium text-slate-400 uppercase tracking-wide">or pay with card</span>
-                  <div className="flex-1 h-px bg-slate-200" />
-                </div>
+                {/* ── Divider (only shown when wallet buttons are available) ── */}
+                {walletAvailable && (
+                  <div className="flex items-center gap-3">
+                    <div className="flex-1 h-px bg-slate-200" />
+                    <span className="text-[11px] font-medium text-slate-400 uppercase tracking-wide">or pay with card</span>
+                    <div className="flex-1 h-px bg-slate-200" />
+                  </div>
+                )}
 
                 {/* ── Card Entry ── */}
                 {/* Email Input */}

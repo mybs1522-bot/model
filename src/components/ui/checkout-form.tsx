@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
-import { VisaLogo, MastercardLogo, AmexLogo, ApplePayLogo, GooglePayLogo } from "@/components/ui/card-payment-form"
+import { VisaLogo, MastercardLogo, AmexLogo } from "@/components/ui/card-payment-form"
 
 export default function CheckoutForm() {
   return (
@@ -34,12 +34,11 @@ export default function CheckoutForm() {
                 <CreditCard className="h-4 w-4 text-muted-foreground" />
                 <span className="text-sm font-medium text-slate-900">Payment Method</span>
               </div>
+              {/* Only show card brand logos — wallet logos are handled by Stripe's native button */}
               <div className="flex items-center gap-1.5">
                 <VisaLogo className="h-4.5 w-auto rounded shadow-2xs" />
                 <MastercardLogo className="h-4.5 w-auto rounded shadow-2xs" />
                 <AmexLogo className="h-4.5 w-auto rounded shadow-2xs" />
-                <ApplePayLogo className="h-4.5 w-auto rounded shadow-2xs" />
-                <GooglePayLogo className="h-4.5 w-auto rounded shadow-2xs" />
               </div>
             </div>
             <p className="text-sm text-muted-foreground">Mastercard</p>
