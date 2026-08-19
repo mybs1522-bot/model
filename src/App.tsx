@@ -640,46 +640,46 @@ export function App() {
       </section>
 
       {/* --- NEW SALES SECTION 1: ROI & VALUE --- */}
-      <section className="py-20 bg-amber-50 relative overflow-hidden">
-        <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-amber-200 to-transparent"></div>
+      <section className="py-16 bg-slate-50 relative overflow-hidden">
+        <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent"></div>
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-          <h2 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight mb-6">
+          <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight mb-4">
             Stop Burning Money on Single Models
           </h2>
-          <p className="text-xl sm:text-2xl font-medium text-amber-900/80 mb-10 leading-relaxed">
-            Other designers charge <span className="text-red-500 font-bold line-through">$50-$200 per model</span>. With AVADA, you get an <strong className="text-amber-700">entire lifetime arsenal</strong> for the price of a cheap lunch.
+          <p className="text-lg font-medium text-slate-600 mb-10 leading-relaxed max-w-2xl mx-auto">
+            Other designers charge <span className="text-slate-400 line-through">$50-$200 per model</span>. With AVADA, you get an <strong className="text-slate-900">entire lifetime arsenal</strong> for the price of a cheap lunch.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-left">
-            <div className="bg-white p-6 rounded-2xl shadow-sm border border-amber-100">
-              <div className="bg-amber-100 w-12 h-12 rounded-xl flex items-center justify-center mb-4">
-                <Shield className="text-amber-600 size-6" />
+            <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+              <div className="bg-emerald-100 w-10 h-10 rounded-xl flex items-center justify-center mb-4">
+                <Shield className="text-emerald-600 size-5" />
               </div>
               <h3 className="font-bold text-slate-900 mb-2">Commercial License</h3>
-              <p className="text-slate-600 text-sm">Use in client presentations, pitches, and final renders without restrictions.</p>
+              <p className="text-slate-600 text-xs">Use in client presentations, pitches, and final renders without restrictions.</p>
             </div>
-            <div className="bg-white p-6 rounded-2xl shadow-sm border border-amber-100">
-              <div className="bg-amber-100 w-12 h-12 rounded-xl flex items-center justify-center mb-4">
-                <Clock className="text-amber-600 size-6" />
+            <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+              <div className="bg-emerald-100 w-10 h-10 rounded-xl flex items-center justify-center mb-4">
+                <Clock className="text-emerald-600 size-5" />
               </div>
               <h3 className="font-bold text-slate-900 mb-2">Saves Years of Work</h3>
-              <p className="text-slate-600 text-sm">Never model a sofa or bed from scratch again. Drag, drop, render.</p>
+              <p className="text-slate-600 text-xs">Never model a sofa or bed from scratch again. Drag, drop, render.</p>
             </div>
-            <div className="bg-white p-6 rounded-2xl shadow-sm border border-amber-100">
-              <div className="bg-amber-100 w-12 h-12 rounded-xl flex items-center justify-center mb-4">
-                <Trophy className="text-amber-600 size-6" />
+            <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+              <div className="bg-emerald-100 w-10 h-10 rounded-xl flex items-center justify-center mb-4">
+                <Trophy className="text-emerald-600 size-5" />
               </div>
               <h3 className="font-bold text-slate-900 mb-2">Pays For Itself</h3>
-              <p className="text-slate-600 text-sm">One approved client pitch pays for this entire package 100x over.</p>
+              <p className="text-slate-600 text-xs">One approved client pitch pays for this entire package 100x over.</p>
             </div>
           </div>
         </div>
       </section>
 
       {/* --- NEW SALES SECTION 2: TESTIMONIALS SLIDER --- */}
-      <section className="py-24 bg-slate-900 text-white relative overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16 text-center">
-          <h2 className="text-3xl sm:text-4xl font-black mb-4">Trusted by 10,000+ Top Designers</h2>
-          <p className="text-slate-400 font-medium">Swipe to read what our community thinks.</p>
+      <section className="py-20 bg-white relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12 text-center">
+          <h2 className="text-2xl sm:text-3xl font-black text-slate-900 mb-2">Trusted by 10,000+ Top Designers</h2>
+          <p className="text-slate-500 font-medium">Swipe to read what our community thinks.</p>
         </div>
         
         {/* CSS to hide scrollbar but keep functionality */}
@@ -688,7 +688,7 @@ export function App() {
           .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         `}} />
 
-        <div className="flex overflow-x-auto gap-6 px-4 sm:px-8 pb-8 snap-x snap-mandatory no-scrollbar">
+        <div className="flex overflow-x-auto gap-4 px-4 sm:px-8 pb-8 snap-x snap-mandatory no-scrollbar">
           {[
             { name: "Sarah Jenkins", role: "Senior Interior Designer", quote: "I used to spend hours searching 3D Warehouse for decent models that didn't look like low-poly trash. The AVADA pack changed everything. V-Ray ready and instant download." },
             { name: "Michael R.", role: "Architectural Visualizer", quote: "The absolute best ROI of any asset I've bought this year. Dropped a bedroom set into my scene and the client approved the render immediately. Highly recommend." },
@@ -713,11 +713,11 @@ export function App() {
             { name: "Sophie Taylor", role: "Drafting Technician", quote: "Easy to import, easy to modify. It integrates seamlessly into my workflow." },
             { name: "Liam O.", role: "Junior Architect", quote: "Paid for itself on the first day. The time saved is worth its weight in gold." }
           ].map((t, i) => (
-            <div key={i} className="flex-none w-[320px] md:w-[400px] snap-center bg-slate-800/50 border border-slate-700/50 p-8 rounded-3xl flex flex-col justify-between">
-              <p className="text-slate-300 font-medium leading-relaxed mb-8 italic">"{t.quote}"</p>
+            <div key={i} className="flex-none w-[280px] md:w-[320px] snap-center bg-slate-50 border border-slate-200 p-6 rounded-2xl flex flex-col justify-between">
+              <p className="text-slate-600 font-medium leading-relaxed mb-6 italic text-sm">"{t.quote}"</p>
               <div>
-                <p className="font-bold text-white">{t.name}</p>
-                <p className="text-sm text-slate-400">{t.role}</p>
+                <p className="font-bold text-slate-900 text-sm">{t.name}</p>
+                <p className="text-xs text-slate-500">{t.role}</p>
               </div>
             </div>
           ))}
@@ -891,7 +891,7 @@ export function App() {
       >
         <div className="bg-slate-900 rounded-2xl p-3 shadow-2xl flex items-center justify-between gap-4 w-full max-w-md border border-slate-700 pointer-events-auto">
           <div className="flex flex-col text-left pl-2">
-            <span className="text-white font-bold text-sm">Lifetime Pass</span>
+            <span className="text-white font-bold text-sm">Get All Models</span>
             <span className="text-rose-400 font-mono text-xs font-bold flex items-center gap-1">
               <Timer className="size-3" /> Ends in {timerString}
             </span>
@@ -903,7 +903,7 @@ export function App() {
             }}
             className="px-6 py-3 rounded-xl bg-[#10b981] text-black font-black text-sm hover:bg-[#059669] transition shadow-md cursor-pointer"
           >
-            Claim $29 Pass
+            Download
           </button>
         </div>
       </div>
