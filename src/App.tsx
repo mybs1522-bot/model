@@ -186,6 +186,17 @@ export function App() {
     window.scrollTo({ top: 0, left: 0, behavior: "instant" });
   }, [currentRoute]);
 
+  const timerString = useEvergreenTimer();
+  const [showFloatingCTA, setShowFloatingCTA] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowFloatingCTA(window.scrollY > 400);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [selectedSubCategory, setSelectedSubCategory] = useState<string>("all-furniture");
   const [visibleCount, setVisibleCount] = useState(6);
@@ -358,16 +369,6 @@ export function App() {
             <a href="#categories" className="hover:text-slate-900 transition">Categories</a>
             <a href="#pricing" className="hover:text-slate-900 transition">Pricing Pass</a>
           </nav>
-
-          {/* Action CTA */}
-          <div className="flex items-center gap-2.5">
-            <button
-              onClick={() => setShowSubscriptionModal(true)}
-              className="px-4 sm:px-5 py-2 sm:py-2.5 rounded-full bg-[#10b981] text-black text-xs font-black hover:bg-[#059669] transition flex items-center gap-2 shadow-sm hover:shadow-md cursor-pointer"
-            >
-              <Zap className="size-3.5 fill-current" /> Claim $29 Pass
-            </button>
-          </div>
         </div>
       </header>
 
@@ -881,6 +882,31 @@ export function App() {
           </div>
         </div>
       )}
+
+      {/* FLOATING CTA AT BOTTOM */}
+      <div 
+        className={`fixed bottom-0 inset-x-0 p-4 z-[100] transition-transform duration-500 flex justify-center pointer-events-none ${
+          showFloatingCTA ? "translate-y-0" : "translate-y-full"
+        }`}
+      >
+        <div className="bg-slate-900 rounded-2xl p-3 shadow-2xl flex items-center justify-between gap-4 w-full max-w-md border border-slate-700 pointer-events-auto">
+          <div className="flex flex-col text-left pl-2">
+            <span className="text-white font-bold text-sm">Lifetime Pass</span>
+            <span className="text-rose-400 font-mono text-xs font-bold flex items-center gap-1">
+              <Timer className="size-3" /> Ends in {timerString}
+            </span>
+          </div>
+          <button 
+            onClick={() => {
+              const el = document.getElementById("pricing");
+              if (el) el.scrollIntoView({ behavior: "smooth" });
+            }}
+            className="px-6 py-3 rounded-xl bg-[#10b981] text-black font-black text-sm hover:bg-[#059669] transition shadow-md cursor-pointer"
+          >
+            Claim $29 Pass
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
