@@ -32,6 +32,10 @@ import {
   Plus,
   Armchair,
   Check,
+  Star,
+  Clock,
+  Shield,
+  Trophy,
 } from "lucide-react";
 
 export interface ModelItem {
@@ -632,6 +636,122 @@ export function App() {
               </button>
             </div>
           )}
+        </div>
+      </section>
+
+      {/* --- NEW SALES SECTION 1: ROI & VALUE --- */}
+      <section className="py-20 bg-amber-50 relative overflow-hidden">
+        <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-amber-200 to-transparent"></div>
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+          <h2 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight mb-6">
+            Stop Burning Money on Single Models
+          </h2>
+          <p className="text-xl sm:text-2xl font-medium text-amber-900/80 mb-10 leading-relaxed">
+            Other designers charge <span className="text-red-500 font-bold line-through">$50-$200 per model</span>. With AVADA, you get an <strong className="text-amber-700">entire lifetime arsenal</strong> for the price of a cheap lunch.
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-left">
+            <div className="bg-white p-6 rounded-2xl shadow-sm border border-amber-100">
+              <div className="bg-amber-100 w-12 h-12 rounded-xl flex items-center justify-center mb-4">
+                <Shield className="text-amber-600 size-6" />
+              </div>
+              <h3 className="font-bold text-slate-900 mb-2">Commercial License</h3>
+              <p className="text-slate-600 text-sm">Use in client presentations, pitches, and final renders without restrictions.</p>
+            </div>
+            <div className="bg-white p-6 rounded-2xl shadow-sm border border-amber-100">
+              <div className="bg-amber-100 w-12 h-12 rounded-xl flex items-center justify-center mb-4">
+                <Clock className="text-amber-600 size-6" />
+              </div>
+              <h3 className="font-bold text-slate-900 mb-2">Saves Years of Work</h3>
+              <p className="text-slate-600 text-sm">Never model a sofa or bed from scratch again. Drag, drop, render.</p>
+            </div>
+            <div className="bg-white p-6 rounded-2xl shadow-sm border border-amber-100">
+              <div className="bg-amber-100 w-12 h-12 rounded-xl flex items-center justify-center mb-4">
+                <Trophy className="text-amber-600 size-6" />
+              </div>
+              <h3 className="font-bold text-slate-900 mb-2">Pays For Itself</h3>
+              <p className="text-slate-600 text-sm">One approved client pitch pays for this entire package 100x over.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* --- NEW SALES SECTION 2: TESTIMONIALS --- */}
+      <section className="py-24 bg-slate-900 text-white relative">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl sm:text-4xl font-black mb-4">Trusted by 10,000+ Top Designers</h2>
+            <p className="text-slate-400 font-medium">Don't just take our word for it.</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* Testimonial 1 */}
+            <div className="bg-slate-800/50 border border-slate-700/50 p-8 rounded-3xl relative">
+              <div className="flex text-amber-400 mb-4 gap-1">
+                <Star className="fill-current size-5" />
+                <Star className="fill-current size-5" />
+                <Star className="fill-current size-5" />
+                <Star className="fill-current size-5" />
+                <Star className="fill-current size-5" />
+              </div>
+              <p className="text-slate-300 font-medium leading-relaxed mb-6 italic">
+                "I used to spend hours searching 3D Warehouse for decent models that didn't look like low-poly trash. The AVADA pack changed everything. V-Ray ready and instant download."
+              </p>
+              <div>
+                <p className="font-bold text-white">Sarah Jenkins</p>
+                <p className="text-sm text-slate-400">Senior Interior Designer</p>
+              </div>
+            </div>
+            {/* Testimonial 2 */}
+            <div className="bg-slate-800/50 border border-slate-700/50 p-8 rounded-3xl relative">
+              <div className="flex text-amber-400 mb-4 gap-1">
+                <Star className="fill-current size-5" />
+                <Star className="fill-current size-5" />
+                <Star className="fill-current size-5" />
+                <Star className="fill-current size-5" />
+                <Star className="fill-current size-5" />
+              </div>
+              <p className="text-slate-300 font-medium leading-relaxed mb-6 italic">
+                "The absolute best ROI of any asset I've bought this year. Dropped a bedroom set into my scene and the client approved the render immediately. Highly recommend."
+              </p>
+              <div>
+                <p className="font-bold text-white">Michael R.</p>
+                <p className="text-sm text-slate-400">Architectural Visualizer</p>
+              </div>
+            </div>
+            {/* Testimonial 3 */}
+            <div className="bg-slate-800/50 border border-slate-700/50 p-8 rounded-3xl relative">
+              <div className="flex text-amber-400 mb-4 gap-1">
+                <Star className="fill-current size-5" />
+                <Star className="fill-current size-5" />
+                <Star className="fill-current size-5" />
+                <Star className="fill-current size-5" />
+                <Star className="fill-current size-5" />
+              </div>
+              <p className="text-slate-300 font-medium leading-relaxed mb-6 italic">
+                "Worth 10x the price. If you value your time and want professional-grade assets, get this immediately before they realize how underpriced it is."
+              </p>
+              <div>
+                <p className="font-bold text-white">Elena Popov</p>
+                <p className="text-sm text-slate-400">Freelance 3D Artist</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* --- NEW SALES SECTION 3: FOMO & URGENCY --- */}
+      <section className="py-20 bg-rose-500 text-white text-center">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-4xl sm:text-5xl font-black mb-6 tracking-tight">Warning: Price Will Increase Soon</h2>
+          <p className="text-xl sm:text-2xl font-medium text-rose-100 mb-8 leading-relaxed">
+            We are constantly adding new models. As the vault grows, so does the price. Lock in your lifetime access right now at this insanely low price.
+          </p>
+          <div className="inline-flex items-center gap-3 bg-white/10 px-6 py-3 rounded-full border border-white/20">
+            <span className="relative flex h-3 w-3">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-3 w-3 bg-white"></span>
+            </span>
+            <span className="font-bold text-sm uppercase tracking-widest">14 Designers downloading right now</span>
+          </div>
         </div>
       </section>
 
