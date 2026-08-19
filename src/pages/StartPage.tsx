@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import {
   Timer,
   Sparkles,
@@ -26,6 +26,10 @@ interface StartPageProps {
 }
 
 export function StartPage({ onNavigateMain, onNavigateMore }: StartPageProps) {
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+  }, []);
+
   const countdown = useEvergreenTimer();
   const [showCheckoutModal, setShowCheckoutModal] = useState(false);
   const [selectedModelTitle, setSelectedModelTitle] = useState<string>("");

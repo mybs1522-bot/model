@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Pricing, useEvergreenTimer } from "@/components/ui/single-pricing-card-1";
 import { SketchUpShowcaseVideo } from "@/components/ui/sketchup-showcase-video";
 import { CategoryPostersSlider } from "@/components/ui/category-posters-slider";
@@ -156,6 +156,10 @@ interface UpsellPageProps {
 }
 
 export function UpsellPage({ onSkipToStarter, onSuccessVIP, onSkip }: UpsellPageProps) {
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+  }, []);
+
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [selectedSubCategory, setSelectedSubCategory] = useState<string>("all-furniture");
   const [visibleCount, setVisibleCount] = useState(6);

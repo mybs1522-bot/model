@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   CheckCircle2,
   Download,
@@ -25,6 +25,10 @@ export function SuccessPage({
   onNavigateHome,
   onNavigateUpsell,
 }: SuccessPageProps) {
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+  }, []);
+
   const [copiedKey, setCopiedKey] = useState(false);
   const email = localStorage.getItem("avada_user_email") || "your-email@example.com";
   const isVip = plan === "vip";
