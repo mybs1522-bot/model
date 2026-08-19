@@ -195,50 +195,59 @@ export function App() {
 
   // Combine real scanned models + dedicated furniture + public JSON fallback
   const ALL_MODELS: ModelItem[] = useMemo(() => {
-    const rawManifestList = Array.isArray(manifestData) ? manifestData : ((manifestData as any)?.models || []);
-    const scannedModels: ModelItem[] = rawManifestList.map((model: any) => ({
-      id: model.id || `${model.folder}_${model.fileName}`,
-      title: model.title || model.fileName?.replace(/_/g, " ").replace(/\.\w+$/, "") || "Untitled",
-      rawName: model.fileName || "Unknown.skp",
-      categoryKey: model.folder?.toLowerCase() || "apartment",
-      categoryName: model.folder?.charAt(0).toUpperCase() + model.folder?.slice(1) || "Apartment",
-      src: model.imagePath || "/placeholder.jpg",
-      renderEngine: model.renderEngine || "V-Ray 6",
-      format: "SketchUp (.SKP)",
-      polyCount: model.polyCount || "~120K Polys",
-      fileSize: model.fileSize || "~55 MB",
-      featured: model.featured || false,
-    }));
+    const rawManifestList = Array.isArray(manifestData)
+      ? manifestData
+      : ((manifestData as any)?.models || []);
 
-    const normalizedRaw = (publicModels as any[]).map((model: any) => {
-      let categoryKey = model.title?.split(" ")[0]?.toLowerCase() || "apartment";
-      let categoryName = categoryKey.charAt(0).toUpperCase() + categoryKey.slice(1);
-      let subCategoryKey: string | undefined = undefined;
-
-      const validCategories = ["apartment", "bedroom", "bathroom", "washroom", "kitchen", "exterior", "furniture"];
-      if (!validCategories.includes(categoryKey)) {
-        categoryKey = "apartment";
-        categoryName = "Apartment";
-      }
-
-      if (categoryKey === "bathroom" || categoryKey === "washroom") {
-        categoryKey = "washroom";
-        categoryName = "Washrooms";
-      }
-
-      if (categoryKey === "bedroom") {
-        subCategoryKey = "beds";
-      }
+    const scannedModels: ModelItem[] = rawManifestList.map((model: any) => {
+      let categoryKey = (model.categoryKey || model.folder || "apartment").toLowerCase();
+      if (categoryKey === "bathroom") categoryKey = "washroom";
+      const categoryName = model.categoryName || (categoryKey.charAt(0).toUpperCase() + categoryKey.slice(1));
+      const src = model.src || model.imagePath || model.relPath || "/placeholder.jpg";
+      const rawName = model.rawName || model.fileName || `${categoryName}_MODEL.SKP`;
+      const title = model.title || rawName.replace(/_/g, " ").replace(/\.\w+$/, "");
 
       return {
-        ...model,
+        id: model.id || `${categoryKey}_${rawName}`,
+        title,
+        rawName,
         categoryKey,
         categoryName,
-        subCategoryKey,
+        subCategoryKey: model.subCategoryKey,
+        src,
+        renderEngine: model.renderEngine || "V-Ray 6",
+        format: model.format || "SketchUp (.SKP)",
+        polyCount: model.polyCount || "~120K Polys",
+        fileSize: model.fileSize || "~55 MB",
+        featured: Boolean(model.featured),
       };
     });
 
-    return [...scannedModels, ...DEDICATED_FURNITURE, ...normalizedRaw];
+    const extraPublicModels: ModelItem[] = (publicModels as any[]).map((m: any, idx: number) => {
+      const catKey = (m.category || "apartment").toLowerCase();
+      const categoryKey = catKey === "bathroom" ? "washroom" : catKey;
+      const categoryName = categoryKey === "washroom" ? "Washrooms" : (categoryKey.charAt(0).toUpperCase() + categoryKey.slice(1));
+      const src = m.relPath || `/models/${m.category}/${m.name}`;
+      const title = `${categoryName} Model #${idx + 1}`;
+      const rawName = m.name || `${categoryName}_${idx + 1}.SKP`;
+
+      return {
+        id: `public_${categoryKey}_${idx}`,
+        title,
+        rawName,
+        categoryKey,
+        categoryName,
+        subCategoryKey: categoryKey === "bedroom" ? "beds" : undefined,
+        src,
+        renderEngine: "V-Ray 6",
+        format: "SketchUp (.SKP)",
+        polyCount: "~140K Tris",
+        fileSize: "28 MB",
+        featured: false,
+      };
+    });
+
+    return [...scannedModels, ...DEDICATED_FURNITURE, ...extraPublicModels];
   }, []);
 
   // Filtered models based on category and sub-category
