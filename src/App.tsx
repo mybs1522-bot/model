@@ -32,7 +32,6 @@ import {
   Plus,
   Armchair,
   Check,
-  Star,
   Clock,
   Shield,
   Trophy,
