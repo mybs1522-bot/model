@@ -675,83 +675,52 @@ export function App() {
         </div>
       </section>
 
-      {/* --- NEW SALES SECTION 2: TESTIMONIALS --- */}
-      <section className="py-24 bg-slate-900 text-white relative">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-black mb-4">Trusted by 10,000+ Top Designers</h2>
-            <p className="text-slate-400 font-medium">Don't just take our word for it.</p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Testimonial 1 */}
-            <div className="bg-slate-800/50 border border-slate-700/50 p-8 rounded-3xl relative">
-              <div className="flex text-amber-400 mb-4 gap-1">
-                <Star className="fill-current size-5" />
-                <Star className="fill-current size-5" />
-                <Star className="fill-current size-5" />
-                <Star className="fill-current size-5" />
-                <Star className="fill-current size-5" />
-              </div>
-              <p className="text-slate-300 font-medium leading-relaxed mb-6 italic">
-                "I used to spend hours searching 3D Warehouse for decent models that didn't look like low-poly trash. The AVADA pack changed everything. V-Ray ready and instant download."
-              </p>
-              <div>
-                <p className="font-bold text-white">Sarah Jenkins</p>
-                <p className="text-sm text-slate-400">Senior Interior Designer</p>
-              </div>
-            </div>
-            {/* Testimonial 2 */}
-            <div className="bg-slate-800/50 border border-slate-700/50 p-8 rounded-3xl relative">
-              <div className="flex text-amber-400 mb-4 gap-1">
-                <Star className="fill-current size-5" />
-                <Star className="fill-current size-5" />
-                <Star className="fill-current size-5" />
-                <Star className="fill-current size-5" />
-                <Star className="fill-current size-5" />
-              </div>
-              <p className="text-slate-300 font-medium leading-relaxed mb-6 italic">
-                "The absolute best ROI of any asset I've bought this year. Dropped a bedroom set into my scene and the client approved the render immediately. Highly recommend."
-              </p>
-              <div>
-                <p className="font-bold text-white">Michael R.</p>
-                <p className="text-sm text-slate-400">Architectural Visualizer</p>
-              </div>
-            </div>
-            {/* Testimonial 3 */}
-            <div className="bg-slate-800/50 border border-slate-700/50 p-8 rounded-3xl relative">
-              <div className="flex text-amber-400 mb-4 gap-1">
-                <Star className="fill-current size-5" />
-                <Star className="fill-current size-5" />
-                <Star className="fill-current size-5" />
-                <Star className="fill-current size-5" />
-                <Star className="fill-current size-5" />
-              </div>
-              <p className="text-slate-300 font-medium leading-relaxed mb-6 italic">
-                "Worth 10x the price. If you value your time and want professional-grade assets, get this immediately before they realize how underpriced it is."
-              </p>
-              <div>
-                <p className="font-bold text-white">Elena Popov</p>
-                <p className="text-sm text-slate-400">Freelance 3D Artist</p>
-              </div>
-            </div>
-          </div>
+      {/* --- NEW SALES SECTION 2: TESTIMONIALS SLIDER --- */}
+      <section className="py-24 bg-slate-900 text-white relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16 text-center">
+          <h2 className="text-3xl sm:text-4xl font-black mb-4">Trusted by 10,000+ Top Designers</h2>
+          <p className="text-slate-400 font-medium">Swipe to read what our community thinks.</p>
         </div>
-      </section>
+        
+        {/* CSS to hide scrollbar but keep functionality */}
+        <style dangerouslySetInnerHTML={{__html: `
+          .no-scrollbar::-webkit-scrollbar { display: none; }
+          .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        `}} />
 
-      {/* --- NEW SALES SECTION 3: FOMO & URGENCY --- */}
-      <section className="py-20 bg-rose-500 text-white text-center">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-4xl sm:text-5xl font-black mb-6 tracking-tight">Warning: Price Will Increase Soon</h2>
-          <p className="text-xl sm:text-2xl font-medium text-rose-100 mb-8 leading-relaxed">
-            We are constantly adding new models. As the vault grows, so does the price. Lock in your lifetime access right now at this insanely low price.
-          </p>
-          <div className="inline-flex items-center gap-3 bg-white/10 px-6 py-3 rounded-full border border-white/20">
-            <span className="relative flex h-3 w-3">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-3 w-3 bg-white"></span>
-            </span>
-            <span className="font-bold text-sm uppercase tracking-widest">14 Designers downloading right now</span>
-          </div>
+        <div className="flex overflow-x-auto gap-6 px-4 sm:px-8 pb-8 snap-x snap-mandatory no-scrollbar">
+          {[
+            { name: "Sarah Jenkins", role: "Senior Interior Designer", quote: "I used to spend hours searching 3D Warehouse for decent models that didn't look like low-poly trash. The AVADA pack changed everything. V-Ray ready and instant download." },
+            { name: "Michael R.", role: "Architectural Visualizer", quote: "The absolute best ROI of any asset I've bought this year. Dropped a bedroom set into my scene and the client approved the render immediately. Highly recommend." },
+            { name: "Elena Popov", role: "Freelance 3D Artist", quote: "Worth 10x the price. If you value your time and want professional-grade assets, get this immediately before they realize how underpriced it is." },
+            { name: "David Chen", role: "Studio Director", quote: "Our entire team uses these models now. The consistency in quality saves us at least 15 hours per project." },
+            { name: "Jessica Alba", role: "Interior Architect", quote: "Finally, models that actually look like the preview renders. Textures are perfectly mapped out of the box." },
+            { name: "Marcus Torres", role: "3D Modeler", quote: "I buy this just to study the topology. The meshes are incredibly clean and well-optimized for heavy scenes." },
+            { name: "Olivia Smith", role: "Set Designer", quote: "A lifesaver for tight deadlines. I can populate an entire living room in 5 minutes and hit render." },
+            { name: "Ryan Davies", role: "ArchViz Specialist", quote: "The categorization is brilliant. No more digging through messy folders. Everything is right where you expect it." },
+            { name: "Nina K.", role: "Freelance Designer", quote: "I was skeptical at the price, but the quality blew me away. Best purchase I've made for my business." },
+            { name: "James Wilson", role: "BIM Manager", quote: "Clean files, no bloatware, perfectly scaled. Exactly what professionals need." },
+            { name: "Chloe M.", role: "Design Student", quote: "This pack gave my portfolio the massive boost it needed. My renders look so much more professional now." },
+            { name: "Ahmed S.", role: "Lead Architect", quote: "We abandoned our internal model library for AVADA. It's just better maintained and higher quality." },
+            { name: "Sophia Lee", role: "Visual Merchandiser", quote: "Perfect for retail mockups. The furniture pieces are trendy and realistic." },
+            { name: "Thomas B.", role: "3D Generalist", quote: "Saves me from modeling mundane objects so I can focus on lighting and composition. Unbeatable value." },
+            { name: "Maria Garcia", role: "Residential Designer", quote: "My clients always point out how realistic the fabrics and materials look. All thanks to these models." },
+            { name: "Kevin Park", role: "Creative Director", quote: "The polygon count is perfectly balanced—detailed enough for close-ups, light enough for massive scenes." },
+            { name: "Anna J.", role: "Freelance Architect", quote: "I literally cannot work without this library anymore. It's the first thing I load up." },
+            { name: "Lucas M.", role: "Environment Artist", quote: "Great base meshes to work from, or just use them as-is. Incredibly versatile." },
+            { name: "Emma White", role: "Interior Stylist", quote: "The sheer volume of high-quality items is staggering. You never run out of options." },
+            { name: "Daniel K.", role: "Principal Designer", quote: "A masterclass in 3D asset creation. Every designer should have this in their toolkit." },
+            { name: "Sophie Taylor", role: "Drafting Technician", quote: "Easy to import, easy to modify. It integrates seamlessly into my workflow." },
+            { name: "Liam O.", role: "Junior Architect", quote: "Paid for itself on the first day. The time saved is worth its weight in gold." }
+          ].map((t, i) => (
+            <div key={i} className="flex-none w-[320px] md:w-[400px] snap-center bg-slate-800/50 border border-slate-700/50 p-8 rounded-3xl flex flex-col justify-between">
+              <p className="text-slate-300 font-medium leading-relaxed mb-8 italic">"{t.quote}"</p>
+              <div>
+                <p className="font-bold text-white">{t.name}</p>
+                <p className="text-sm text-slate-400">{t.role}</p>
+              </div>
+            </div>
+          ))}
         </div>
       </section>
 
