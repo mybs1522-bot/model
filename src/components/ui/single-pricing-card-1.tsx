@@ -160,11 +160,10 @@ export function Pricing({ onSelectPlan, onSkip, isProcessing = false }: PricingP
               </div>
 
               {/* Included Features List */}
-              <div className="space-y-2.5 pt-2 border-t border-slate-200 text-xs">
+              <div className="space-y-2.5 pt-2 border-t border-slate-200 text-xs text-left">
                 {[
                   'Instant access to 3,000+ SketchUp (.SKP) scene models',
                   'Full commercial license — edit & sell to your clients',
-                  'Free SketchUp Course Lifetime Access (Free Addon)',
                   'Includes 8K PBR textures, furniture & archviz packs',
                   'Free lifetime updates with new weekly model drops',
                 ].map((feature, idx) => (
@@ -175,6 +174,22 @@ export function Pricing({ onSelectPlan, onSkip, isProcessing = false }: PricingP
                     <span>{feature}</span>
                   </div>
                 ))}
+              </div>
+
+              {/* Free Addon Visual Block */}
+              <div className="flex items-center gap-3 p-3 rounded-xl bg-emerald-50 border border-emerald-200 relative overflow-hidden text-left mt-3">
+                <div className="absolute top-0 right-0 px-2 py-0.5 bg-emerald-500 text-white text-[9px] font-black uppercase tracking-wider rounded-bl-lg">
+                  Free Addon
+                </div>
+                <div className="bg-emerald-100 size-10 rounded border border-emerald-200 flex items-center justify-center shrink-0">
+                  <Sparkles className="size-5 text-emerald-600" />
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm font-bold text-slate-900 leading-snug">Free SketchUp Course</p>
+                  <p className="text-xs text-emerald-700 font-semibold">Lifetime Access</p>
+                </div>
+                <span className="text-sm font-bold text-emerald-600 line-through opacity-70 mr-1">$297</span>
+                <span className="text-sm font-black text-emerald-600">FREE</span>
               </div>
 
               {/* 1-Click Upgrade CTA Action */}

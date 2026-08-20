@@ -191,9 +191,16 @@ export function App() {
 
   useEffect(() => {
     const handleScroll = () => {
-      setShowFloatingCTA(window.scrollY > 400);
+      const pricingEl = document.getElementById("pricing");
+      let pricingInView = false;
+      if (pricingEl) {
+        const rect = pricingEl.getBoundingClientRect();
+        pricingInView = rect.top <= window.innerHeight && rect.bottom >= 0;
+      }
+      setShowFloatingCTA(window.scrollY > 400 && !pricingInView);
     };
     window.addEventListener("scroll", handleScroll);
+    handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
