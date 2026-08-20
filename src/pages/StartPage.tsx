@@ -66,8 +66,9 @@ export function StartPage({ onNavigateMain, onNavigateMore }: StartPageProps) {
 
   const modelsByCategory = useMemo(() => {
     const map: Record<string, typeof publicModels> = {};
-    publicModels.forEach((m) => {
-      const k = m.categoryKey || "exterior";
+    publicModels.forEach((m: any) => {
+      let k = (m.category || "exterior").toLowerCase();
+      if (k === "bathroom") k = "washroom";
       if (!map[k]) map[k] = [];
       map[k].push(m);
     });
@@ -232,7 +233,7 @@ export function StartPage({ onNavigateMain, onNavigateMore }: StartPageProps) {
               }}
               className="text-xs font-bold text-slate-900 underline transition cursor-pointer"
             >
-              All Categories (378)
+              All Categories
             </button>
           </div>
 
@@ -241,7 +242,7 @@ export function StartPage({ onNavigateMain, onNavigateMore }: StartPageProps) {
             {CATEGORIES.map((cat) => {
               const IconComp = ICON_MAP[cat.icon] || Box;
               const catModels = modelsByCategory[cat.key] || [];
-              const previewImages = catModels.slice(0, 4).map((m) => m.src);
+              const previewImages = catModels.slice(0, 4).map((m: any) => m.relPath || m.src);
 
               return (
                 <button
