@@ -181,14 +181,14 @@ export function Pricing({ onSelectPlan, onSkip, isProcessing = false }: PricingP
                 <div className="absolute top-0 right-0 px-2 py-0.5 bg-emerald-500 text-white text-[9px] font-black uppercase tracking-wider rounded-bl-lg">
                   Free Addon
                 </div>
-                <div className="bg-emerald-100 size-10 rounded border border-emerald-200 flex items-center justify-center shrink-0">
-                  <Sparkles className="size-5 text-emerald-600" />
+                <div className="bg-white size-10 rounded-lg border border-emerald-200 flex items-center justify-center shrink-0 overflow-hidden shadow-sm">
+                  <img src="/sketchup-logo.png" alt="SketchUp Logo" className="w-6 h-6 object-contain" />
                 </div>
                 <div className="flex-1">
                   <p className="text-sm font-bold text-slate-900 leading-snug">Free SketchUp Course</p>
                   <p className="text-xs text-emerald-700 font-semibold">Lifetime Access</p>
                 </div>
-                <span className="text-sm font-bold text-emerald-600 line-through opacity-70 mr-1">$297</span>
+                <span className="text-sm font-bold text-emerald-600 line-through opacity-70 mr-1">$49</span>
                 <span className="text-sm font-black text-emerald-600">FREE</span>
               </div>
 
