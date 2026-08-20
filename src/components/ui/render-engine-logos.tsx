@@ -67,31 +67,31 @@ export function SketchUpLogo({ className = "h-6 w-auto" }: { className?: string 
  */
 export function RenderEngineTrustBanner({ className = "" }: { className?: string }) {
   return (
-    <div className={`flex flex-col items-center gap-2 py-3 ${className}`}>
-      <span className="text-[11px] font-mono font-bold tracking-widest text-slate-500 uppercase flex items-center gap-1.5">
+    <div className={`flex flex-col items-center sm:items-start gap-2 py-2 w-full ${className}`}>
+      <span className="text-[10px] sm:text-[11px] font-mono font-bold tracking-wider text-slate-500 uppercase flex items-center gap-1.5">
         <span className="size-1.5 rounded-full bg-[#10b981] animate-pulse" />
         Official Compatibility & Support
       </span>
 
-      <div className="flex items-center justify-center flex-wrap gap-2.5 sm:gap-3.5 px-4 py-2.5 rounded-2xl bg-white/90 border border-slate-200 backdrop-blur-xl shadow-sm">
+      <div className="grid grid-cols-4 gap-1 sm:gap-2.5 p-1.5 sm:px-3 sm:py-2 rounded-xl sm:rounded-2xl bg-white/90 border border-slate-200 backdrop-blur-xl shadow-xs w-full max-w-md">
         {/* D5 Render Badge */}
-        <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200/80 hover:border-[#3B82F6] hover:bg-white transition duration-300 shadow-xs">
-          <D5RenderLogo className="h-5 w-auto" />
+        <div className="flex items-center justify-center p-1 sm:px-2 sm:py-1 rounded-lg sm:rounded-xl bg-slate-50 border border-slate-200/80 hover:border-[#3B82F6] hover:bg-white transition duration-300 shadow-2xs">
+          <D5RenderLogo className="h-3.5 sm:h-5 w-auto max-w-full" />
         </div>
 
         {/* Chaos V-Ray Badge */}
-        <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200/80 hover:border-[#E11D48] hover:bg-white transition duration-300 shadow-xs">
-          <VRayLogo className="h-5 w-auto" />
+        <div className="flex items-center justify-center p-1 sm:px-2 sm:py-1 rounded-lg sm:rounded-xl bg-slate-50 border border-slate-200/80 hover:border-[#E11D48] hover:bg-white transition duration-300 shadow-2xs">
+          <VRayLogo className="h-3.5 sm:h-5 w-auto max-w-full" />
         </div>
 
         {/* Lumion Badge */}
-        <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200/80 hover:border-[#F97316] hover:bg-white transition duration-300 shadow-xs">
-          <LumionLogo className="h-5 w-auto" />
+        <div className="flex items-center justify-center p-1 sm:px-2 sm:py-1 rounded-lg sm:rounded-xl bg-slate-50 border border-slate-200/80 hover:border-[#F97316] hover:bg-white transition duration-300 shadow-2xs">
+          <LumionLogo className="h-3.5 sm:h-5 w-auto max-w-full" />
         </div>
 
         {/* SketchUp Badge */}
-        <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200/80 hover:border-[#005F9E] hover:bg-white transition duration-300 shadow-xs">
-          <SketchUpLogo className="h-5 w-auto" />
+        <div className="flex items-center justify-center p-1 sm:px-2 sm:py-1 rounded-lg sm:rounded-xl bg-slate-50 border border-slate-200/80 hover:border-[#005F9E] hover:bg-white transition duration-300 shadow-2xs">
+          <SketchUpLogo className="h-3.5 sm:h-5 w-auto max-w-full" />
         </div>
       </div>
     </div>

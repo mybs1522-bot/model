@@ -26,7 +26,6 @@ import {
   Zap,
   Timer,
   Eye,
-  ArrowRight,
   Armchair,
   Check,
   Clock,
@@ -440,13 +439,11 @@ export function App() {
                   <span className="text-[10px] bg-black/15 text-black px-2 py-0.5 rounded-full font-mono line-through opacity-75">$199</span>
                 </button>
 
-                <a
-                  href="#models-directory"
-                  className="px-5 py-3.5 rounded-full bg-white text-slate-800 border border-slate-200 font-bold text-xs hover:bg-slate-50 transition flex items-center justify-center gap-1.5 shadow-2xs text-center"
-                >
-                  <span>Explore 3,000+ Models</span>
-                  <ArrowRight className="size-3.5 text-slate-500" />
-                </a>
+                {/* +100 New Models Every Month Pill */}
+                <div className="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-full bg-emerald-50 border border-emerald-200/80 text-emerald-950 text-xs font-bold shadow-2xs whitespace-nowrap">
+                  <span className="size-2 rounded-full bg-[#10b981] animate-pulse" />
+                  <span>+100 New Models Every Month</span>
+                </div>
               </div>
 
               {/* Works With D5 Render, V-Ray, Lumion Trust Banner */}
