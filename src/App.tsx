@@ -412,14 +412,14 @@ export function App() {
               </span>
             </h1>
 
-            <p className="text-slate-600 text-sm sm:text-base max-w-xl font-medium leading-relaxed">
-              Unlock <strong className="text-slate-900 font-bold">3,000+ High-Quality SketchUp 3D Scenes</strong>. Complete production-ready .SKP files with 8K PBR textures and lighting. Ready for instant rendering.
-            </p>
-
-            {/* Mobile Video Placement (Under Description, Before Buttons) */}
+            {/* Mobile Video Placement (Under Title, Above Description) */}
             <div className="block lg:hidden w-full py-4">
               <SketchUpShowcaseVideo />
             </div>
+
+            <p className="text-slate-600 text-sm sm:text-base max-w-xl font-medium leading-relaxed">
+              Unlock <strong className="text-slate-900 font-bold">3,000+ High-Quality SketchUp 3D Scenes</strong>. Complete production-ready .SKP files with 8K PBR textures and lighting. Ready for instant rendering.
+            </p>
 
             <div className="flex flex-row items-center gap-2 sm:gap-4 pt-2 flex-nowrap w-full max-w-md">
               <button
