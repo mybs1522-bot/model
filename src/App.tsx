@@ -392,7 +392,10 @@ export function App() {
 
             <div className="flex flex-row items-center gap-2 sm:gap-4 pt-2 flex-nowrap w-full max-w-md">
               <button
-                onClick={() => setShowSubscriptionModal(true)}
+                onClick={() => {
+                  const el = document.getElementById("pricing");
+                  if (el) el.scrollIntoView({ behavior: "smooth" });
+                }}
                 className="flex-1 px-3 sm:px-6 py-3.5 rounded-full bg-[#10b981] text-black font-black text-xs sm:text-sm shadow-md hover:bg-[#059669] transition flex items-center justify-center gap-2 whitespace-nowrap active:scale-95 cursor-pointer"
               >
                 <Zap className="size-4 fill-current" /> Unlock All Models ($29)
