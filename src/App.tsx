@@ -416,6 +416,11 @@ export function App() {
               Unlock <strong className="text-slate-900 font-bold">3,000+ High-Quality SketchUp 3D Scenes</strong>. Complete production-ready .SKP files with 8K PBR textures and lighting. Ready for instant rendering.
             </p>
 
+            {/* Mobile Video Placement (Under Description, Before Buttons) */}
+            <div className="block lg:hidden w-full py-4">
+              <SketchUpShowcaseVideo />
+            </div>
+
             <div className="flex flex-row items-center gap-2 sm:gap-4 pt-2 flex-nowrap w-full max-w-md">
               <button
                 onClick={() => {
@@ -457,8 +462,8 @@ export function App() {
             </div>
           </div>
 
-          {/* Right Interactive SketchUp Video Workflow Showcase */}
-          <div className="lg:col-span-6 relative">
+          {/* Right Interactive SketchUp Video Workflow Showcase (Desktop Only) */}
+          <div className="hidden lg:block lg:col-span-6 relative">
             <SketchUpShowcaseVideo />
           </div>
         </div>
