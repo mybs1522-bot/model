@@ -208,9 +208,9 @@ export function StartPage({ onNavigateMain, onNavigateMore }: StartPageProps) {
         {/* Headline */}
         <div className="space-y-4">
           <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-slate-900 tracking-tight leading-[1.08]">
-            MEET YOUR NEW <br className="hidden sm:inline" />
+            3,000+ High Detailed Models for SketchUp, <br className="hidden sm:inline" />
             <span className="bg-gradient-to-r from-slate-950 via-emerald-800 to-[#10b981] bg-clip-text text-transparent">
-              SKETCHUP DESIGN LIBRARY
+              Create Anything. Copy & Paste.
             </span>
           </h1>
           
