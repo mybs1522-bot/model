@@ -480,98 +480,11 @@ export function App() {
             <SketchUpShowcaseVideo />
           </div>
         </div>
-      </section>
-
-      {/* FEATURED CATEGORY POSTERS SLIDER (RIGHT BELOW HERO VIDEO) */}
-      <CategoryPostersSlider
-        onSelectCategory={(cat) => {
-          setSelectedCategory(cat);
-          setVisibleCount(6);
-          if (cat === "furniture") {
-            setSelectedSubCategory("all-furniture");
-          }
-        }}
-      />
-
-      {/* CATEGORY TILES (6 MAIN TILES INCL. FURNITURE) */}
-      <section id="categories" className="py-12 px-4 sm:px-6 lg:px-8 border-b border-slate-200">
-        <div className="max-w-7xl mx-auto space-y-6">
-          <div className="flex items-center justify-between">
-            <h2 className="text-lg sm:text-xl font-black tracking-tight text-slate-900 flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-[#10b981]" />
-              Categories
-            </h2>
-            <button
-              onClick={() => {
-                setSelectedCategory("all");
-                setSelectedSubCategory("all-furniture");
-                setVisibleCount(6);
-              }}
-              className={`text-xs font-bold transition cursor-pointer ${
-                selectedCategory === "all" ? "text-slate-900 underline" : "text-slate-500 hover:text-slate-900"
-              }`}
-            >
-              All Categories ({ALL_MODELS.length})
-            </button>
-          </div>
-
-          {/* 6 Clean Minimal Tiles with 3-4 Circular Image Icons */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
-            {CATEGORIES.map((cat) => {
-              const IconComp = ICON_MAP[cat.icon] || Box;
-              const isSelected = selectedCategory === cat.key;
-              const catModels = modelsByCategory[cat.key] || [];
-              const previewImages = catModels.slice(0, 4).map((m) => m.src);
-
-              return (
-                <button
-                  key={cat.key}
-                  onClick={() => {
-                    setSelectedCategory(cat.key);
-                    setVisibleCount(6);
-                    if (cat.key === "furniture") {
-                      setSelectedSubCategory("all-furniture");
-                    }
-                    const elem = document.getElementById("models-directory");
-                    if (elem) elem.scrollIntoView({ behavior: "smooth" });
-                  }}
-                  className={`p-3.5 sm:p-4 rounded-2xl border text-left transition-all flex flex-col justify-between h-32 group cursor-pointer ${
-                    isSelected
-                      ? "bg-white border-2 border-emerald-500 shadow-md"
-                      : "bg-white border-slate-200 hover:border-slate-300 hover:shadow-md hover:bg-slate-50/80"
-                  }`}
-                >
-                  <div className="flex items-center justify-between w-full">
-                    {/* Stack of 3-4 Circular Model Image Avatars */}
-                    <div className="flex items-center pl-1">
-                      {previewImages.map((imgSrc, idx) => (
-                        <img
-                          key={idx}
-                          src={imgSrc}
-                          alt={cat.name}
-                          className="size-6 sm:size-7.5 rounded-full border-2 border-white object-cover -ml-2 first:ml-0 shadow-sm group-hover:border-slate-100 transition-colors"
-                        />
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="flex items-center justify-between w-full pt-2 border-t border-slate-100">
-                    <div className="text-xs sm:text-sm font-extrabold text-slate-900 transition-colors flex items-center gap-1.5 truncate">
-                      <IconComp className="size-3.5 text-slate-500 group-hover:text-slate-900" />
-                      {cat.name}
-                    </div>
-                  </div>
-                </button>
-              );
-            })}
-          </div>
-        </div>
-      </section>
 
       {/* MINIMAL MODELS SHOWCASE DIRECTORY WITH FURNITURE SUBCATEGORIES */}
-      <section id="models-directory" className="py-12 sm:py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full space-y-6">
+      <div id="models-directory" className="pt-16 pb-4 px-0 max-w-[100vw] mx-auto w-full space-y-6">
         {/* Filter Controls */}
-        <div className="space-y-4 pb-4 border-b border-slate-200">
+        <div className="space-y-4 pb-4 border-b border-slate-200 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between">
             <h2 className="text-base sm:text-lg font-black text-slate-900 tracking-tight flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-[#10b981]" />
@@ -724,6 +637,95 @@ export function App() {
                 </div>
               ))}
             </div>
+          </div>
+        </div>
+      </section>
+
+
+      </section>
+
+      {/* FEATURED CATEGORY POSTERS SLIDER (RIGHT BELOW HERO VIDEO) */}
+      <CategoryPostersSlider
+        onSelectCategory={(cat) => {
+          setSelectedCategory(cat);
+          setVisibleCount(6);
+          if (cat === "furniture") {
+            setSelectedSubCategory("all-furniture");
+          }
+        }}
+      />
+
+      {/* CATEGORY TILES (6 MAIN TILES INCL. FURNITURE) */}
+      <section id="categories" className="py-12 px-4 sm:px-6 lg:px-8 border-b border-slate-200">
+        <div className="max-w-7xl mx-auto space-y-6">
+          <div className="flex items-center justify-between">
+            <h2 className="text-lg sm:text-xl font-black tracking-tight text-slate-900 flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-[#10b981]" />
+              Categories
+            </h2>
+            <button
+              onClick={() => {
+                setSelectedCategory("all");
+                setSelectedSubCategory("all-furniture");
+                setVisibleCount(6);
+              }}
+              className={`text-xs font-bold transition cursor-pointer ${
+                selectedCategory === "all" ? "text-slate-900 underline" : "text-slate-500 hover:text-slate-900"
+              }`}
+            >
+              All Categories ({ALL_MODELS.length})
+            </button>
+          </div>
+
+          {/* 6 Clean Minimal Tiles with 3-4 Circular Image Icons */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
+            {CATEGORIES.map((cat) => {
+              const IconComp = ICON_MAP[cat.icon] || Box;
+              const isSelected = selectedCategory === cat.key;
+              const catModels = modelsByCategory[cat.key] || [];
+              const previewImages = catModels.slice(0, 4).map((m) => m.src);
+
+              return (
+                <button
+                  key={cat.key}
+                  onClick={() => {
+                    setSelectedCategory(cat.key);
+                    setVisibleCount(6);
+                    if (cat.key === "furniture") {
+                      setSelectedSubCategory("all-furniture");
+                    }
+                    const elem = document.getElementById("models-directory");
+                    if (elem) elem.scrollIntoView({ behavior: "smooth" });
+                  }}
+                  className={`p-3.5 sm:p-4 rounded-2xl border text-left transition-all flex flex-col justify-between h-32 group cursor-pointer ${
+                    isSelected
+                      ? "bg-white border-2 border-emerald-500 shadow-md"
+                      : "bg-white border-slate-200 hover:border-slate-300 hover:shadow-md hover:bg-slate-50/80"
+                  }`}
+                >
+                  <div className="flex items-center justify-between w-full">
+                    {/* Stack of 3-4 Circular Model Image Avatars */}
+                    <div className="flex items-center pl-1">
+                      {previewImages.map((imgSrc, idx) => (
+                        <img
+                          key={idx}
+                          src={imgSrc}
+                          alt={cat.name}
+                          className="size-6 sm:size-7.5 rounded-full border-2 border-white object-cover -ml-2 first:ml-0 shadow-sm group-hover:border-slate-100 transition-colors"
+                        />
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between w-full pt-2 border-t border-slate-100">
+                    <div className="text-xs sm:text-sm font-extrabold text-slate-900 transition-colors flex items-center gap-1.5 truncate">
+                      <IconComp className="size-3.5 text-slate-500 group-hover:text-slate-900" />
+                      {cat.name}
+                    </div>
+                  </div>
+                </button>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -1001,3 +1003,5 @@ export function App() {
 }
 
 export default App;
+
+
