@@ -187,24 +187,6 @@ export function StartPage({ onNavigateMain, onNavigateMore }: StartPageProps) {
           <span className="text-slate-600 font-medium">1,480+ 3D Artists & Architects</span>
         </div>
 
-        {/* Narrative Hook */}
-        <div className="max-w-2xl mx-auto space-y-3 pt-1">
-          <p className="text-sm sm:text-base text-slate-700 font-medium leading-snug">
-            Tired of wasting <strong className="text-rose-600 font-bold">20+ hours searching & modeling</strong> while faster designers close your dream clients?
-          </p>
-          
-          <div className="inline-flex items-center gap-2 bg-slate-100 text-slate-600 px-3.5 py-1.5 rounded-full text-xs sm:text-sm font-mono border border-slate-200 shadow-inner">
-            <span className="text-emerald-600 font-bold">Never search for:</span>
-            <strong className="text-slate-900 w-[180px] text-left transition-all duration-300 truncate">
-              {["luxury living rooms.", "modern sofas.", "penthouse villas.", "kitchen layouts.", "architectural facades.", "8K PBR textures."][searchTermIdx]}
-            </strong>
-          </div>
-
-          <p className="text-xs sm:text-sm text-slate-500 font-semibold">
-            What if you could drop client-ready, photorealistic 3D scenes in 1 click?
-          </p>
-        </div>
-
         {/* Headline */}
         <div className="space-y-4">
           <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-slate-900 tracking-tight leading-[1.08]">
@@ -382,7 +364,25 @@ export function StartPage({ onNavigateMain, onNavigateMore }: StartPageProps) {
         </div>
       </section>
 
+      {/* NARRATIVE HOOK ABOVE CATEGORIES */}
+      <section className="py-10 sm:py-14 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto text-center space-y-4">
+        <div className="space-y-3">
+          <p className="text-base sm:text-lg text-slate-800 font-bold leading-snug">
+            Tired of wasting <strong className="text-rose-600 font-black">20+ hours searching & modeling</strong> while faster designers close your dream clients?
+          </p>
+          
+          <div className="inline-flex items-center justify-center gap-2 bg-slate-100 text-slate-700 px-4 py-2 rounded-full text-xs sm:text-sm font-mono border border-slate-200 shadow-inner">
+            <span className="text-emerald-600 font-bold">Never search for:</span>
+            <strong className="text-slate-900 w-[180px] text-left transition-all duration-300 truncate">
+              {["luxury living rooms.", "modern sofas.", "penthouse villas.", "kitchen layouts.", "architectural facades.", "8K PBR textures."][searchTermIdx]}
+            </strong>
+          </div>
 
+          <p className="text-sm sm:text-base text-slate-600 font-medium">
+            What if you could drop client-ready, photorealistic 3D scenes in 1 click?
+          </p>
+        </div>
+      </section>
 
       {/* FEATURED CATEGORY POSTERS SLIDER */}
       <CategoryPostersSlider

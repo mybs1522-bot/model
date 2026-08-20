@@ -394,27 +394,6 @@ export function App() {
                 <span>🔥 If you use Sketchup, Don't miss this package.</span>
               </div>
 
-              {/* Hook Narrative: Money & Time ROI */}
-              <div className="space-y-3 pt-1">
-                <div className="text-sm sm:text-base text-slate-700 font-medium space-y-2">
-                  <p className="leading-snug">
-                    Tired of wasting <strong className="text-rose-600 font-bold">20+ hours searching & modeling</strong> while faster designers close your dream clients?
-                  </p>
-                  
-                  {/* Dynamic Fast Search Pill */}
-                  <div className="inline-flex items-center gap-2 bg-slate-100 text-slate-600 px-3.5 py-1.5 rounded-full text-xs sm:text-sm font-mono border border-slate-200 shadow-inner">
-                    <span className="text-emerald-600 font-bold">Never search for:</span>
-                    <strong className="text-slate-900 w-[180px] text-left transition-all duration-300 truncate">
-                      {["luxury living rooms.", "modern sofas.", "penthouse villas.", "kitchen layouts.", "architectural facades.", "8K PBR textures."][searchTermIdx]}
-                    </strong>
-                  </div>
-
-                  <p className="text-xs sm:text-sm text-slate-500 font-semibold">
-                    What if you could drop client-ready, photorealistic 3D scenes in 1 click?
-                  </p>
-                </div>
-              </div>
-
               <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-slate-900 leading-[1.08]">
                 3,000+ High Detailed Models for SketchUp, <br className="hidden sm:inline" />
                 <span className="bg-gradient-to-r from-slate-950 via-emerald-800 to-[#10b981] bg-clip-text text-transparent">
@@ -675,6 +654,26 @@ export function App() {
         </div>
       </div>
 
+      </section>
+
+      {/* NARRATIVE HOOK ABOVE CATEGORIES */}
+      <section className="py-12 sm:py-16 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto text-center space-y-4">
+        <div className="space-y-3">
+          <p className="text-base sm:text-lg text-slate-800 font-bold leading-snug">
+            Tired of wasting <strong className="text-rose-600 font-black">20+ hours searching & modeling</strong> while faster designers close your dream clients?
+          </p>
+          
+          <div className="inline-flex items-center justify-center gap-2 bg-slate-100 text-slate-700 px-4 py-2 rounded-full text-xs sm:text-sm font-mono border border-slate-200 shadow-inner">
+            <span className="text-emerald-600 font-bold">Never search for:</span>
+            <strong className="text-slate-900 w-[180px] text-left transition-all duration-300 truncate">
+              {["luxury living rooms.", "modern sofas.", "penthouse villas.", "kitchen layouts.", "architectural facades.", "8K PBR textures."][searchTermIdx]}
+            </strong>
+          </div>
+
+          <p className="text-sm sm:text-base text-slate-600 font-medium">
+            What if you could drop client-ready, photorealistic 3D scenes in 1 click?
+          </p>
+        </div>
       </section>
 
       {/* FEATURED CATEGORY POSTERS SLIDER (RIGHT BELOW HERO VIDEO) */}
