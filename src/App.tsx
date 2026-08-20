@@ -9,8 +9,6 @@ import { SuccessPage } from "@/pages/SuccessPage";
 import DemoOne from "@/demo";
 import { RenderEngineTrustBanner } from "@/components/ui/render-engine-logos";
 import {
-  CopiedIcon,
-  HeartIcon,
   DownloadDoneIcon,
 } from "@/components/ui/animated-state-icons";
 import manifestData from "@/data/modelsManifest.json";
@@ -29,7 +27,6 @@ import {
   Timer,
   Eye,
   ArrowRight,
-  Plus,
   Armchair,
   Check,
   Clock,
@@ -206,10 +203,7 @@ export function App() {
 
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [selectedSubCategory, setSelectedSubCategory] = useState<string>("all-furniture");
-  const [visibleCount, setVisibleCount] = useState(6);
   const [activeModel, setActiveModel] = useState<ModelItem | null>(null);
-  const [likedModels, setLikedModels] = useState<Record<string, boolean>>({});
-  const [copiedId, setCopiedId] = useState<string | null>(null);
   const [showSubscriptionModal, setShowSubscriptionModal] = useState(false);
   const [searchTermIdx, setSearchTermIdx] = useState(0);
   const [mobileBlinkIndex, setMobileBlinkIndex] = useState(0);
@@ -301,9 +295,6 @@ export function App() {
     });
   }, [ALL_MODELS, selectedCategory, selectedSubCategory]);
 
-  const visibleModels = filteredModels.slice(0, visibleCount);
-  const hasMore = visibleCount < filteredModels.length;
-
   // Group models by category for summary counts
   const modelsByCategory = useMemo(() => {
     const map: Record<string, ModelItem[]> = {
@@ -321,15 +312,6 @@ export function App() {
     });
     return map;
   }, [ALL_MODELS]);
-
-  const toggleLikeModel = (id: string) => {
-    setLikedModels((prev) => ({ ...prev, [id]: !prev[id] }));
-  };
-
-  const handleCopyLink = (id: string) => {
-    setCopiedId(id);
-    setTimeout(() => setCopiedId(null), 2200);
-  };
 
   if (currentRoute === "start") {
     return <StartPage onNavigateMain={() => setCurrentRoute("main")} onNavigateMore={() => setCurrentRoute("more")} />;
@@ -505,7 +487,7 @@ export function App() {
                   key={sub.key}
                   onClick={() => {
                     setSelectedSubCategory(sub.key);
-                    setVisibleCount(6);
+
                   }}
                   className={`px-3.5 py-1.5 rounded-full text-[11px] font-extrabold transition whitespace-nowrap border cursor-pointer ${
                     selectedSubCategory === sub.key
@@ -639,8 +621,7 @@ export function App() {
             </div>
           </div>
         </div>
-      </section>
-
+      </div>
 
       </section>
 
@@ -648,7 +629,7 @@ export function App() {
       <CategoryPostersSlider
         onSelectCategory={(cat) => {
           setSelectedCategory(cat);
-          setVisibleCount(6);
+
           if (cat === "furniture") {
             setSelectedSubCategory("all-furniture");
           }
@@ -667,7 +648,7 @@ export function App() {
               onClick={() => {
                 setSelectedCategory("all");
                 setSelectedSubCategory("all-furniture");
-                setVisibleCount(6);
+
               }}
               className={`text-xs font-bold transition cursor-pointer ${
                 selectedCategory === "all" ? "text-slate-900 underline" : "text-slate-500 hover:text-slate-900"
@@ -690,7 +671,7 @@ export function App() {
                   key={cat.key}
                   onClick={() => {
                     setSelectedCategory(cat.key);
-                    setVisibleCount(6);
+
                     if (cat.key === "furniture") {
                       setSelectedSubCategory("all-furniture");
                     }
@@ -1003,5 +984,7 @@ export function App() {
 }
 
 export default App;
+
+
 
 

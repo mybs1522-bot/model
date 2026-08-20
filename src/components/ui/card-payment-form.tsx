@@ -9,7 +9,6 @@ import {
   ShieldCheck,
   Check,
   AlertCircle,
-  Sparkles,
 } from "lucide-react";
 import { getStripe, chargeSavedCardUpsell } from "@/lib/stripe";
 import { saveLeadEmail } from "@/lib/supabase";
@@ -558,3 +557,5 @@ export function CardPaymentForm({
     </form>
   );
 }
+
+
