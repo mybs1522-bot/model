@@ -448,29 +448,6 @@ export function App() {
 
               {/* Works With D5 Render, V-Ray, Lumion Trust Banner */}
               <RenderEngineTrustBanner className="pt-2" />
-
-              {/* Clean Minimal Stat Strip */}
-              <div className="flex items-center gap-6 sm:gap-8 pt-4 border-t border-slate-200 text-xs">
-                <div>
-                  <div className="text-lg sm:text-xl font-black text-slate-900">3,000+</div>
-                  <div className="text-slate-500 font-medium text-[11px]">3D Scenes</div>
-                </div>
-                <div className="w-px h-8 bg-slate-200" />
-                <div>
-                  <div className="text-lg sm:text-xl font-black text-slate-900">6</div>
-                  <div className="text-slate-500 font-medium text-[11px]">Categories</div>
-                </div>
-                <div className="w-px h-8 bg-slate-200" />
-                <div>
-                  <div className="text-lg sm:text-xl font-black text-slate-900">8K PBR</div>
-                  <div className="text-slate-500 font-medium text-[11px]">Textures</div>
-                </div>
-                <div className="w-px h-8 bg-slate-200" />
-                <div>
-                  <div className="text-lg sm:text-xl font-black text-emerald-600">Lifetime</div>
-                  <div className="text-slate-500 font-medium text-[11px]">VIP License</div>
-                </div>
-              </div>
             </div>
 
             {/* Right Interactive SketchUp Video Workflow Showcase (Desktop Only) */}
