@@ -217,114 +217,6 @@ export function StartPage({ onNavigateMain, onNavigateMore }: StartPageProps) {
           </button>
         </div>
       </section>
-
-      {/* FEATURED CATEGORY POSTERS SLIDER */}
-      <CategoryPostersSlider
-        onSelectCategory={() => {
-          const elem = document.getElementById("models-directory");
-          if (elem) elem.scrollIntoView({ behavior: "smooth" });
-        }}
-      />
-
-      {/* CATEGORY TILES */}
-      <section id="categories" className="py-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        <div className="space-y-6">
-          <div className="flex items-center justify-between">
-            <h2 className="text-lg sm:text-xl font-black tracking-tight text-slate-900 flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-[#10b981]" />
-              Categories
-            </h2>
-            <button
-              onClick={() => {
-                const elem = document.getElementById("models-directory");
-                if (elem) elem.scrollIntoView({ behavior: "smooth" });
-              }}
-              className="text-xs font-bold text-slate-900 underline transition cursor-pointer"
-            >
-              All Categories
-            </button>
-          </div>
-
-          {/* 6 Clean Minimal Tiles with 3-4 Circular Image Icons */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
-            {CATEGORIES.map((cat) => {
-              const IconComp = ICON_MAP[cat.icon] || Box;
-              const catModels = modelsByCategory[cat.key] || [];
-              const previewImages = catModels.slice(0, 4).map((m: any) => m.relPath || m.src);
-
-              return (
-                <button
-                  key={cat.key}
-                  onClick={() => {
-                    const elem = document.getElementById("models-directory");
-                    if (elem) elem.scrollIntoView({ behavior: "smooth" });
-                  }}
-                  className="p-3.5 sm:p-4 rounded-2xl border text-left transition-all flex flex-col justify-between h-32 group cursor-pointer bg-white border-slate-200 hover:border-slate-300 hover:shadow-md hover:bg-slate-50/80"
-                >
-                  <div className="flex items-center justify-between w-full">
-                    {/* Stack of 3-4 Circular Model Image Avatars */}
-                    <div className="flex items-center pl-1">
-                      {previewImages.map((imgSrc, idx) => (
-                        <img
-                          key={idx}
-                          src={imgSrc}
-                          alt={cat.name}
-                          className="size-6 sm:size-7.5 rounded-full border-2 border-white object-cover -ml-2 first:ml-0 shadow-sm group-hover:border-slate-100 transition-colors"
-                        />
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-1.5 pt-4">
-                    <IconComp className="size-3.5 text-slate-400 group-hover:text-emerald-600 transition-colors" />
-                    <span className="text-[11px] sm:text-xs font-bold text-slate-700 group-hover:text-slate-900 transition-colors">
-                      {cat.name}
-                    </span>
-                  </div>
-                </button>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* VALUE HIGHLIGHTS / OBJECTION BUSTERS GRID */}
-      <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-          <div className="p-4 rounded-2xl bg-white border border-slate-200/90 shadow-2xs space-y-1.5 text-left">
-            <div className="size-8 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
-              <Zap className="size-4" />
-            </div>
-            <h4 className="text-xs font-bold text-slate-900">Instant .ZIP Access</h4>
-            <p className="text-[11px] text-slate-500 leading-normal">Immediate direct download link + Google Drive backup.</p>
-          </div>
-
-          <div className="p-4 rounded-2xl bg-white border border-slate-200/90 shadow-2xs space-y-1.5 text-left">
-            <div className="size-8 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
-              <FileCheck className="size-4" />
-            </div>
-            <h4 className="text-xs font-bold text-slate-900">Commercial License</h4>
-            <p className="text-[11px] text-slate-500 leading-normal">Full rights to use in commercial client work with zero royalties.</p>
-          </div>
-
-          <div className="p-4 rounded-2xl bg-white border border-slate-200/90 shadow-2xs space-y-1.5 text-left">
-            <div className="size-8 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center">
-              <Layers className="size-4" />
-            </div>
-            <h4 className="text-xs font-bold text-slate-900">8K PBR Textures</h4>
-            <p className="text-[11px] text-slate-500 leading-normal">High-res materials, proxies, and lighting configurations.</p>
-          </div>
-
-          <div className="p-4 rounded-2xl bg-white border border-slate-200/90 shadow-2xs space-y-1.5 text-left">
-            <div className="size-8 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
-              <ShieldCheck className="size-4" />
-            </div>
-            <h4 className="text-xs font-bold text-slate-900">100% Risk-Free</h4>
-            <p className="text-[11px] text-slate-500 leading-normal">30-day money-back guarantee. No questions asked.</p>
-          </div>
-        </div>
-      </section>
-
       {/* 200 FEATURED MODELS SHOWCASE GRID -> SINGLE ROW MARQUEE */}
       <section id="models-directory" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 overflow-hidden">
         <div className="text-center space-y-2 relative z-10">
@@ -460,6 +352,115 @@ export function StartPage({ onNavigateMain, onNavigateMore }: StartPageProps) {
                 </div>
               );
             })}
+          </div>
+        </div>
+      </section>
+
+
+
+      {/* FEATURED CATEGORY POSTERS SLIDER */}
+      <CategoryPostersSlider
+        onSelectCategory={() => {
+          const elem = document.getElementById("models-directory");
+          if (elem) elem.scrollIntoView({ behavior: "smooth" });
+        }}
+      />
+
+      {/* CATEGORY TILES */}
+      <section id="categories" className="py-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <div className="space-y-6">
+          <div className="flex items-center justify-between">
+            <h2 className="text-lg sm:text-xl font-black tracking-tight text-slate-900 flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-[#10b981]" />
+              Categories
+            </h2>
+            <button
+              onClick={() => {
+                const elem = document.getElementById("models-directory");
+                if (elem) elem.scrollIntoView({ behavior: "smooth" });
+              }}
+              className="text-xs font-bold text-slate-900 underline transition cursor-pointer"
+            >
+              All Categories
+            </button>
+          </div>
+
+          {/* 6 Clean Minimal Tiles with 3-4 Circular Image Icons */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
+            {CATEGORIES.map((cat) => {
+              const IconComp = ICON_MAP[cat.icon] || Box;
+              const catModels = modelsByCategory[cat.key] || [];
+              const previewImages = catModels.slice(0, 4).map((m: any) => m.relPath || m.src);
+
+              return (
+                <button
+                  key={cat.key}
+                  onClick={() => {
+                    const elem = document.getElementById("models-directory");
+                    if (elem) elem.scrollIntoView({ behavior: "smooth" });
+                  }}
+                  className="p-3.5 sm:p-4 rounded-2xl border text-left transition-all flex flex-col justify-between h-32 group cursor-pointer bg-white border-slate-200 hover:border-slate-300 hover:shadow-md hover:bg-slate-50/80"
+                >
+                  <div className="flex items-center justify-between w-full">
+                    {/* Stack of 3-4 Circular Model Image Avatars */}
+                    <div className="flex items-center pl-1">
+                      {previewImages.map((imgSrc, idx) => (
+                        <img
+                          key={idx}
+                          src={imgSrc}
+                          alt={cat.name}
+                          className="size-6 sm:size-7.5 rounded-full border-2 border-white object-cover -ml-2 first:ml-0 shadow-sm group-hover:border-slate-100 transition-colors"
+                        />
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-1.5 pt-4">
+                    <IconComp className="size-3.5 text-slate-400 group-hover:text-emerald-600 transition-colors" />
+                    <span className="text-[11px] sm:text-xs font-bold text-slate-700 group-hover:text-slate-900 transition-colors">
+                      {cat.name}
+                    </span>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* VALUE HIGHLIGHTS / OBJECTION BUSTERS GRID */}
+      <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+          <div className="p-4 rounded-2xl bg-white border border-slate-200/90 shadow-2xs space-y-1.5 text-left">
+            <div className="size-8 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+              <Zap className="size-4" />
+            </div>
+            <h4 className="text-xs font-bold text-slate-900">Instant .ZIP Access</h4>
+            <p className="text-[11px] text-slate-500 leading-normal">Immediate direct download link + Google Drive backup.</p>
+          </div>
+
+          <div className="p-4 rounded-2xl bg-white border border-slate-200/90 shadow-2xs space-y-1.5 text-left">
+            <div className="size-8 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
+              <FileCheck className="size-4" />
+            </div>
+            <h4 className="text-xs font-bold text-slate-900">Commercial License</h4>
+            <p className="text-[11px] text-slate-500 leading-normal">Full rights to use in commercial client work with zero royalties.</p>
+          </div>
+
+          <div className="p-4 rounded-2xl bg-white border border-slate-200/90 shadow-2xs space-y-1.5 text-left">
+            <div className="size-8 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center">
+              <Layers className="size-4" />
+            </div>
+            <h4 className="text-xs font-bold text-slate-900">8K PBR Textures</h4>
+            <p className="text-[11px] text-slate-500 leading-normal">High-res materials, proxies, and lighting configurations.</p>
+          </div>
+
+          <div className="p-4 rounded-2xl bg-white border border-slate-200/90 shadow-2xs space-y-1.5 text-left">
+            <div className="size-8 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
+              <ShieldCheck className="size-4" />
+            </div>
+            <h4 className="text-xs font-bold text-slate-900">100% Risk-Free</h4>
+            <p className="text-[11px] text-slate-500 leading-normal">30-day money-back guarantee. No questions asked.</p>
           </div>
         </div>
       </section>
@@ -677,3 +678,4 @@ export function StartPage({ onNavigateMain, onNavigateMore }: StartPageProps) {
     </div>
   );
 }
+
