@@ -384,7 +384,7 @@ export function App() {
               {/* Top High-Value Badge */}
               <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-50 text-emerald-900 border border-emerald-200 text-xs font-mono font-bold shadow-xs">
                 <span className="flex h-2 w-2 rounded-full bg-emerald-500 animate-ping" />
-                <span>🔥 The Unfair Advantage For 1,500+ Interior Designers & Architects</span>
+                <span>🔥 If you use Sketchup, Don't miss this package.</span>
               </div>
 
               {/* Hook Narrative: Money & Time ROI */}
