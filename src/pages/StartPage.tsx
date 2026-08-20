@@ -51,7 +51,7 @@ export function StartPage({ onNavigateMain, onNavigateMore }: StartPageProps) {
   useEffect(() => {
     const blinkInterval = setInterval(() => {
       setMobileBlinkIndex((prev) => (prev + 1) % 200);
-    }, 1000);
+    }, 600);
     const searchInterval = setInterval(() => {
       setSearchTermIdx((prev) => (prev + 1) % 6);
     }, 1500);
@@ -253,60 +253,75 @@ export function StartPage({ onNavigateMain, onNavigateMore }: StartPageProps) {
             animation-play-state: paused;
           }
           @keyframes blinkIn {
-            0% { opacity: 0.8; transform: scale(0.98); }
+            0% { opacity: 0.6; transform: scale(0.96); }
             100% { opacity: 1; transform: scale(1); }
           }
           .animate-blink-in {
-            animation: blinkIn 0.3s ease-out forwards;
+            animation: blinkIn 0.18s ease-out forwards;
           }
         `}} />
 
-        {/* MOBILE: Single Blinking Card */}
-        <div className="sm:hidden w-full max-w-sm mx-auto py-4">
+        {/* MOBILE: 2 Smaller Side-by-Side Blinking Cards */}
+        <div className="sm:hidden w-full max-w-lg mx-auto px-1 py-2">
           {(() => {
-            const model = starterModels[mobileBlinkIndex];
-            if (!model) return null;
-            const modelIndex = mobileBlinkIndex + 1;
-            const modelTitle = `${model.category || "3D"} Scene #${modelIndex}`;
+            const idx1 = (mobileBlinkIndex * 2) % starterModels.length;
+            const idx2 = (mobileBlinkIndex * 2 + 1) % starterModels.length;
+
+            const m1 = starterModels[idx1];
+            const m2 = starterModels[idx2];
+            const pair = [
+              { model: m1, index: idx1 + 1 },
+              { model: m2, index: idx2 + 1 },
+            ].filter((p) => Boolean(p.model));
+
             return (
-              <div
-                key={mobileBlinkIndex}
-                className="animate-blink-in w-full group rounded-3xl bg-white border border-slate-200 overflow-hidden flex flex-col justify-between shadow-xl"
-              >
-                <div className="relative aspect-[4/3] overflow-hidden bg-slate-100">
-                  <img
-                    src={model.relPath}
-                    alt={modelTitle}
-                    loading="lazy"
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full border border-slate-200 text-[10px] font-mono font-bold text-slate-800 shadow-md">
-                    Model #{modelIndex}
-                  </div>
-                  <div className="absolute top-3 right-3 bg-[#10b981] text-black font-extrabold text-[9px] px-2 py-1 rounded-full shadow-md">
-                    .SKP INCLUDED
-                  </div>
-                </div>
+              <div className="grid grid-cols-2 gap-2">
+                {pair.map(({ model, index }) => {
+                  const modelTitle = `${model.category || "3D"} Scene #${index}`;
+                  return (
+                    <div
+                      key={`${mobileBlinkIndex}-${index}`}
+                      onClick={() => openCheckoutForModel(modelTitle)}
+                      className="animate-blink-in group rounded-2xl bg-white border border-slate-200 overflow-hidden flex flex-col justify-between shadow-md cursor-pointer hover:border-emerald-500 transition-all"
+                    >
+                      <div className="relative aspect-[4/3] overflow-hidden bg-slate-100">
+                        <img
+                          src={model.relPath}
+                          alt={modelTitle}
+                          loading="lazy"
+                          className="w-full h-full object-cover"
+                        />
+                        <div className="absolute top-1.5 left-1.5 bg-white/90 backdrop-blur-md px-1.5 py-0.5 rounded-full border border-slate-200 text-[8px] font-mono font-bold text-slate-800 shadow-xs">
+                          #{index}
+                        </div>
+                        <div className="absolute top-1.5 right-1.5 bg-[#10b981] text-black font-black text-[7px] px-1.5 py-0.5 rounded-full shadow-xs">
+                          .SKP
+                        </div>
+                      </div>
 
-                <div className="p-4 space-y-3 flex flex-col justify-between">
-                  <div className="space-y-1">
-                    <h3 className="text-sm font-bold text-slate-900 line-clamp-1">
-                      {modelTitle}
-                    </h3>
-                    <div className="flex items-center gap-1.5 text-xs text-slate-500 font-mono">
-                      <span className="capitalize">{model.category || "3D Scene"}</span>
-                      <span>•</span>
-                      <span>SketchUp 2024</span>
+                      <div className="p-2.5 space-y-2 flex flex-col justify-between flex-1">
+                        <div className="space-y-0.5">
+                          <h3 className="text-[11px] font-bold text-slate-900 line-clamp-1 leading-tight">
+                            {modelTitle}
+                          </h3>
+                          <div className="text-[9px] text-slate-500 font-mono capitalize truncate">
+                            {model.category || "3D Scene"}
+                          </div>
+                        </div>
+
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            openCheckoutForModel(modelTitle);
+                          }}
+                          className="w-full py-2 rounded-xl bg-[#10b981] hover:bg-[#059669] text-black font-extrabold text-[10px] shadow-xs transition flex items-center justify-center gap-1 cursor-pointer"
+                        >
+                          <Download className="size-3" /> Download
+                        </button>
+                      </div>
                     </div>
-                  </div>
-
-                  <button
-                    onClick={() => openCheckoutForModel(modelTitle)}
-                    className="w-full py-3 rounded-xl bg-[#10b981] text-black font-bold text-xs shadow-md transition flex items-center justify-center gap-1.5"
-                  >
-                    <Download className="size-4" /> Download (.SKP)
-                  </button>
-                </div>
+                  );
+                })}
               </div>
             );
           })()}

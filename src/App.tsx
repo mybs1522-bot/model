@@ -211,7 +211,7 @@ export function App() {
   useEffect(() => {
     const blinkInterval = setInterval(() => {
       setMobileBlinkIndex((prev) => (prev + 1) % 200);
-    }, 1000);
+    }, 600);
     const searchInterval = setInterval(() => {
       setSearchTermIdx((prev) => (prev + 1) % 6);
     }, 1500);
@@ -537,65 +537,67 @@ export function App() {
               animation-play-state: paused;
             }
             @keyframes blinkIn {
-              0% { opacity: 0.8; transform: scale(0.98); }
+              0% { opacity: 0.6; transform: scale(0.96); }
               100% { opacity: 1; transform: scale(1); }
             }
             .animate-blink-in {
-              animation: blinkIn 0.3s ease-out forwards;
+              animation: blinkIn 0.18s ease-out forwards;
             }
           `}} />
 
-          {/* MOBILE: Single Blinking Card */}
-          <div className="sm:hidden w-full max-w-sm mx-auto py-4">
+          {/* MOBILE: 2 Smaller Side-by-Side Blinking Cards */}
+          <div className="sm:hidden w-full max-w-lg mx-auto px-1 py-2">
             {(() => {
-              // Use up to 100 items from filtered models for the blink loop
               const showcaseModels = filteredModels.slice(0, 100);
               if (showcaseModels.length === 0) return null;
-              const model = showcaseModels[mobileBlinkIndex % showcaseModels.length];
-              if (!model) return null;
-              
-              return (
-                <div
-                  key={mobileBlinkIndex % showcaseModels.length}
-                  onClick={scrollToPricing}
-                  className="animate-blink-in w-full group rounded-3xl bg-white border border-slate-200 overflow-hidden flex flex-col justify-between shadow-xl cursor-pointer"
-                >
-                  <div className="relative aspect-[4/3] overflow-hidden bg-slate-100">
-                    <img
-                      src={model.src}
-                      alt={model.title}
-                      loading="lazy"
-                      className="w-full h-full object-cover"
-                    />
-                    <div className="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                      <span className="px-3 py-1.5 rounded-full bg-white text-black text-xs font-black shadow-md flex items-center gap-1.5">
-                        <Eye className="size-3.5" /> Download SKP
-                      </span>
-                    </div>
-                  </div>
 
-                  <div className="p-4 space-y-3 flex flex-col justify-between">
-                    <div className="space-y-1">
-                      <h3 className="text-sm font-bold text-slate-900 line-clamp-1">
-                        {model.title}
-                      </h3>
-                      <div className="flex items-center gap-1.5 text-xs text-slate-500 font-mono">
-                        <span className="capitalize">{model.categoryName || "3D Scene"}</span>
-                        <span>•</span>
-                        <span>SketchUp (.SKP)</span>
+              const idx1 = (mobileBlinkIndex * 2) % showcaseModels.length;
+              const idx2 = (mobileBlinkIndex * 2 + 1) % showcaseModels.length;
+
+              const pair = [showcaseModels[idx1], showcaseModels[idx2]].filter(Boolean);
+
+              return (
+                <div className="grid grid-cols-2 gap-2">
+                  {pair.map((model, pIdx) => (
+                    <div
+                      key={`${mobileBlinkIndex}-${pIdx}-${model.id}`}
+                      onClick={scrollToPricing}
+                      className="animate-blink-in group rounded-2xl bg-white border border-slate-200 overflow-hidden flex flex-col justify-between shadow-md cursor-pointer hover:border-emerald-500 transition-all"
+                    >
+                      <div className="relative aspect-[4/3] overflow-hidden bg-slate-100">
+                        <img
+                          src={model.src}
+                          alt={model.title}
+                          loading="lazy"
+                          className="w-full h-full object-cover"
+                        />
+                        <div className="absolute top-1.5 right-1.5 bg-[#10b981] text-black font-black text-[7px] px-1.5 py-0.5 rounded-full shadow-xs">
+                          .SKP
+                        </div>
+                      </div>
+
+                      <div className="p-2.5 space-y-2 flex flex-col justify-between flex-1">
+                        <div className="space-y-0.5">
+                          <h3 className="text-[11px] font-bold text-slate-900 line-clamp-1 leading-tight">
+                            {model.title}
+                          </h3>
+                          <div className="text-[9px] text-slate-500 font-mono capitalize truncate">
+                            {model.categoryName || "3D Scene"}
+                          </div>
+                        </div>
+
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            scrollToPricing();
+                          }}
+                          className="w-full py-2 rounded-xl bg-[#10b981] hover:bg-[#059669] text-black font-extrabold text-[10px] shadow-xs transition flex items-center justify-center gap-1 cursor-pointer"
+                        >
+                          <DownloadDoneIcon size={12} color="#000000" /> Unlock
+                        </button>
                       </div>
                     </div>
-
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        scrollToPricing();
-                      }}
-                      className="w-full py-3 rounded-xl bg-[#10b981] text-black font-bold text-xs shadow-md transition flex items-center justify-center gap-1.5 cursor-pointer"
-                    >
-                      <DownloadDoneIcon size={16} color="#000000" /> Unlock Model
-                    </button>
-                  </div>
+                  ))}
                 </div>
               );
             })()}
