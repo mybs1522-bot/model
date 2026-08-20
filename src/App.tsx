@@ -490,7 +490,7 @@ export function App() {
             <h2 className="text-base sm:text-lg font-black text-slate-900 tracking-tight flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-[#10b981]" />
               {selectedCategory === "all"
-                ? "All 3D Models Catalog"
+                ? "3,000+ Models Biggest Library"
                 : `${CATEGORIES.find((c) => c.key === selectedCategory)?.name || "Models"} Collection`}
             </h2>
           </div>
