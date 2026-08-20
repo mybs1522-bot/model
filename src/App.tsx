@@ -377,96 +377,124 @@ export function App() {
       </header>
 
       {/* ULTRA MINIMAL HERO SECTION */}
-      <section className="relative py-16 sm:py-24 px-4 sm:px-6 lg:px-8 border-b border-slate-200">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          {/* Left Copy */}
-          <div className="lg:col-span-6 space-y-6">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-mono font-bold shadow-2xs">
-              <Zap className="size-3.5 fill-current text-emerald-600" /> 3,000+ Curated SketchUp (.SKP) Assets
-            </div>
-
-            {/* Narrative Hook */}
-            <div className="space-y-4 pt-2">
-              <div className="text-sm sm:text-base text-slate-600 font-medium space-y-2.5">
-                <p>You start a new project. Then the search begins...</p>
-                <div className="inline-flex items-center justify-center gap-2 bg-slate-100 text-slate-500 px-4 py-1.5 rounded-full text-xs sm:text-sm font-mono border border-slate-200 shadow-inner">
-                  <span className="animate-pulse">🔍</span>
-                  <span>Searching for</span>
-                  <strong className="text-emerald-700 w-[170px] text-left transition-all duration-300">
-                    {["the right sofa.", "the perfect table.", "lighting.", "décor.", "materials.", "architectural elements."][searchTermIdx]}
-                  </strong>
-                </div>
-                <p className="leading-relaxed text-slate-500 pt-1">
-                  Before you know it, you've spent hours collecting resources instead of designing.
-                </p>
+      <section className="relative py-12 sm:py-20 px-4 sm:px-6 lg:px-8 border-b border-slate-200">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+            {/* Left Copy */}
+            <div className="lg:col-span-6 space-y-5">
+              {/* Top High-Value Badge */}
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-50 text-emerald-900 border border-emerald-200 text-xs font-mono font-bold shadow-xs">
+                <span className="flex h-2 w-2 rounded-full bg-emerald-500 animate-ping" />
+                <span>🔥 The Unfair Advantage For 1,500+ Interior Designers & Architects</span>
               </div>
-              <p className="text-base sm:text-lg text-slate-900 font-black pt-2">
-                What if your entire design library was already in one place?
+
+              {/* Hook Narrative: Money & Time ROI */}
+              <div className="space-y-3 pt-1">
+                <div className="text-sm sm:text-base text-slate-700 font-medium space-y-2">
+                  <p className="leading-snug">
+                    Tired of wasting <strong className="text-rose-600 font-bold">20+ hours searching & modeling</strong> while faster designers close your dream clients?
+                  </p>
+                  
+                  {/* Dynamic Fast Search Pill */}
+                  <div className="inline-flex items-center gap-2 bg-slate-100 text-slate-600 px-3.5 py-1.5 rounded-full text-xs sm:text-sm font-mono border border-slate-200 shadow-inner">
+                    <span className="text-emerald-600 font-bold">Never search for:</span>
+                    <strong className="text-slate-900 w-[180px] text-left transition-all duration-300 truncate">
+                      {["luxury living rooms.", "modern sofas.", "penthouse villas.", "kitchen layouts.", "architectural facades.", "8K PBR textures."][searchTermIdx]}
+                    </strong>
+                  </div>
+
+                  <p className="text-xs sm:text-sm text-slate-500 font-semibold">
+                    What if you could drop client-ready, photorealistic 3D scenes in 1 click?
+                  </p>
+                </div>
+              </div>
+
+              <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-slate-900 leading-[1.08]">
+                MEET YOUR NEW <br className="hidden sm:inline" />
+                <span className="bg-gradient-to-r from-slate-950 via-emerald-800 to-[#10b981] bg-clip-text text-transparent">
+                  SKETCHUP DESIGN LIBRARY
+                </span>
+              </h1>
+
+              {/* Mobile Video Placement (Under Title, Above Description) */}
+              <div className="block lg:hidden w-full py-2">
+                <SketchUpShowcaseVideo />
+              </div>
+
+              <p className="text-slate-600 text-sm sm:text-base max-w-xl font-medium leading-relaxed">
+                Unlock <strong className="text-slate-950 font-black">3,000+ Production-Ready SketchUp Scenes</strong>. Complete with 8K PBR textures, calibrated lighting, and 100% Commercial License. Drag, drop, render in minutes, and <strong className="text-emerald-700 font-bold">win $5,000+ client projects effortlessly</strong>.
               </p>
+
+              {/* 3 High-Conversion ROI Micro-Badges */}
+              <div className="grid grid-cols-3 gap-2 pt-1 text-xs">
+                <div className="p-2 sm:p-2.5 rounded-xl bg-emerald-50/80 border border-emerald-200 text-emerald-950">
+                  <div className="font-extrabold text-[11px] sm:text-xs">⚡ 15-Min Renders</div>
+                  <div className="text-[9px] sm:text-[10px] text-emerald-700 font-medium">10x faster pitches</div>
+                </div>
+                <div className="p-2 sm:p-2.5 rounded-xl bg-amber-50/80 border border-amber-200 text-amber-950">
+                  <div className="font-extrabold text-[11px] sm:text-xs">💰 Save $2,400+/mo</div>
+                  <div className="text-[9px] sm:text-[10px] text-amber-700 font-medium">Zero 3D artist fees</div>
+                </div>
+                <div className="p-2 sm:p-2.5 rounded-xl bg-slate-100 border border-slate-200 text-slate-900">
+                  <div className="font-extrabold text-[11px] sm:text-xs">🏆 Commercial Use</div>
+                  <div className="text-[9px] sm:text-[10px] text-slate-600 font-medium">Keep 100% profit</div>
+                </div>
+              </div>
+
+              {/* CTA Action Buttons */}
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-2 w-full max-w-lg">
+                <button
+                  onClick={() => {
+                    const el = document.getElementById("pricing");
+                    if (el) el.scrollIntoView({ behavior: "smooth" });
+                  }}
+                  className="flex-1 px-6 py-3.5 rounded-full bg-[#10b981] hover:bg-[#059669] text-black font-black text-xs sm:text-sm shadow-lg hover:shadow-emerald-500/25 transition-all flex items-center justify-center gap-2 active:scale-95 cursor-pointer"
+                >
+                  <Zap className="size-4 fill-current" />
+                  <span>Claim Lifetime Access ($29)</span>
+                  <span className="text-[10px] bg-black/15 text-black px-2 py-0.5 rounded-full font-mono line-through opacity-75">$199</span>
+                </button>
+
+                <a
+                  href="#models-directory"
+                  className="px-5 py-3.5 rounded-full bg-white text-slate-800 border border-slate-200 font-bold text-xs hover:bg-slate-50 transition flex items-center justify-center gap-1.5 shadow-2xs text-center"
+                >
+                  <span>Explore 3,000+ Models</span>
+                  <ArrowRight className="size-3.5 text-slate-500" />
+                </a>
+              </div>
+
+              {/* Works With D5 Render, V-Ray, Lumion Trust Banner */}
+              <RenderEngineTrustBanner className="pt-2" />
+
+              {/* Clean Minimal Stat Strip */}
+              <div className="flex items-center gap-6 sm:gap-8 pt-4 border-t border-slate-200 text-xs">
+                <div>
+                  <div className="text-lg sm:text-xl font-black text-slate-900">3,000+</div>
+                  <div className="text-slate-500 font-medium text-[11px]">3D Scenes</div>
+                </div>
+                <div className="w-px h-8 bg-slate-200" />
+                <div>
+                  <div className="text-lg sm:text-xl font-black text-slate-900">6</div>
+                  <div className="text-slate-500 font-medium text-[11px]">Categories</div>
+                </div>
+                <div className="w-px h-8 bg-slate-200" />
+                <div>
+                  <div className="text-lg sm:text-xl font-black text-slate-900">8K PBR</div>
+                  <div className="text-slate-500 font-medium text-[11px]">Textures</div>
+                </div>
+                <div className="w-px h-8 bg-slate-200" />
+                <div>
+                  <div className="text-lg sm:text-xl font-black text-emerald-600">Lifetime</div>
+                  <div className="text-slate-500 font-medium text-[11px]">VIP License</div>
+                </div>
+              </div>
             </div>
 
-            <h1 className="text-[28px] sm:text-4xl lg:text-5xl font-black tracking-tight text-slate-900 leading-tight">
-              MEET YOUR NEW <br className="hidden sm:inline" />
-              <span className="bg-gradient-to-r from-slate-900 via-emerald-800 to-[#10b981] bg-clip-text text-transparent">
-                SKETCHUP DESIGN LIBRARY
-              </span>
-            </h1>
-
-            {/* Mobile Video Placement (Under Title, Above Description) */}
-            <div className="block lg:hidden w-full py-4">
+            {/* Right Interactive SketchUp Video Workflow Showcase (Desktop Only) */}
+            <div className="hidden lg:block lg:col-span-6 relative">
               <SketchUpShowcaseVideo />
             </div>
-
-            <p className="text-slate-600 text-sm sm:text-base max-w-xl font-medium leading-relaxed">
-              Unlock <strong className="text-slate-900 font-bold">3,000+ High-Quality SketchUp 3D Scenes</strong>. Complete production-ready .SKP files with 8K PBR textures and lighting. Ready for instant rendering.
-            </p>
-
-            <div className="flex flex-row items-center gap-2 sm:gap-4 pt-2 flex-nowrap w-full max-w-md">
-              <button
-                onClick={() => {
-                  const el = document.getElementById("pricing");
-                  if (el) el.scrollIntoView({ behavior: "smooth" });
-                }}
-                className="flex-1 px-3 sm:px-6 py-3.5 rounded-full bg-[#10b981] text-black font-black text-xs sm:text-sm shadow-md hover:bg-[#059669] transition flex items-center justify-center gap-2 whitespace-nowrap active:scale-95 cursor-pointer"
-              >
-                <Zap className="size-4 fill-current" /> Unlock All Models ($29)
-              </button>
-
-              <a
-                href="#models-directory"
-                className="flex-1 px-3 sm:px-6 py-3 sm:py-3.5 rounded-full bg-white text-slate-800 border border-slate-200 font-bold text-[11px] sm:text-xs hover:bg-slate-50 transition flex items-center justify-center gap-1.5 sm:gap-2 whitespace-nowrap shadow-2xs"
-              >
-                Browse Collection <ArrowRight className="size-3.5 sm:size-4 text-slate-500" />
-              </a>
-            </div>
-
-            {/* Works With D5 Render, V-Ray, Lumion Trust Banner */}
-            <RenderEngineTrustBanner className="pt-2" />
-
-            {/* Clean Minimal Stat Strip */}
-            <div className="flex items-center gap-8 pt-6 border-t border-slate-200 text-xs">
-              <div>
-                <div className="text-xl font-black text-slate-900">3,000+</div>
-                <div className="text-slate-500 font-medium">3D Scenes</div>
-              </div>
-              <div className="w-px h-8 bg-slate-200" />
-              <div>
-                <div className="text-xl font-black text-slate-900">6</div>
-                <div className="text-slate-500 font-medium">Categories</div>
-              </div>
-              <div className="w-px h-8 bg-slate-200" />
-              <div>
-                <div className="text-xl font-black text-slate-900">8K</div>
-                <div className="text-slate-500 font-medium">PBR Maps</div>
-              </div>
-            </div>
           </div>
-
-          {/* Right Interactive SketchUp Video Workflow Showcase (Desktop Only) */}
-          <div className="hidden lg:block lg:col-span-6 relative">
-            <SketchUpShowcaseVideo />
-          </div>
-        </div>
 
       {/* MINIMAL MODELS SHOWCASE DIRECTORY WITH FURNITURE SUBCATEGORIES */}
       <div id="models-directory" className="pt-16 pb-4 px-0 max-w-[100vw] mx-auto w-full space-y-6">

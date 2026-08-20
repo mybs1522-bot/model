@@ -188,36 +188,34 @@ export function StartPage({ onNavigateMain, onNavigateMore }: StartPageProps) {
         </div>
 
         {/* Narrative Hook */}
-        <div className="max-w-2xl mx-auto space-y-4 pt-2">
-          <div className="text-sm sm:text-base text-slate-600 font-medium space-y-2.5">
-            <p>You start a new project. Then the search begins...</p>
-            <div className="inline-flex items-center justify-center gap-2 bg-slate-100 text-slate-500 px-4 py-1.5 rounded-full text-xs sm:text-sm font-mono border border-slate-200 shadow-inner">
-              <span className="animate-pulse">🔍</span>
-              <span>Searching for</span>
-              <strong className="text-emerald-700 w-[170px] text-left transition-all duration-300">
-                {["the right sofa.", "the perfect table.", "lighting.", "décor.", "materials.", "architectural elements."][searchTermIdx]}
-              </strong>
-            </div>
-            <p className="leading-relaxed text-slate-500 pt-1">
-              Before you know it, you've spent hours collecting resources instead of designing.
-            </p>
+        <div className="max-w-2xl mx-auto space-y-3 pt-1">
+          <p className="text-sm sm:text-base text-slate-700 font-medium leading-snug">
+            Tired of wasting <strong className="text-rose-600 font-bold">20+ hours searching & modeling</strong> while faster designers close your dream clients?
+          </p>
+          
+          <div className="inline-flex items-center gap-2 bg-slate-100 text-slate-600 px-3.5 py-1.5 rounded-full text-xs sm:text-sm font-mono border border-slate-200 shadow-inner">
+            <span className="text-emerald-600 font-bold">Never search for:</span>
+            <strong className="text-slate-900 w-[180px] text-left transition-all duration-300 truncate">
+              {["luxury living rooms.", "modern sofas.", "penthouse villas.", "kitchen layouts.", "architectural facades.", "8K PBR textures."][searchTermIdx]}
+            </strong>
           </div>
-          <p className="text-base sm:text-lg text-slate-900 font-black pt-2">
-            What if your entire design library was already in one place?
+
+          <p className="text-xs sm:text-sm text-slate-500 font-semibold">
+            What if you could drop client-ready, photorealistic 3D scenes in 1 click?
           </p>
         </div>
 
         {/* Headline */}
         <div className="space-y-4">
-          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-slate-900 tracking-tight leading-[1.1]">
+          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-slate-900 tracking-tight leading-[1.08]">
             MEET YOUR NEW <br className="hidden sm:inline" />
-            <span className="bg-gradient-to-r from-slate-900 via-emerald-800 to-[#10b981] bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-slate-950 via-emerald-800 to-[#10b981] bg-clip-text text-transparent">
               SKETCHUP DESIGN LIBRARY
             </span>
           </h1>
           
           <p className="max-w-2xl mx-auto text-sm sm:text-base text-slate-600 font-medium leading-relaxed">
-            Get <strong className="text-slate-900 font-bold">200 High-Quality SketchUp 3D Scenes for just $7</strong>. Complete production-ready .SKP files with 8K PBR textures and lighting. Ready for instant rendering in <strong className="text-slate-900 font-semibold">Enscape, V-Ray, D5 Render, Lumion & Blender</strong>.
+            Get <strong className="text-slate-950 font-black">200 High-Quality SketchUp 3D Scenes for just $7</strong>. Complete with 8K PBR textures, calibrated lighting & commercial license. Drag, drop, render in minutes, and <strong className="text-emerald-700 font-bold">win $5,000+ client projects effortlessly</strong>.
           </p>
         </div>
 
