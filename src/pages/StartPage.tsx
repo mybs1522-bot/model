@@ -46,12 +46,19 @@ export function StartPage({ onNavigateMain, onNavigateMore }: StartPageProps) {
   const [selectedModelTitle, setSelectedModelTitle] = useState<string>("");
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [mobileBlinkIndex, setMobileBlinkIndex] = useState(0);
+  const [searchTermIdx, setSearchTermIdx] = useState(0);
 
   useEffect(() => {
-    const interval = setInterval(() => {
+    const blinkInterval = setInterval(() => {
       setMobileBlinkIndex((prev) => (prev + 1) % 200);
-    }, 1000); // 1 second blink rate
-    return () => clearInterval(interval);
+    }, 1000);
+    const searchInterval = setInterval(() => {
+      setSearchTermIdx((prev) => (prev + 1) % 6);
+    }, 1500);
+    return () => {
+      clearInterval(blinkInterval);
+      clearInterval(searchInterval);
+    };
   }, []);
 
   // Select 200 high quality models for the $7 starter pack
@@ -164,7 +171,7 @@ export function StartPage({ onNavigateMain, onNavigateMore }: StartPageProps) {
       </header>
 
       {/* HERO SECTION */}
-      <section className="relative pt-10 sm:pt-14 pb-10 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto text-center space-y-6">
+      <section className="relative pt-8 sm:pt-12 pb-10 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto text-center space-y-6 sm:space-y-8">
         {/* Social Proof Star Pill */}
         <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-white border border-slate-200 text-xs text-slate-800 font-semibold shadow-xs">
           <div className="flex -space-x-1.5 items-center">
@@ -180,18 +187,39 @@ export function StartPage({ onNavigateMain, onNavigateMore }: StartPageProps) {
           <span className="text-slate-600 font-medium">1,480+ 3D Artists & Architects</span>
         </div>
 
-        {/* Headline */}
-        <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-slate-900 tracking-tight leading-[1.15]">
-          Get 200 High-Quality <br className="hidden sm:inline" />
-          <span className="bg-gradient-to-r from-slate-900 via-emerald-800 to-[#10b981] bg-clip-text text-transparent">
-            SketchUp 3D Scenes for Just $7
-          </span>
-        </h1>
+        {/* Narrative Hook */}
+        <div className="max-w-2xl mx-auto space-y-4 pt-2">
+          <div className="text-sm sm:text-base text-slate-600 font-medium space-y-2.5">
+            <p>You start a new project. Then the search begins...</p>
+            <div className="inline-flex items-center justify-center gap-2 bg-slate-100 text-slate-500 px-4 py-1.5 rounded-full text-xs sm:text-sm font-mono border border-slate-200 shadow-inner">
+              <span className="animate-pulse">🔍</span>
+              <span>Searching for</span>
+              <strong className="text-emerald-700 w-[170px] text-left transition-all duration-300">
+                {["the right sofa.", "the perfect table.", "lighting.", "décor.", "materials.", "architectural elements."][searchTermIdx]}
+              </strong>
+            </div>
+            <p className="leading-relaxed text-slate-500 pt-1">
+              Before you know it, you've spent hours collecting resources instead of designing.
+            </p>
+          </div>
+          <p className="text-base sm:text-lg text-slate-900 font-black pt-2">
+            What if your entire design library was already in one place?
+          </p>
+        </div>
 
-        {/* Subtitle */}
-        <p className="max-w-2xl mx-auto text-sm sm:text-base text-slate-600 font-medium leading-relaxed">
-          Complete production-ready .SKP scenes with 8K PBR textures and lighting. Ready for instant rendering in <strong className="text-slate-900 font-semibold">Enscape, V-Ray, D5 Render, Lumion & Blender</strong>.
-        </p>
+        {/* Headline */}
+        <div className="space-y-4">
+          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-slate-900 tracking-tight leading-[1.1]">
+            MEET YOUR NEW <br className="hidden sm:inline" />
+            <span className="bg-gradient-to-r from-slate-900 via-emerald-800 to-[#10b981] bg-clip-text text-transparent">
+              SKETCHUP DESIGN LIBRARY
+            </span>
+          </h1>
+          
+          <p className="max-w-2xl mx-auto text-sm sm:text-base text-slate-600 font-medium leading-relaxed">
+            Get <strong className="text-slate-900 font-bold">200 High-Quality SketchUp 3D Scenes for just $7</strong>. Complete production-ready .SKP files with 8K PBR textures and lighting. Ready for instant rendering in <strong className="text-slate-900 font-semibold">Enscape, V-Ray, D5 Render, Lumion & Blender</strong>.
+          </p>
+        </div>
 
         {/* Works With Render Engines */}
         <RenderEngineTrustBanner className="pt-1" />
