@@ -164,7 +164,7 @@ export function Pricing({ onSelectPlan, onSkip, isProcessing = false }: PricingP
                 {[
                   'Instant access to 3,000+ SketchUp (.SKP) scene models',
                   'Full commercial license — edit & sell to your clients',
-                  'High quality models to get paid like top designers',
+                  'Free SketchUp Course Lifetime Access (Free Addon)',
                   'Includes 8K PBR textures, furniture & archviz packs',
                   'Free lifetime updates with new weekly model drops',
                 ].map((feature, idx) => (
