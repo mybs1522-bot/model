@@ -425,23 +425,23 @@ export function App() {
                 </div>
               </div>
 
-              {/* CTA Action Buttons */}
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-2 w-full max-w-lg">
+              {/* Attached CTA Action + Compact Pill */}
+              <div className="flex flex-col items-center sm:items-start gap-2 pt-2 w-full max-w-md">
                 <button
                   onClick={() => {
                     const el = document.getElementById("pricing");
                     if (el) el.scrollIntoView({ behavior: "smooth" });
                   }}
-                  className="flex-1 px-6 py-3.5 rounded-full bg-[#10b981] hover:bg-[#059669] text-black font-black text-xs sm:text-sm shadow-lg hover:shadow-emerald-500/25 transition-all flex items-center justify-center gap-2 active:scale-95 cursor-pointer"
+                  className="w-full px-6 py-3.5 rounded-full bg-[#10b981] hover:bg-[#059669] text-black font-black text-xs sm:text-sm shadow-lg hover:shadow-emerald-500/25 transition-all flex items-center justify-center gap-2 active:scale-95 cursor-pointer"
                 >
                   <Zap className="size-4 fill-current" />
                   <span>Claim Lifetime Access ($29)</span>
                   <span className="text-[10px] bg-black/15 text-black px-2 py-0.5 rounded-full font-mono line-through opacity-75">$199</span>
                 </button>
 
-                {/* +100 New Models Every Month Pill */}
-                <div className="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-full bg-emerald-50 border border-emerald-200/80 text-emerald-950 text-xs font-bold shadow-2xs whitespace-nowrap">
-                  <span className="size-2 rounded-full bg-[#10b981] animate-pulse" />
+                {/* Shorter Attached Pill */}
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-950 text-[11px] font-bold shadow-2xs whitespace-nowrap self-center sm:self-start">
+                  <span className="size-1.5 rounded-full bg-[#10b981] animate-pulse" />
                   <span>+100 New Models Every Month</span>
                 </div>
               </div>
