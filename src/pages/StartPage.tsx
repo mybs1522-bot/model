@@ -16,9 +16,20 @@ import {
 } from "lucide-react";
 import { CardPaymentForm } from "@/components/ui/card-payment-form";
 import { useEvergreenTimer } from "@/components/ui/single-pricing-card-1";
+import { CategoryPostersSlider } from "@/components/ui/category-posters-slider";
 import { RenderEngineTrustBanner } from "@/components/ui/render-engine-logos";
 import { Separator } from "@/components/ui/separator";
 import publicModels from "@/data/publicModelsImages.json";
+import {
+  Building2,
+  Bath,
+  Bed,
+  Home,
+  Utensils,
+  Droplets,
+  Box,
+  Armchair,
+} from "lucide-react";
 
 interface StartPageProps {
   onNavigateMain?: () => void;
@@ -35,9 +46,32 @@ export function StartPage({ onNavigateMain, onNavigateMore }: StartPageProps) {
   const [selectedModelTitle, setSelectedModelTitle] = useState<string>("");
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
-  // Select 20 high quality models for the $1 starter pack
+  // Select 200 high quality models for the $7 starter pack
   const starterModels = useMemo(() => {
-    return publicModels.slice(0, 20);
+    return publicModels.slice(0, 200);
+  }, []);
+
+  const CATEGORIES = [
+    { name: "Apartments", key: "apartment", icon: "Building2", countDisplay: "960+" },
+    { name: "Furniture", key: "furniture", icon: "Armchair", countDisplay: "1,450+" },
+    { name: "Washrooms", key: "washroom", icon: "Droplets", countDisplay: "1,180+" },
+    { name: "Bedrooms", key: "bedroom", icon: "Bed", countDisplay: "350+" },
+    { name: "Exteriors", key: "exterior", icon: "Home", countDisplay: "250+" },
+    { name: "Kitchens", key: "kitchen", icon: "Utensils", countDisplay: "1,020+" },
+  ];
+
+  const ICON_MAP: Record<string, any> = {
+    Building2, Bath, Bed, Home, Utensils, Droplets, Armchair
+  };
+
+  const modelsByCategory = useMemo(() => {
+    const map: Record<string, typeof publicModels> = {};
+    publicModels.forEach((m) => {
+      const k = m.categoryKey || "exterior";
+      if (!map[k]) map[k] = [];
+      map[k].push(m);
+    });
+    return map;
   }, []);
 
   const openCheckoutForModel = (title: string) => {
@@ -47,7 +81,7 @@ export function StartPage({ onNavigateMain, onNavigateMore }: StartPageProps) {
 
   const handleInitialPurchaseSuccess = () => {
     setShowCheckoutModal(false);
-    localStorage.setItem("avada_just_bought_1dollar", "true");
+    localStorage.setItem("avada_just_bought_7dollar", "true");
     if (onNavigateMore) {
       onNavigateMore();
     } else if (onNavigateMain) {
@@ -75,8 +109,8 @@ export function StartPage({ onNavigateMain, onNavigateMore }: StartPageProps) {
 
   const faqs = [
     {
-      q: "Is this strictly a one-time $1 payment?",
-      a: "Yes! There are absolutely zero recurring fees, no hidden subscriptions, and no surprise rebills. You pay $1 once and keep full access to all 20 models forever.",
+      q: "Is this strictly a one-time $7 payment?",
+      a: "Yes! There are absolutely zero recurring fees, no hidden subscriptions, and no surprise rebills. You pay $7 once and keep full access to all 200 models forever.",
     },
     {
       q: "Which SketchUp versions and render engines are supported?",
@@ -113,7 +147,7 @@ export function StartPage({ onNavigateMain, onNavigateMore }: StartPageProps) {
               onClick={scrollToCheckout}
               className="px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-xl bg-[#10b981] hover:bg-[#059669] text-black hover:text-white font-bold text-xs transition shadow-xs cursor-pointer flex items-center gap-1.5"
             >
-              <span>Get 20 Models for $1</span>
+              <span>Get 200 Models for $7</span>
               <ArrowRight className="size-3.5" />
             </button>
           </div>
@@ -139,9 +173,9 @@ export function StartPage({ onNavigateMain, onNavigateMore }: StartPageProps) {
 
         {/* Headline */}
         <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-slate-900 tracking-tight leading-[1.15]">
-          Get 20 High-Quality <br className="hidden sm:inline" />
+          Get 200 High-Quality <br className="hidden sm:inline" />
           <span className="bg-gradient-to-r from-slate-900 via-emerald-800 to-[#10b981] bg-clip-text text-transparent">
-            SketchUp 3D Scenes for Just $1
+            SketchUp 3D Scenes for Just $7
           </span>
         </h1>
 
@@ -158,7 +192,7 @@ export function StartPage({ onNavigateMain, onNavigateMore }: StartPageProps) {
           <div className="inline-flex items-center justify-between gap-3 p-2.5 px-4 rounded-2xl bg-white border border-slate-200 text-xs shadow-xs">
             <div className="flex items-center gap-1.5 text-slate-700 font-bold">
               <Timer className="size-4 text-emerald-600 animate-pulse" />
-              <span>Special $1 Pricing Ends In:</span>
+              <span>Special $7 Pricing Ends In:</span>
             </div>
             <div className="font-mono font-black text-xs text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-xl border border-emerald-300 shadow-2xs">
               {countdown}
@@ -169,9 +203,79 @@ export function StartPage({ onNavigateMain, onNavigateMore }: StartPageProps) {
             onClick={scrollToCheckout}
             className="w-full sm:w-auto px-6 py-2.5 rounded-2xl bg-slate-900 hover:bg-emerald-600 text-white font-bold text-xs transition duration-200 shadow-md flex items-center justify-center gap-2 cursor-pointer"
           >
-            <span>Claim 20 Models for $1.00</span>
+            <span>Claim 200 Models for $7.00</span>
             <ArrowRight className="size-3.5" />
           </button>
+        </div>
+      </section>
+
+      {/* FEATURED CATEGORY POSTERS SLIDER */}
+      <CategoryPostersSlider
+        onSelectCategory={() => {
+          const elem = document.getElementById("models-directory");
+          if (elem) elem.scrollIntoView({ behavior: "smooth" });
+        }}
+      />
+
+      {/* CATEGORY TILES */}
+      <section id="categories" className="py-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <div className="space-y-6">
+          <div className="flex items-center justify-between">
+            <h2 className="text-lg sm:text-xl font-black tracking-tight text-slate-900 flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-[#10b981]" />
+              Categories
+            </h2>
+            <button
+              onClick={() => {
+                const elem = document.getElementById("models-directory");
+                if (elem) elem.scrollIntoView({ behavior: "smooth" });
+              }}
+              className="text-xs font-bold text-slate-900 underline transition cursor-pointer"
+            >
+              All Categories (378)
+            </button>
+          </div>
+
+          {/* 6 Clean Minimal Tiles with 3-4 Circular Image Icons */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
+            {CATEGORIES.map((cat) => {
+              const IconComp = ICON_MAP[cat.icon] || Box;
+              const catModels = modelsByCategory[cat.key] || [];
+              const previewImages = catModels.slice(0, 4).map((m) => m.src);
+
+              return (
+                <button
+                  key={cat.key}
+                  onClick={() => {
+                    const elem = document.getElementById("models-directory");
+                    if (elem) elem.scrollIntoView({ behavior: "smooth" });
+                  }}
+                  className="p-3.5 sm:p-4 rounded-2xl border text-left transition-all flex flex-col justify-between h-32 group cursor-pointer bg-white border-slate-200 hover:border-slate-300 hover:shadow-md hover:bg-slate-50/80"
+                >
+                  <div className="flex items-center justify-between w-full">
+                    {/* Stack of 3-4 Circular Model Image Avatars */}
+                    <div className="flex items-center pl-1">
+                      {previewImages.map((imgSrc, idx) => (
+                        <img
+                          key={idx}
+                          src={imgSrc}
+                          alt={cat.name}
+                          className="size-6 sm:size-7.5 rounded-full border-2 border-white object-cover -ml-2 first:ml-0 shadow-sm group-hover:border-slate-100 transition-colors"
+                        />
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-1.5 pt-4">
+                    <IconComp className="size-3.5 text-slate-400 group-hover:text-emerald-600 transition-colors" />
+                    <span className="text-[11px] sm:text-xs font-bold text-slate-700 group-hover:text-slate-900 transition-colors">
+                      {cat.name}
+                    </span>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
         </div>
       </section>
 
@@ -212,14 +316,14 @@ export function StartPage({ onNavigateMain, onNavigateMore }: StartPageProps) {
         </div>
       </section>
 
-      {/* 20 FEATURED MODELS SHOWCASE GRID */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+      {/* 200 FEATURED MODELS SHOWCASE GRID */}
+      <section id="models-directory" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         <div className="text-center space-y-2">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-[11px] font-mono font-bold text-slate-700">
             <Sparkles className="size-3 text-emerald-600" /> INCLUDED ASSETS
           </div>
           <h2 className="text-xl sm:text-3xl font-black text-slate-900 tracking-tight">
-            All 20 Models Included in Your $1 Package
+            All 200 Models Included in Your $7 Package
           </h2>
           <p className="text-xs sm:text-sm text-slate-600 max-w-xl mx-auto">
             Every model below is an unlocked, editable .SKP scene with full geometry, proxy assets, and texture maps.
@@ -288,7 +392,7 @@ export function StartPage({ onNavigateMain, onNavigateMore }: StartPageProps) {
               ))}
             </div>
             <p className="text-xs text-slate-700 leading-relaxed italic">
-              "The lighting setup and proxy foliage in Model #4 alone saved me 15+ hours on a luxury villa client pitch. Absolute steal for $1."
+              "The lighting setup and proxy foliage in Model #4 alone saved me 15+ hours on a luxury villa client pitch. Absolute steal for $7."
             </p>
             <div className="flex items-center gap-2.5 pt-1">
               <img className="size-7 rounded-full object-cover" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=64&h=64&fit=crop&crop=faces" alt="Marcus T." />
@@ -350,7 +454,7 @@ export function StartPage({ onNavigateMain, onNavigateMore }: StartPageProps) {
           </div>
         </div>
 
-        {/* 20 OVERLAPPING CIRCULAR MODEL THUMBNAILS STRIP */}
+        {/* 200 OVERLAPPING CIRCULAR MODEL THUMBNAILS STRIP */}
         <div className="space-y-2 py-0.5 text-center">
           <div className="flex items-center justify-center -space-x-2.5 overflow-x-auto scrollbar-none py-1 px-1.5 max-w-full">
             {starterModels.map((item, idx) => (
@@ -364,22 +468,22 @@ export function StartPage({ onNavigateMain, onNavigateMore }: StartPageProps) {
           </div>
           <div className="flex justify-center">
             <span className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-slate-700 bg-white px-3 py-1 rounded-full border border-slate-200 shadow-2xs">
-              <Sparkles className="size-3.5 text-emerald-600" /> 20 SketchUp (.SKP) Scene Models Included
+              <Sparkles className="size-3.5 text-emerald-600" /> 200 SketchUp (.SKP) Scene Models Included
             </span>
           </div>
         </div>
 
         {/* EMBEDDED STRIPE CARD PAYMENT FORM */}
         <CardPaymentForm
-          sourceLocation="start_page_1dollar_pack"
+          sourceLocation="start_page_7dollar_pack"
           buttonText="Place Order"
           allowSavedCard={false}
-          deliveryAddressLine1="20 SketchUp (.SKP) Scenes + 8K Textures"
+          deliveryAddressLine1="200 SketchUp (.SKP) Scenes + 8K Textures"
           deliveryAddressLine2="Instant Download Access • Single Zip Archive"
           itemTotal="$49.00"
           deliveryFee="$0.00"
           discountAmount="-$48.00"
-          totalPrice="$1.00"
+          totalPrice="$7.00"
           onSuccess={handleInitialPurchaseSuccess}
         />
       </section>
@@ -388,7 +492,7 @@ export function StartPage({ onNavigateMain, onNavigateMore }: StartPageProps) {
       <section className="max-w-2xl mx-auto px-4 py-8 space-y-4 text-left">
         <div className="text-center space-y-1 pb-2">
           <h3 className="text-xl font-black text-slate-900">Frequently Asked Questions</h3>
-          <p className="text-xs text-slate-500">Everything you need to know about the $1 Starter Pack.</p>
+          <p className="text-xs text-slate-500">Everything you need to know about the $7 Starter Pack.</p>
         </div>
 
         <div className="space-y-2.5">
@@ -420,14 +524,14 @@ export function StartPage({ onNavigateMain, onNavigateMore }: StartPageProps) {
       {/* STICKY BOTTOM MOBILE QUICK ACTION BAR */}
       <div className="sm:hidden fixed bottom-0 left-0 right-0 z-30 p-3 bg-white/95 backdrop-blur-lg border-t border-slate-200 shadow-xl flex items-center justify-between gap-3">
         <div className="text-left">
-          <div className="text-sm font-black text-slate-900">20 Models • $1.00</div>
+          <div className="text-sm font-black text-slate-900">200 Models • $7.00</div>
           <div className="text-[10px] text-emerald-600 font-bold">One-time payment</div>
         </div>
         <button
           onClick={scrollToCheckout}
           className="px-4 py-2 rounded-xl bg-[#059669] hover:bg-[#047857] text-white font-bold text-xs shadow-md transition flex items-center gap-1.5 cursor-pointer"
         >
-          <span>Claim for $1.00</span>
+          <span>Claim for $7.00</span>
           <ArrowRight className="size-3.5" />
         </button>
       </div>
@@ -446,10 +550,10 @@ export function StartPage({ onNavigateMain, onNavigateMore }: StartPageProps) {
             {/* Modal Header */}
             <div className="space-y-1 pt-2 text-left">
               <span className="text-[11px] font-mono text-emerald-700 font-bold">ORDER SUMMARY</span>
-              <h3 className="text-lg font-black text-slate-900">20 Models Starter Pack</h3>
+              <h3 className="text-lg font-black text-slate-900">200 Models Starter Pack</h3>
               {selectedModelTitle && (
                 <p className="text-xs text-slate-500">
-                  Selected: <span className="font-semibold text-slate-800">"{selectedModelTitle}"</span> + 19 more models
+                  Selected: <span className="font-semibold text-slate-800">"{selectedModelTitle}"</span> + 199 more models
                 </p>
               )}
             </div>
@@ -472,12 +576,12 @@ export function StartPage({ onNavigateMain, onNavigateMore }: StartPageProps) {
               sourceLocation="start_page_checkout_modal"
               buttonText="Place Order"
               allowSavedCard={false}
-              deliveryAddressLine1={`Model: "${selectedModelTitle || "3D Scene"}" + 19 More`}
+              deliveryAddressLine1={`Model: "${selectedModelTitle || "3D Scene"}" + 199 more`}
               deliveryAddressLine2="Instant .SKP Download Link"
               itemTotal="$49.00"
               deliveryFee="$0.00"
               discountAmount="-$48.00"
-              totalPrice="$1.00"
+              totalPrice="$7.00"
               onSuccess={handleInitialPurchaseSuccess}
             />
           </div>
