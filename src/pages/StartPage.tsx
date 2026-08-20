@@ -45,6 +45,14 @@ export function StartPage({ onNavigateMain, onNavigateMore }: StartPageProps) {
   const [showCheckoutModal, setShowCheckoutModal] = useState(false);
   const [selectedModelTitle, setSelectedModelTitle] = useState<string>("");
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [mobileBlinkIndex, setMobileBlinkIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setMobileBlinkIndex((prev) => (prev + 1) % 200);
+    }, 1000); // 1 second blink rate
+    return () => clearInterval(interval);
+  }, []);
 
   // Select 200 high quality models for the $7 starter pack
   const starterModels = useMemo(() => {
@@ -344,9 +352,68 @@ export function StartPage({ onNavigateMain, onNavigateMore }: StartPageProps) {
           .animate-slide-fast:hover {
             animation-play-state: paused;
           }
+          @keyframes blinkIn {
+            0% { opacity: 0.8; transform: scale(0.98); }
+            100% { opacity: 1; transform: scale(1); }
+          }
+          .animate-blink-in {
+            animation: blinkIn 0.3s ease-out forwards;
+          }
         `}} />
 
-        <div className="w-[100vw] relative left-1/2 -translate-x-1/2 overflow-hidden py-4">
+        {/* MOBILE: Single Blinking Card */}
+        <div className="sm:hidden w-full max-w-sm mx-auto py-4">
+          {(() => {
+            const model = starterModels[mobileBlinkIndex];
+            if (!model) return null;
+            const modelIndex = mobileBlinkIndex + 1;
+            const modelTitle = `${model.category || "3D"} Scene #${modelIndex}`;
+            return (
+              <div
+                key={mobileBlinkIndex}
+                className="animate-blink-in w-full group rounded-3xl bg-white border border-slate-200 overflow-hidden flex flex-col justify-between shadow-xl"
+              >
+                <div className="relative aspect-[4/3] overflow-hidden bg-slate-100">
+                  <img
+                    src={model.relPath}
+                    alt={modelTitle}
+                    loading="lazy"
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full border border-slate-200 text-[10px] font-mono font-bold text-slate-800 shadow-md">
+                    Model #{modelIndex}
+                  </div>
+                  <div className="absolute top-3 right-3 bg-[#10b981] text-black font-extrabold text-[9px] px-2 py-1 rounded-full shadow-md">
+                    .SKP INCLUDED
+                  </div>
+                </div>
+
+                <div className="p-4 space-y-3 flex flex-col justify-between">
+                  <div className="space-y-1">
+                    <h3 className="text-sm font-bold text-slate-900 line-clamp-1">
+                      {modelTitle}
+                    </h3>
+                    <div className="flex items-center gap-1.5 text-xs text-slate-500 font-mono">
+                      <span className="capitalize">{model.category || "3D Scene"}</span>
+                      <span>•</span>
+                      <span>SketchUp 2024</span>
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={() => openCheckoutForModel(modelTitle)}
+                    className="w-full py-3 rounded-xl bg-[#10b981] text-black font-bold text-xs shadow-md transition flex items-center justify-center gap-1.5"
+                  >
+                    <Download className="size-4" /> Download (.SKP)
+                  </button>
+                </div>
+              </div>
+            );
+          })()}
+        </div>
+
+        {/* DESKTOP: Fast Scrolling Marquee */}
+        <div className="hidden sm:block w-[100vw] relative left-1/2 -translate-x-1/2 overflow-hidden py-4">
           <div className="animate-slide-fast gap-3 sm:gap-4 px-4">
             {[...starterModels, ...starterModels].map((model, idx) => {
               const modelIndex = (idx % 200) + 1;
