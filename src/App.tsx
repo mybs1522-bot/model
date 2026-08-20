@@ -313,6 +313,13 @@ export function App() {
     return map;
   }, [ALL_MODELS]);
 
+  const scrollToPricing = () => {
+    const el = document.getElementById("pricing");
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   if (currentRoute === "start") {
     return <StartPage onNavigateMain={() => setCurrentRoute("main")} onNavigateMore={() => setCurrentRoute("more")} />;
   }
@@ -571,7 +578,7 @@ export function App() {
               return (
                 <div
                   key={mobileBlinkIndex % showcaseModels.length}
-                  onClick={() => setShowSubscriptionModal(true)}
+                  onClick={scrollToPricing}
                   className="animate-blink-in w-full group rounded-3xl bg-white border border-slate-200 overflow-hidden flex flex-col justify-between shadow-xl cursor-pointer"
                 >
                   <div className="relative aspect-[4/3] overflow-hidden bg-slate-100">
@@ -600,7 +607,13 @@ export function App() {
                       </div>
                     </div>
 
-                    <button className="w-full py-3 rounded-xl bg-[#10b981] text-black font-bold text-xs shadow-md transition flex items-center justify-center gap-1.5">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        scrollToPricing();
+                      }}
+                      className="w-full py-3 rounded-xl bg-[#10b981] text-black font-bold text-xs shadow-md transition flex items-center justify-center gap-1.5 cursor-pointer"
+                    >
                       <DownloadDoneIcon size={16} color="#000000" /> Unlock Model
                     </button>
                   </div>
@@ -615,7 +628,7 @@ export function App() {
               {[...filteredModels.slice(0, 100), ...filteredModels.slice(0, 100)].map((model, idx) => (
                 <div
                   key={`${model.id}-${idx}`}
-                  onClick={() => setShowSubscriptionModal(true)}
+                  onClick={scrollToPricing}
                   className="w-[260px] sm:w-[280px] flex-none group rounded-2xl bg-white border border-slate-200 hover:border-emerald-500/80 transition duration-300 overflow-hidden flex flex-col justify-between shadow-xs hover:shadow-md cursor-pointer"
                 >
                   <div className="relative aspect-[4/3] overflow-hidden bg-slate-100">
@@ -645,7 +658,13 @@ export function App() {
                       </div>
                     </div>
 
-                    <button className="w-full py-2 rounded-xl bg-slate-50 hover:bg-[#10b981] text-slate-800 hover:text-black font-bold text-[11px] border border-slate-200 hover:border-[#10b981] transition flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        scrollToPricing();
+                      }}
+                      className="w-full py-2 rounded-xl bg-slate-50 hover:bg-[#10b981] text-slate-800 hover:text-black font-bold text-[11px] border border-slate-200 hover:border-[#10b981] transition flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs"
+                    >
                       <DownloadDoneIcon size={14} color="currentColor" /> Unlock Model
                     </button>
                   </div>
