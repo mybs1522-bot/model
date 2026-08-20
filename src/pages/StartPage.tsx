@@ -316,9 +316,9 @@ export function StartPage({ onNavigateMain, onNavigateMore }: StartPageProps) {
         </div>
       </section>
 
-      {/* 200 FEATURED MODELS SHOWCASE GRID */}
-      <section id="models-directory" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-        <div className="text-center space-y-2">
+      {/* 200 FEATURED MODELS SHOWCASE GRID -> SINGLE ROW MARQUEE */}
+      <section id="models-directory" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 overflow-hidden">
+        <div className="text-center space-y-2 relative z-10">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-[11px] font-mono font-bold text-slate-700">
             <Sparkles className="size-3 text-emerald-600" /> INCLUDED ASSETS
           </div>
@@ -330,50 +330,69 @@ export function StartPage({ onNavigateMain, onNavigateMore }: StartPageProps) {
           </p>
         </div>
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
-          {starterModels.map((model, idx) => {
-            const modelTitle = `${model.category || "3D"} Scene #${idx + 1}`;
-            return (
-              <div
-                key={idx}
-                className="group rounded-2xl bg-white border border-slate-200 hover:border-emerald-500/80 transition duration-300 overflow-hidden flex flex-col justify-between shadow-xs hover:shadow-md"
-              >
-                <div className="relative aspect-[4/3] overflow-hidden bg-slate-100">
-                  <img
-                    src={model.relPath}
-                    alt={modelTitle}
-                    className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
-                  />
-                  <div className="absolute top-2 left-2 sm:top-3 sm:left-3 bg-white/90 backdrop-blur-md px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full border border-slate-200 text-[9px] sm:text-[10px] font-mono font-bold text-slate-800 shadow-xs">
-                    Model #{idx + 1}
-                  </div>
-                  <div className="absolute top-2 right-2 sm:top-3 sm:right-3 bg-[#10b981] text-black font-extrabold text-[8px] sm:text-[10px] px-1.5 py-0.5 rounded-full shadow-xs">
-                    .SKP INCLUDED
-                  </div>
-                </div>
+        <style dangerouslySetInnerHTML={{__html: `
+          @keyframes slideFast {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+          }
+          .animate-slide-fast {
+            animation: slideFast 150s linear infinite;
+            display: flex;
+            width: max-content;
+          }
+          .animate-slide-fast:hover {
+            animation-play-state: paused;
+          }
+        `}} />
 
-                <div className="p-2.5 sm:p-4 space-y-2.5 flex-1 flex flex-col justify-between">
-                  <div className="space-y-0.5 sm:space-y-1">
-                    <h3 className="text-xs sm:text-sm font-bold text-slate-900 group-hover:text-emerald-700 transition line-clamp-1">
-                      {modelTitle}
-                    </h3>
-                    <div className="flex items-center gap-1.5 text-[10px] sm:text-[11px] text-slate-500 font-mono">
-                      <span className="capitalize">{model.category || "3D Scene"}</span>
-                      <span>•</span>
-                      <span>SketchUp 2024</span>
+        <div className="w-[100vw] relative left-1/2 -translate-x-1/2 overflow-hidden py-4">
+          <div className="animate-slide-fast gap-3 sm:gap-4 px-4">
+            {[...starterModels, ...starterModels].map((model, idx) => {
+              const modelIndex = (idx % 200) + 1;
+              const modelTitle = `${model.category || "3D"} Scene #${modelIndex}`;
+              return (
+                <div
+                  key={idx}
+                  className="w-[260px] sm:w-[280px] flex-none group rounded-2xl bg-white border border-slate-200 hover:border-emerald-500/80 transition duration-300 overflow-hidden flex flex-col justify-between shadow-xs hover:shadow-md"
+                >
+                  <div className="relative aspect-[4/3] overflow-hidden bg-slate-100">
+                    <img
+                      src={model.relPath}
+                      alt={modelTitle}
+                      loading="lazy"
+                      className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                    />
+                    <div className="absolute top-2 left-2 bg-white/90 backdrop-blur-md px-2 py-0.5 rounded-full border border-slate-200 text-[9px] font-mono font-bold text-slate-800 shadow-xs">
+                      Model #{modelIndex}
+                    </div>
+                    <div className="absolute top-2 right-2 bg-[#10b981] text-black font-extrabold text-[8px] px-1.5 py-0.5 rounded-full shadow-xs">
+                      .SKP INCLUDED
                     </div>
                   </div>
 
-                  <button
-                    onClick={() => openCheckoutForModel(modelTitle)}
-                    className="w-full py-2 sm:py-2.5 rounded-xl bg-slate-50 hover:bg-[#10b981] text-slate-800 hover:text-black font-bold text-[11px] sm:text-xs border border-slate-200 hover:border-[#10b981] transition flex items-center justify-center gap-1 sm:gap-1.5 cursor-pointer shadow-2xs"
-                  >
-                    <Download className="size-3 sm:size-3.5" /> Download (.SKP)
-                  </button>
+                  <div className="p-3 space-y-2 flex-1 flex flex-col justify-between">
+                    <div className="space-y-0.5">
+                      <h3 className="text-xs font-bold text-slate-900 group-hover:text-emerald-700 transition line-clamp-1">
+                        {modelTitle}
+                      </h3>
+                      <div className="flex items-center gap-1.5 text-[10px] text-slate-500 font-mono">
+                        <span className="capitalize">{model.category || "3D Scene"}</span>
+                        <span>•</span>
+                        <span>SketchUp 2024</span>
+                      </div>
+                    </div>
+
+                    <button
+                      onClick={() => openCheckoutForModel(modelTitle)}
+                      className="w-full py-2 rounded-xl bg-slate-50 hover:bg-[#10b981] text-slate-800 hover:text-black font-bold text-[11px] border border-slate-200 hover:border-[#10b981] transition flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs"
+                    >
+                      <Download className="size-3" /> Download (.SKP)
+                    </button>
+                  </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
       </section>
 
