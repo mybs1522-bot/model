@@ -389,8 +389,8 @@ export function App() {
             {/* Left Copy */}
             <div className="lg:col-span-6 space-y-5">
               {/* Top High-Value Badge */}
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-50 text-emerald-900 border border-emerald-200 text-xs font-mono font-bold shadow-xs">
-                <span className="flex h-2 w-2 rounded-full bg-emerald-500 animate-ping" />
+              <div className="inline-flex items-center gap-2 px-3 sm:px-3.5 py-1.5 rounded-full bg-emerald-50 text-emerald-900 border border-emerald-200 text-[11px] sm:text-xs font-bold whitespace-nowrap shadow-xs max-w-full">
+                <span className="flex h-2 w-2 rounded-full bg-emerald-500 animate-ping shrink-0" />
                 <span>🔥 If you use Sketchup, Don't miss this package.</span>
               </div>
 
