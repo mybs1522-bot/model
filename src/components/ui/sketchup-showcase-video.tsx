@@ -7,53 +7,66 @@ import { MousePointer, Download, CheckCircle2 } from "lucide-react";
 
 export function SketchUpShowcaseVideo() {
   const [step, setStep] = useState<number>(0);
-  const [selectedIndex, setSelectedIndex] = useState<number>(7);
+  const [selectedIndex, setSelectedIndex] = useState<number>(33);
 
   const images = publicModels;
-
-  // 24 high-quality renders across all categories
   const wallImages = useMemo(() => {
-    return images.slice(0, 24);
+    return images.slice(0, 120);
   }, [images]);
 
   useEffect(() => {
-    // 7.5s ultra-smooth loop
-    const timer = setInterval(() => {
-      setStep((prevStep) => {
-        if (prevStep === 0) return 1;
-        if (prevStep === 1) return 2;
-        if (prevStep === 2) return 3;
-        setSelectedIndex((prevIdx) => (prevIdx + 5) % wallImages.length);
-        return 0;
-      });
-    }, 1875);
-
-    return () => clearInterval(timer);
-  }, [wallImages.length]);
+    const stepDurations = [2500, 1000, 1200, 1500]; 
+    let timer: ReturnType<typeof setTimeout>;
+    
+    const runSequence = (currentStep: number) => {
+      timer = setTimeout(() => {
+        setStep((prev) => {
+          let nextStep = prev + 1;
+          if (nextStep > 3) {
+            const randomRow = Math.floor(Math.random() * 8) + 4;
+            const randomCol = Math.floor(Math.random() * 6);
+            setSelectedIndex(randomRow * 6 + randomCol);
+            nextStep = 0;
+          }
+          runSequence(nextStep);
+          return nextStep;
+        });
+      }, stepDurations[currentStep]);
+    };
+    runSequence(0);
+    return () => clearTimeout(timer);
+  }, []);
 
   const selectedModel = wallImages[selectedIndex] || wallImages[0];
+  const targetRow = Math.floor(selectedIndex / 6);
+  const targetCol = selectedIndex % 6;
+  const rowHeightPercent = 100 / 20;
+  const scrollYPercent = step === 0 ? 0 : -(targetRow - 1.5) * rowHeightPercent; 
 
-  // Format category titles nicely
   const displayTitle = useMemo(() => {
     const cat = selectedModel.category || "Living";
-    return `Modern ${cat} Scene`;
+    return 'Modern ' + cat + ' Scene';
   }, [selectedModel]);
 
   return (
     <div className="relative w-full rounded-3xl bg-white border border-slate-200 overflow-hidden shadow-xl select-none group">
-      {/* Sleek Floating Header Badge */}
-      <div className="absolute top-3 left-3 z-30 flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/90 backdrop-blur-md border border-slate-200 shadow-md">
+      <div className="absolute top-3 left-3 z-30 flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/95 backdrop-blur-md border border-emerald-200 shadow-md">
         <div className="size-5 rounded-md bg-[#ea4335] text-white font-black text-[9px] flex items-center justify-center tracking-tighter shadow-2xs">
           SKP
         </div>
-        <span className="text-xs font-bold text-slate-800">SketchUp Vault</span>
+        <span className="text-xs font-black text-emerald-900 tracking-tight">3,000+ SketchUp Models</span>
         <span className="size-1.5 rounded-full bg-[#10b981] animate-pulse" />
       </div>
 
-      {/* Main Viewport Window */}
       <div className="relative aspect-[16/10] sm:aspect-[16/9] w-full bg-slate-100 overflow-hidden flex items-center justify-center">
-        {/* 24-Image Wall Grid */}
-        <div className="absolute inset-0 p-2 sm:p-3 grid grid-cols-6 grid-rows-4 gap-1.5 sm:gap-2">
+        <motion.div 
+          className="absolute inset-0 p-2 sm:p-3 grid grid-cols-6 gap-1.5 sm:gap-2 h-max"
+          initial={{ y: "0%" }}
+          animate={{ y: scrollYPercent + "%" }}
+          transition={{ duration: step === 0 ? 0 : 2.2, ease: "circOut" }}
+          style={{ gridAutoRows: "minmax(0, 1fr)" }}
+        >
+          <style dangerouslySetInnerHTML={{__html: '.scroll-grid-row-h { aspect-ratio: 4/3; }'}} />
           {wallImages.map((img, idx) => {
             const isTarget = idx === selectedIndex;
             return (
@@ -64,9 +77,7 @@ export function SketchUpShowcaseVideo() {
                   borderColor: isTarget && step >= 1 ? "#10b981" : "#e2e8f0",
                   zIndex: isTarget && step >= 1 ? 30 : 1,
                 }}
-                className={`relative rounded-xl overflow-hidden border bg-white transition-all ${
-                  isTarget ? "ring-2 ring-[#10b981] shadow-xl" : "border-slate-200 opacity-90"
-                }`}
+                className={"scroll-grid-row-h relative rounded-xl overflow-hidden border bg-white transition-all " + (isTarget ? "ring-2 ring-[#10b981] shadow-xl" : "border-slate-200 opacity-90")}
               >
                 <img src={img.relPath} alt={img.name} className="w-full h-full object-cover" />
 
@@ -81,25 +92,22 @@ export function SketchUpShowcaseVideo() {
               </motion.div>
             );
           })}
-        </div>
+        </motion.div>
 
-        {/* Subtle Ambient Vignette */}
         <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 via-transparent to-slate-900/10 pointer-events-none z-10" />
 
-        {/* Cursor Motion */}
         <motion.div
           animate={{
-            x: step === 0 ? -120 : step === 1 ? (selectedIndex % 6 - 2.5) * 55 : 0,
-            y: step === 0 ? -60 : step === 1 ? (Math.floor(selectedIndex / 6) - 1.5) * 35 : 0,
+            x: step === 0 ? 0 : step === 1 ? (targetCol - 2.5) * 55 : 0,
+            y: step === 0 ? 250 : step === 1 ? 0 : 0,
             scale: step === 1 ? [1, 0.8, 1] : 1,
           }}
-          transition={{ duration: 0.6, ease: "easeInOut" }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
           className="absolute z-40 pointer-events-none drop-shadow-lg"
         >
           <MousePointer className="size-6 text-slate-900 fill-white stroke-slate-900 stroke-2" />
         </motion.div>
 
-        {/* Minimal Impactful Action Overlay */}
         <AnimatePresence>
           {step >= 2 && (
             <motion.div
@@ -154,3 +162,4 @@ export function SketchUpShowcaseVideo() {
     </div>
   );
 }
+
