@@ -9,6 +9,7 @@ import {
   ShieldCheck,
   Check,
   AlertCircle,
+  Sparkles,
 } from "lucide-react";
 import { getStripe, chargeSavedCardUpsell } from "@/lib/stripe";
 import { saveLeadEmail } from "@/lib/supabase";
@@ -321,13 +322,41 @@ export function CardPaymentForm({
         
         <CardContent className="space-y-5 text-left pt-0">
           {/* Digital Delivery / Order Details Section */}
-          <div>
+          <div className="space-y-3">
             <div className="flex items-center gap-2 mb-2">
               <Package className="h-4 w-4 text-muted-foreground" />
               <span className="text-sm font-medium text-slate-900">Order Details</span>
             </div>
-            <p className="text-sm text-muted-foreground">{deliveryAddressLine1}</p>
-            <p className="text-sm text-muted-foreground">{deliveryAddressLine2}</p>
+            
+            {/* Main Product */}
+            <div className="flex items-center gap-3">
+              <div className="bg-slate-100 size-10 rounded border border-slate-200 flex items-center justify-center shrink-0">
+                <Package className="size-5 text-slate-600" />
+              </div>
+              <div className="flex-1">
+                <p className="text-sm font-bold text-slate-900 leading-snug">{deliveryAddressLine1}</p>
+                <p className="text-xs text-slate-500">Digital Access • 3,000+ Models</p>
+              </div>
+              <span className="text-sm font-medium text-slate-900">{totalPrice}</span>
+            </div>
+
+            {/* Free Addon */}
+            {deliveryAddressLine2 && (
+              <div className="flex items-center gap-3 p-3 rounded-lg bg-emerald-50 border border-emerald-200 relative overflow-hidden">
+                <div className="absolute top-0 right-0 px-2 py-0.5 bg-emerald-500 text-white text-[9px] font-black uppercase tracking-wider rounded-bl-lg">
+                  Free Addon
+                </div>
+                <div className="bg-emerald-100 size-10 rounded border border-emerald-200 flex items-center justify-center shrink-0">
+                  <Sparkles className="size-5 text-emerald-600" />
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm font-bold text-slate-900 leading-snug">Free SketchUp Course</p>
+                  <p className="text-xs text-emerald-700 font-semibold">Lifetime Access</p>
+                </div>
+                <span className="text-sm font-bold text-emerald-600 line-through opacity-70 mr-1">$297</span>
+                <span className="text-sm font-black text-emerald-600">FREE</span>
+              </div>
+            )}
           </div>
 
           <Separator className="bg-slate-100" />
