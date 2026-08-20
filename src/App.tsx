@@ -211,6 +211,21 @@ export function App() {
   const [likedModels, setLikedModels] = useState<Record<string, boolean>>({});
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [showSubscriptionModal, setShowSubscriptionModal] = useState(false);
+  const [searchTermIdx, setSearchTermIdx] = useState(0);
+  const [mobileBlinkIndex, setMobileBlinkIndex] = useState(0);
+
+  useEffect(() => {
+    const blinkInterval = setInterval(() => {
+      setMobileBlinkIndex((prev) => (prev + 1) % 200);
+    }, 1000);
+    const searchInterval = setInterval(() => {
+      setSearchTermIdx((prev) => (prev + 1) % 6);
+    }, 1500);
+    return () => {
+      clearInterval(blinkInterval);
+      clearInterval(searchInterval);
+    };
+  }, []);
 
   const countdown = useEvergreenTimer();
 
@@ -388,13 +403,35 @@ export function App() {
               <Zap className="size-3.5 fill-current text-emerald-600" /> 3,000+ Curated SketchUp (.SKP) Assets
             </div>
 
-            <h1 className="text-[24px] sm:text-4xl lg:text-5xl font-black tracking-tight text-slate-900 leading-tight">
-              Design Homes, Offices & Villas for Clients <br className="hidden sm:inline" />
-              <span className="text-[#10b981]">in a Few Minutes.</span>
+            {/* Narrative Hook */}
+            <div className="space-y-4 pt-2">
+              <div className="text-sm sm:text-base text-slate-600 font-medium space-y-2.5">
+                <p>You start a new project. Then the search begins...</p>
+                <div className="inline-flex items-center justify-center gap-2 bg-slate-100 text-slate-500 px-4 py-1.5 rounded-full text-xs sm:text-sm font-mono border border-slate-200 shadow-inner">
+                  <span className="animate-pulse">🔍</span>
+                  <span>Searching for</span>
+                  <strong className="text-emerald-700 w-[170px] text-left transition-all duration-300">
+                    {["the right sofa.", "the perfect table.", "lighting.", "décor.", "materials.", "architectural elements."][searchTermIdx]}
+                  </strong>
+                </div>
+                <p className="leading-relaxed text-slate-500 pt-1">
+                  Before you know it, you've spent hours collecting resources instead of designing.
+                </p>
+              </div>
+              <p className="text-base sm:text-lg text-slate-900 font-black pt-2">
+                What if your entire design library was already in one place?
+              </p>
+            </div>
+
+            <h1 className="text-[28px] sm:text-4xl lg:text-5xl font-black tracking-tight text-slate-900 leading-tight">
+              MEET YOUR NEW <br className="hidden sm:inline" />
+              <span className="bg-gradient-to-r from-slate-900 via-emerald-800 to-[#10b981] bg-clip-text text-transparent">
+                SKETCHUP DESIGN LIBRARY
+              </span>
             </h1>
 
-            <p className="text-slate-600 text-sm sm:text-base max-w-xl font-normal leading-relaxed">
-              Get the best 3D models on SketchUp — Edit and Sell. High quality models to get paid like top designers.
+            <p className="text-slate-600 text-sm sm:text-base max-w-xl font-medium leading-relaxed">
+              Unlock <strong className="text-slate-900 font-bold">3,000+ High-Quality SketchUp 3D Scenes</strong>. Complete production-ready .SKP files with 8K PBR textures and lighting. Ready for instant rendering.
             </p>
 
             <div className="flex flex-row items-center gap-2 sm:gap-4 pt-2 flex-nowrap w-full max-w-md">
@@ -570,82 +607,124 @@ export function App() {
           )}
         </div>
 
-        {/* Models Grid */}
+        {/* Models Animated Showcase */}
         <div>
-          <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-6">
-            {visibleModels.map((model) => (
-              <div
-                key={model.id}
-                onClick={() => setShowSubscriptionModal(true)}
-                className="group cursor-pointer rounded-2xl bg-white border border-slate-200 hover:border-emerald-500/80 transition-all overflow-hidden flex flex-col shadow-xs hover:shadow-md"
-              >
-                {/* Clean Image Container */}
-                <div className="relative aspect-[16/10] w-full overflow-hidden bg-slate-100">
-                  <img
-                    src={model.src}
-                    alt={model.title}
-                    loading="lazy"
-                    className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                  <div className="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                    <span className="px-2.5 py-1 rounded-full bg-white text-black text-[10px] sm:text-xs font-black shadow-md flex items-center gap-1">
-                      <Eye className="size-3" /> Download SKP
-                    </span>
-                  </div>
+          <style dangerouslySetInnerHTML={{__html: `
+            @keyframes slideFast {
+              0% { transform: translateX(0); }
+              100% { transform: translateX(-50%); }
+            }
+            .animate-slide-fast {
+              animation: slideFast 150s linear infinite;
+              display: flex;
+              width: max-content;
+            }
+            .animate-slide-fast:hover {
+              animation-play-state: paused;
+            }
+            @keyframes blinkIn {
+              0% { opacity: 0.8; transform: scale(0.98); }
+              100% { opacity: 1; transform: scale(1); }
+            }
+            .animate-blink-in {
+              animation: blinkIn 0.3s ease-out forwards;
+            }
+          `}} />
 
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      toggleLikeModel(model.id);
-                    }}
-                    className="absolute top-2 right-2 p-1.5 rounded-full bg-white/80 backdrop-blur-xs text-slate-700 hover:bg-white transition shadow-sm"
-                  >
-                    <HeartIcon size={14} color={likedModels[model.id] ? "#10b981" : "#64748b"} duration={likedModels[model.id] ? 100 : 2000} />
-                  </button>
-                </div>
-
-                {/* Minimal Info */}
-                <div className="p-3 flex-1 flex flex-col justify-between space-y-2">
-                  <div>
-                    <div className="flex items-center justify-between text-[10px] text-slate-500">
-                      <span className="font-mono text-slate-700 font-semibold truncate max-w-[120px]">{model.rawName}</span>
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleCopyLink(model.id);
-                        }}
-                        className="text-slate-400 hover:text-slate-700 cursor-pointer"
-                      >
-                        <CopiedIcon size={12} color={copiedId === model.id ? "#10b981" : "#94a3b8"} duration={copiedId === model.id ? 100 : 2200} />
-                      </button>
+          {/* MOBILE: Single Blinking Card */}
+          <div className="sm:hidden w-full max-w-sm mx-auto py-4">
+            {(() => {
+              // Use up to 100 items from filtered models for the blink loop
+              const showcaseModels = filteredModels.slice(0, 100);
+              if (showcaseModels.length === 0) return null;
+              const model = showcaseModels[mobileBlinkIndex % showcaseModels.length];
+              if (!model) return null;
+              
+              return (
+                <div
+                  key={mobileBlinkIndex % showcaseModels.length}
+                  onClick={() => setShowSubscriptionModal(true)}
+                  className="animate-blink-in w-full group rounded-3xl bg-white border border-slate-200 overflow-hidden flex flex-col justify-between shadow-xl cursor-pointer"
+                >
+                  <div className="relative aspect-[4/3] overflow-hidden bg-slate-100">
+                    <img
+                      src={model.src}
+                      alt={model.title}
+                      loading="lazy"
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                      <span className="px-3 py-1.5 rounded-full bg-white text-black text-xs font-black shadow-md flex items-center gap-1.5">
+                        <Eye className="size-3.5" /> Download SKP
+                      </span>
                     </div>
-                    <h3 className="text-xs font-bold text-slate-900 group-hover:text-emerald-700 transition-colors mt-0.5 truncate">
-                      {model.title}
-                    </h3>
                   </div>
 
-                  <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-[10px]">
-                    <span className="text-slate-500 font-medium">SketchUp (.SKP)</span>
-                    <span className="text-slate-700 font-bold flex items-center gap-0.5 group-hover:text-emerald-600 transition-colors">
-                      <DownloadDoneIcon size={12} color="#059669" /> Download SKP
-                    </span>
+                  <div className="p-4 space-y-3 flex flex-col justify-between">
+                    <div className="space-y-1">
+                      <h3 className="text-sm font-bold text-slate-900 line-clamp-1">
+                        {model.title}
+                      </h3>
+                      <div className="flex items-center gap-1.5 text-xs text-slate-500 font-mono">
+                        <span className="capitalize">{model.categoryName || "3D Scene"}</span>
+                        <span>•</span>
+                        <span>SketchUp (.SKP)</span>
+                      </div>
+                    </div>
+
+                    <button className="w-full py-3 rounded-xl bg-[#10b981] text-black font-bold text-xs shadow-md transition flex items-center justify-center gap-1.5">
+                      <DownloadDoneIcon size={16} color="#000000" /> Unlock Model
+                    </button>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })()}
           </div>
 
-          {/* Load More Button */}
-          {hasMore && (
-            <div className="text-center pt-10">
-              <button
-                onClick={() => setVisibleCount((prev) => prev + 6)}
-                className="px-8 py-3 rounded-full bg-slate-900 text-white font-extrabold text-xs hover:bg-slate-800 transition inline-flex items-center gap-2 shadow-md cursor-pointer"
-              >
-                <Plus className="size-4" /> Load More Models
-              </button>
+          {/* DESKTOP: Fast Scrolling Marquee */}
+          <div className="hidden sm:block w-[100vw] relative left-1/2 -translate-x-1/2 overflow-hidden py-4">
+            <div className="animate-slide-fast gap-3 sm:gap-4 px-4">
+              {[...filteredModels.slice(0, 100), ...filteredModels.slice(0, 100)].map((model, idx) => (
+                <div
+                  key={`${model.id}-${idx}`}
+                  onClick={() => setShowSubscriptionModal(true)}
+                  className="w-[260px] sm:w-[280px] flex-none group rounded-2xl bg-white border border-slate-200 hover:border-emerald-500/80 transition duration-300 overflow-hidden flex flex-col justify-between shadow-xs hover:shadow-md cursor-pointer"
+                >
+                  <div className="relative aspect-[4/3] overflow-hidden bg-slate-100">
+                    <img
+                      src={model.src}
+                      alt={model.title}
+                      loading="lazy"
+                      className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                    />
+                    <div className="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                      <span className="px-2.5 py-1 rounded-full bg-white text-black text-xs font-black shadow-md flex items-center gap-1">
+                        <Eye className="size-3.5" /> Download SKP
+                      </span>
+                    </div>
+                    <div className="absolute top-2 right-2 bg-[#10b981] text-black font-extrabold text-[8px] px-1.5 py-0.5 rounded-full shadow-xs">
+                      .SKP INCLUDED
+                    </div>
+                  </div>
+
+                  <div className="p-3 space-y-2 flex-1 flex flex-col justify-between">
+                    <div className="space-y-0.5">
+                      <h3 className="text-xs font-bold text-slate-900 group-hover:text-emerald-700 transition line-clamp-1">
+                        {model.title}
+                      </h3>
+                      <div className="flex items-center gap-1.5 text-[10px] text-slate-500 font-mono">
+                        <span className="capitalize">{model.categoryName || "3D Scene"}</span>
+                      </div>
+                    </div>
+
+                    <button className="w-full py-2 rounded-xl bg-slate-50 hover:bg-[#10b981] text-slate-800 hover:text-black font-bold text-[11px] border border-slate-200 hover:border-[#10b981] transition flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs">
+                      <DownloadDoneIcon size={14} color="currentColor" /> Unlock Model
+                    </button>
+                  </div>
+                </div>
+              ))}
             </div>
-          )}
+          </div>
         </div>
       </section>
 
