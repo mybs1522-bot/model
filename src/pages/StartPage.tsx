@@ -454,6 +454,21 @@ export function StartPage({ onNavigateMain, onNavigateMore }: StartPageProps) {
         </div>
       </section>
 
+      {/* ALL IN ONE BUNDLE VISUAL SHOWCASE */}
+      <section className="py-8 sm:py-12 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
+        <div className="rounded-2xl sm:rounded-3xl overflow-hidden border border-slate-200 shadow-xl bg-white hover:shadow-2xl transition-all duration-300">
+          <picture>
+            <source srcSet="/images/all-in-one-bundle.webp" type="image/webp" />
+            <img
+              src="/images/all-in-one-bundle.jpg"
+              alt="All In One Bundle - Everything Included"
+              loading="lazy"
+              className="w-full h-auto object-contain block mx-auto"
+            />
+          </picture>
+        </div>
+      </section>
+
       {/* VALUE HIGHLIGHTS / OBJECTION BUSTERS GRID */}
       <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">

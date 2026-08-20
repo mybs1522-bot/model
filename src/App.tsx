@@ -763,6 +763,33 @@ export function App() {
         </div>
       </section>
 
+      {/* ALL IN ONE BUNDLE VISUAL SHOWCASE */}
+      <section className="py-12 sm:py-16 px-4 sm:px-6 lg:px-8 bg-slate-50/50 border-b border-slate-200">
+        <div className="max-w-3xl sm:max-w-4xl mx-auto space-y-6">
+          <div className="rounded-2xl sm:rounded-3xl overflow-hidden border border-slate-200 shadow-xl bg-white hover:shadow-2xl transition-all duration-300">
+            <picture>
+              <source srcSet="/images/all-in-one-bundle.webp" type="image/webp" />
+              <img
+                src="/images/all-in-one-bundle.jpg"
+                alt="All In One Bundle - 3,000+ SketchUp Models, Materials & Textures, Rendering Resources, Training"
+                loading="lazy"
+                className="w-full h-auto object-contain block mx-auto"
+              />
+            </picture>
+          </div>
+
+          <div className="text-center pt-2">
+            <button
+              onClick={scrollToPricing}
+              className="px-8 py-3.5 rounded-full bg-[#10b981] hover:bg-[#059669] text-black font-black text-xs sm:text-sm shadow-md hover:shadow-emerald-500/20 transition-all inline-flex items-center gap-2 cursor-pointer active:scale-95"
+            >
+              <Zap className="size-4 fill-current" />
+              <span>Get The Entire All-In-One Bundle for $29</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
       {/* --- NEW SALES SECTION 1: ROI & VALUE --- */}
       <section className="py-16 bg-slate-50 relative overflow-hidden">
         <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent"></div>
