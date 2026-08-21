@@ -11,7 +11,6 @@ import {
   FolderDown,
   Layers,
   CheckCircle2,
-  HardDrive,
   Eye,
   X,
   Package,
@@ -355,66 +354,7 @@ export function VaultPage({ onNavigateHome, onOpenActivateModal }: VaultPageProp
       </header>
 
       {/* MAIN VAULT CONTENT */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 space-y-10">
-        {/* $20 ACTIVATION CALLOUT BANNER */}
-        <div className="p-4 sm:p-6 rounded-3xl bg-gradient-to-r from-emerald-950/80 via-slate-900 to-slate-900 border-2 border-emerald-500 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-2xl">
-          <div className="space-y-1.5">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-mono font-bold border border-emerald-500/30">
-              <Sparkles className="size-3.5" /> LIFETIME ACTIVATION • $20 ONLY
-            </div>
-            <h3 className="text-base sm:text-xl font-black text-white tracking-tight">
-              Want More Models & Permanent Lifetime Access?
-            </h3>
-            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-2xl">
-              Pay $20 to permanently activate unlimited lifetime downloads of all SketchUp scenes, furniture assets & 8K PBR textures.
-            </p>
-          </div>
-          <button
-            type="button"
-            onClick={handleOpenActivate}
-            className="px-6 py-3 rounded-2xl bg-[#10b981] hover:bg-[#059669] text-black font-black text-xs sm:text-sm shadow-xl hover:shadow-emerald-500/25 transition active:scale-95 whitespace-nowrap cursor-pointer flex items-center gap-2 border border-emerald-300"
-          >
-            <span>Pay $20 to Activate →</span>
-          </button>
-        </div>
-
-        {/* HERO VAULT WELCOME BANNER */}
-        <div className="p-6 sm:p-10 rounded-3xl bg-gradient-to-br from-slate-900 via-slate-900/90 to-emerald-950/30 border border-slate-800 relative overflow-hidden shadow-2xl">
-          <div className="relative z-10 space-y-4 max-w-3xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/40 text-emerald-400 text-xs font-mono font-bold">
-              <Sparkles className="size-3.5" /> SKETCHUP MASTER ARCHIVE
-            </div>
-            <h1 className="text-2xl sm:text-4xl font-black text-white tracking-tight">
-              Welcome to Your <span className="text-[#10b981]">SketchUp Master Library</span>
-            </h1>
-            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-              Every single 3D scene below includes editable geometry (.SKP), proxy assets, and 8K PBR materials.
-              Compatible with SketchUp 2024–2019, V-Ray, D5 Render, Lumion, and Enscape.
-            </p>
-
-            {/* Master 1-Click Complete Archive Download */}
-            <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-              <button
-                onClick={() =>
-                  handleDownload(
-                    "AVADA-3D-Master-Vault-Archive.zip",
-                    "Complete Master Vault"
-                  )
-                }
-                className="px-6 py-3.5 rounded-2xl bg-[#10b981] hover:bg-[#059669] text-black font-black text-xs sm:text-sm shadow-xl flex items-center justify-center gap-2.5 transition active:scale-95 cursor-pointer border border-emerald-400"
-              >
-                <FolderDown className="size-5" />
-                <span>Download Complete Master Vault (.ZIP)</span>
-              </button>
-
-              <div className="px-4 py-2.5 rounded-xl bg-slate-950/60 border border-slate-800 text-slate-400 text-xs font-mono flex items-center justify-center gap-2">
-                <HardDrive className="size-4 text-emerald-400" />
-                <span>Unlimited High-Speed Cloud Bandwidth</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 space-y-8">
         {/* ══════ 6 REAL GOOGLE DRIVE CATEGORY PACKS ══════ */}
         <div className="space-y-4">
           <div className="flex items-center justify-between">
