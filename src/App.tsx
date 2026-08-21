@@ -208,6 +208,22 @@ export function App() {
   const [searchTermIdx, setSearchTermIdx] = useState(0);
   const [mobileBlinkIndex, setMobileBlinkIndex] = useState(0);
 
+  const openCheckout = (source: string = "hero_cta") => {
+    setShowCheckoutModal(true);
+    if (typeof window !== "undefined" && (window as any).fbq) {
+      try {
+        (window as any).fbq("track", "InitiateCheckout", {
+          content_name: "7-Day Free Trial",
+          content_category: "3D SketchUp Models",
+          content_ids: ["avada_3d_trial"],
+          value: billingCycle === "yearly" ? 180 : 20,
+          currency: "USD",
+          source,
+        });
+      } catch (err) {}
+    }
+  };
+
   useEffect(() => {
     const blinkInterval = setInterval(() => {
       setMobileBlinkIndex((prev) => (prev + 1) % 200);
@@ -481,7 +497,7 @@ export function App() {
               {/* Attached CTA Action + Compact Pill */}
               <div className="flex flex-col items-center sm:items-start gap-2 pt-2 w-full max-w-md">
                 <button
-                  onClick={() => setShowCheckoutModal(true)}
+                  onClick={() => openCheckout("hero")}
                   className="w-full px-6 py-3.5 rounded-full bg-[#10b981] hover:bg-[#059669] text-black font-black text-xs sm:text-sm shadow-lg hover:shadow-emerald-500/25 transition-all flex items-center justify-center gap-2 active:scale-95 cursor-pointer"
                 >
                   <Zap className="size-4 fill-current" />
@@ -901,7 +917,7 @@ export function App() {
       </section>
 
       {/* SINGLE PRICING CARD COMPONENT */}
-      <Pricing onSelectPlan={() => setShowCheckoutModal(true)} />
+      <Pricing onSelectPlan={() => openCheckout("pricing_card")} />
 
       {/* FOOTER */}
       <footer className="bg-slate-50 text-slate-600 border-t border-slate-200 py-10 px-4 sm:px-6 lg:px-8 text-xs text-center">
@@ -937,7 +953,7 @@ export function App() {
                 <button
                   onClick={() => {
                     setActiveModel(null);
-                    setShowCheckoutModal(true);
+                    openCheckout("lightbox_preview");
                   }}
                   className="px-5 py-2.5 rounded-full bg-[#10b981] text-black text-xs font-black hover:bg-[#059669] cursor-pointer shadow-sm"
                 >
@@ -980,7 +996,7 @@ export function App() {
             </span>
           </div>
           <button 
-            onClick={() => setShowCheckoutModal(true)}
+            onClick={() => openCheckout("floating_bottom_bar")}
             className="px-3.5 sm:px-5 py-2.5 rounded-xl bg-[#10b981] text-black font-black text-xs sm:text-sm hover:bg-[#059669] transition shadow-md cursor-pointer whitespace-nowrap shrink-0"
           >
             Start 7-Day Free Trial
