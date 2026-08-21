@@ -14,6 +14,7 @@ import {
   Eye,
   X,
   Package,
+  Mail,
 } from "lucide-react";
 import publicModels from "@/data/publicModelsImages.json";
 import manifestData from "@/data/modelsManifest.json";
@@ -354,7 +355,32 @@ export function VaultPage({ onNavigateHome, onOpenActivateModal }: VaultPageProp
       </header>
 
       {/* MAIN VAULT CONTENT */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 space-y-8">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 space-y-6">
+        {/* EMAIL ACCESS CONFIRMATION BANNER */}
+        <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-emerald-950 via-slate-900 to-slate-900 border-2 border-emerald-500 text-white flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-xl">
+          <div className="flex items-center gap-3">
+            <div className="size-10 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 flex items-center justify-center shrink-0">
+              <Mail className="size-5" />
+            </div>
+            <div className="space-y-0.5">
+              <div className="flex items-center gap-2">
+                <span className="size-2 rounded-full bg-emerald-400 animate-pulse" />
+                <h3 className="text-sm font-black text-white">
+                  Trial Active • Direct Vault Access Link Sent to Your Email
+                </h3>
+              </div>
+              <p className="text-xs text-slate-300">
+                Unlimited access unlocked below. A direct link has also been sent to <strong className="text-emerald-400 font-mono">{email || "your registered email"}</strong>.
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2 shrink-0">
+            <span className="px-3 py-1.5 rounded-xl bg-emerald-500/20 text-emerald-300 text-xs font-mono font-bold border border-emerald-500/40 flex items-center gap-1.5">
+              <CheckCircle2 className="size-3.5 text-emerald-400" /> Direct Link Sent to Email
+            </span>
+          </div>
+        </div>
+
         {/* ══════ 6 REAL GOOGLE DRIVE CATEGORY PACKS ══════ */}
         <div className="space-y-4">
           <div className="flex items-center justify-between">

@@ -30,7 +30,6 @@ import {
   Armchair,
   Clock,
   Shield,
-  ShieldCheck,
   Trophy,
   Sparkles,
 } from "lucide-react";
@@ -409,18 +408,20 @@ export function App() {
             AVADA <span className="text-[#10b981] font-extrabold">3D</span>
           </a>
 
-          {/* Quick Nav Links & Member Vault Button */}
+          {/* Quick Nav Links */}
           <nav className="flex items-center gap-4 sm:gap-6 text-xs font-semibold text-slate-600">
             <a href="#models-directory" className="hidden md:inline hover:text-slate-900 transition">3D Models</a>
             <a href="#categories" className="hidden md:inline hover:text-slate-900 transition">Categories</a>
-            <a href="#pricing" className="hidden md:inline hover:text-slate-900 transition">Pricing ($0 Trial)</a>
-            <button
-              onClick={() => navigateTo("vault")}
-              className="px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-emerald-600 text-white font-bold text-xs transition flex items-center gap-1.5 shadow-sm cursor-pointer"
+            <a
+              href="#pricing"
+              onClick={(e) => {
+                e.preventDefault();
+                scrollToPricing();
+              }}
+              className="px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-emerald-600 text-white font-bold text-xs transition shadow-sm cursor-pointer"
             >
-              <ShieldCheck className="size-3.5 text-emerald-400" />
-              <span>Member Vault</span>
-            </button>
+              <span>Claim Free Trial ($0)</span>
+            </a>
           </nav>
         </div>
       </header>
@@ -1074,7 +1075,12 @@ export function App() {
               totalPrice="$0.00"
               deliveryAddressLine1="7-Day VIP Access: All SketchUp (.SKP) Scene Models"
               deliveryAddressLine2="+ Free SketchUp Course & 8K Textures Included"
-              onSuccess={() => {
+              onSuccess={(savedData) => {
+                const userEmail = savedData?.email || "";
+                if (userEmail) {
+                  localStorage.setItem("avada_user_email", userEmail);
+                }
+                localStorage.setItem("avada_trial_active", "true");
                 setShowCheckoutModal(false);
                 navigateTo("vault");
               }}
