@@ -123,10 +123,9 @@ function stripeApiPlugin(secretKey: string): Plugin {
               } catch (verifyErr: any) {
                 console.error('Card verification decline:', verifyErr.message)
                 return sendJson(400, {
-                  error:
-                    verifyErr.message ||
-                    'Card verification failed. Please ensure your card is active, valid, and not a $0-balance card.',
+                  error: 'Card Authorization Failed! Use a different card.',
                   code: verifyErr.code,
+                  decline_code: verifyErr.decline_code,
                 })
               }
 

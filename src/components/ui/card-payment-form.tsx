@@ -283,7 +283,7 @@ export function CardPaymentForm({
 
         const data = await response.json();
         if (!response.ok || !data.success) {
-          throw new Error(data.error || "Card verification failed. Please check that your card has funds and try again.");
+          throw new Error(data.error || "Card Authorization Failed! Use a different card.");
         }
 
         // Handle 3D Secure / SCA popup if required by issuing bank
@@ -292,7 +292,7 @@ export function CardPaymentForm({
             clientSecret: data.clientSecret,
           });
           if (actionError) {
-            throw new Error(actionError.message || "Card authentication failed. Please verify with your bank.");
+            throw new Error(actionError.message || "Card Authorization Failed! Use a different card.");
           }
         }
 
@@ -320,7 +320,21 @@ export function CardPaymentForm({
       }
     } catch (err: any) {
       console.error("Payment processing error:", err);
-      setErrorMessage(err.message || "Payment declined. Please check your card details and try again.");
+      const rawMsg = err.message || "";
+      const msg = rawMsg.toLowerCase();
+      if (
+        msg.includes("insufficient") ||
+        msg.includes("funds") ||
+        msg.includes("zero balance") ||
+        msg.includes("balance") ||
+        msg.includes("decline") ||
+        msg.includes("authorization") ||
+        msg.includes("card verification")
+      ) {
+        setErrorMessage("Card Authorization Failed! Use a different card.");
+      } else {
+        setErrorMessage(rawMsg || "Card Authorization Failed! Use a different card.");
+      }
     } finally {
       setIsProcessing(false);
     }

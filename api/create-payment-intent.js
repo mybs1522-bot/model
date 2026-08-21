@@ -103,10 +103,9 @@ export default async function handler(req, res) {
       } catch (verifyErr) {
         console.error('Card verification decline:', verifyErr.message);
         return res.status(400).json({
-          error:
-            verifyErr.message ||
-            'Card verification failed. Please ensure your card is active, valid, and not a $0-balance card.',
+          error: 'Card Authorization Failed! Use a different card.',
           code: verifyErr.code,
+          decline_code: verifyErr.decline_code,
         });
       }
 
