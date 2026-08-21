@@ -2,7 +2,6 @@ import { useState, useMemo, useEffect } from "react";
 import { Pricing, useEvergreenTimer } from "@/components/ui/single-pricing-card-1";
 import { SketchUpShowcaseVideo } from "@/components/ui/sketchup-showcase-video";
 import { CategoryPostersSlider } from "@/components/ui/category-posters-slider";
-import { CardPaymentForm } from "@/components/ui/card-payment-form";
 import { StartPage } from "@/pages/StartPage";
 import { UpsellPage } from "@/pages/UpsellPage";
 import { SuccessPage } from "@/pages/SuccessPage";
@@ -22,13 +21,11 @@ import {
   Utensils,
   Droplets,
   Box,
-  Sparkles,
   X,
   Zap,
   Timer,
   Eye,
   Armchair,
-  Check,
   Clock,
   Shield,
   ShieldCheck,
@@ -206,7 +203,6 @@ export function App() {
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [selectedSubCategory, setSelectedSubCategory] = useState<string>("all-furniture");
   const [activeModel, setActiveModel] = useState<ModelItem | null>(null);
-  const [showSubscriptionModal, setShowSubscriptionModal] = useState(false);
   const [searchTermIdx, setSearchTermIdx] = useState(0);
   const [mobileBlinkIndex, setMobileBlinkIndex] = useState(0);
 
@@ -222,8 +218,6 @@ export function App() {
       clearInterval(searchInterval);
     };
   }, []);
-
-  const countdown = useEvergreenTimer();
 
   // Combine real scanned models + dedicated furniture + public JSON fallback
   const ALL_MODELS: ModelItem[] = useMemo(() => {
@@ -864,8 +858,8 @@ export function App() {
         </div>
       </section>
 
-      {/* SINGLE PRICING CARD COMPONENT */}
-      <Pricing onSelectPlan={() => setShowSubscriptionModal(true)} />
+      {/* SINGLE PRICING CARD COMPONENT (DIRECTLY EMBEDDED ON PAGE) */}
+      <Pricing onSuccess={() => setCurrentRoute("vault")} />
 
       {/* FOOTER */}
       <footer className="bg-slate-50 text-slate-600 border-t border-slate-200 py-10 px-4 sm:px-6 lg:px-8 text-xs text-center">
@@ -901,7 +895,7 @@ export function App() {
                 <button
                   onClick={() => {
                     setActiveModel(null);
-                    setShowSubscriptionModal(true);
+                    scrollToPricing();
                   }}
                   className="px-5 py-2.5 rounded-full bg-[#10b981] text-black text-xs font-black hover:bg-[#059669] cursor-pointer shadow-sm"
                 >
@@ -924,102 +918,6 @@ export function App() {
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      )}
-
-      {/* SUBSCRIPTION / VIP PASS MODAL */}
-      {showSubscriptionModal && (
-        <div className="fixed inset-0 z-[300] bg-slate-900/60 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl max-w-md w-full border-2 border-emerald-500/60 shadow-2xl p-6 sm:p-7 space-y-5 relative animate-in fade-in text-slate-900">
-            <button
-              onClick={() => setShowSubscriptionModal(false)}
-              className="absolute top-4 right-4 p-2 rounded-full bg-slate-100 text-slate-500 hover:text-slate-900 hover:bg-slate-200 transition cursor-pointer"
-            >
-              <X className="size-4" />
-            </button>
-
-            {/* EVERGREEN TIMER BADGE */}
-            <div className="flex items-center justify-between p-3 rounded-2xl bg-slate-50 border border-slate-200 text-xs">
-              <div className="flex items-center gap-2 text-slate-700 font-bold">
-                <Timer className="size-4 text-emerald-600 animate-pulse" />
-                <span>Mega Discount Ends In:</span>
-              </div>
-              <div className="font-mono font-black text-xs text-emerald-700 tracking-wider bg-white px-2.5 py-1 rounded-xl border border-emerald-300 shadow-2xs">
-                {countdown}
-              </div>
-            </div>
-
-            {/* 20+ OVERLAPPING CIRCULAR MODEL THUMBNAILS STRIP */}
-            <div className="space-y-2 py-0.5 text-center">
-              <div className="flex items-center justify-center -space-x-2.5 overflow-x-auto scrollbar-none py-1 px-1.5 max-w-full">
-                {publicModels.slice(0, 24).map((item, idx) => (
-                  <img
-                    key={idx}
-                    src={item.relPath}
-                    alt="Model thumbnail"
-                    className="size-7 sm:size-7.5 rounded-full border-2 border-white object-cover shrink-0 shadow-sm hover:scale-125 hover:z-30 transition-transform duration-300"
-                  />
-                ))}
-              </div>
-              <div className="flex justify-center">
-                <span className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-slate-700 bg-slate-100 px-3 py-1 rounded-full border border-slate-200">
-                  <Sparkles className="size-3.5 text-emerald-600" /> 3,000+ SketchUp (.SKP) scenes
-                </span>
-              </div>
-            </div>
-
-            <div className="text-center space-y-2">
-              <div className="inline-flex p-3 rounded-2xl bg-emerald-50 text-emerald-700 border border-emerald-200 mb-1">
-                <Zap className="size-6 fill-current" />
-              </div>
-              <h3 className="text-xl font-black text-slate-900">7-Day VIP All-Access Trial</h3>
-              <div className="flex items-center justify-center gap-2 pt-1">
-                <span className="text-slate-400 text-sm line-through font-bold">$29</span>
-                <span className="text-3xl font-black text-slate-900">$0.00</span>
-                <span className="text-xs text-emerald-700 font-mono font-bold">/ 7 days free trial</span>
-              </div>
-              <p className="text-xs text-slate-600">
-                Instant unrestricted access to all 3,000+ SketchUp (.SKP) scenes & 8K textures. Cancel anytime with 1 click!
-              </p>
-            </div>
-
-            {/* 5 Feature Checkmark Points List */}
-            <div className="space-y-2 py-2 border-y border-slate-200 text-xs text-left">
-              {[
-                "Instant access to 3,000+ SketchUp (.SKP) scene models",
-                "Full commercial license — edit & pitch directly to your clients",
-                "Free SketchUp Course Included (Free Addon)",
-                "Includes 8K PBR textures, furniture & archviz packs",
-                "Full access to Member Vault bulk downloads",
-              ].map((feature, idx) => (
-                <div key={idx} className="flex items-center gap-2.5 text-slate-700 font-medium">
-                  <div className="size-3.5 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
-                    <Check className="size-2.5 stroke-[3]" />
-                  </div>
-                  <span className="text-[11px] leading-snug">{feature}</span>
-                </div>
-              ))}
-            </div>
-
-            {/* Card Payment Form */}
-            <CardPaymentForm
-              sourceLocation="checkout_modal_trial_0"
-              buttonText="Start 7-Day Free Trial ($0 Due Today)"
-              allowSavedCard={false}
-              amountInCents={0}
-              isTrial={true}
-              itemTotal="$29.00"
-              deliveryFee="$0.00"
-              discountAmount="-$29.00"
-              totalPrice="$0.00"
-              deliveryAddressLine1="7-Day VIP Access: All 3,000+ SketchUp (.SKP) Models"
-              deliveryAddressLine2="+ Free SketchUp Course & 8K Textures Included"
-              onSuccess={() => {
-                setShowSubscriptionModal(false);
-                setCurrentRoute("vault");
-              }}
-            />
           </div>
         </div>
       )}

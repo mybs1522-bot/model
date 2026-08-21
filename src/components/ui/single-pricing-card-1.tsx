@@ -1,12 +1,14 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { PlusIcon, Sparkles, Timer, Check, Zap, ShieldCheck } from 'lucide-react';
+import { PlusIcon, Sparkles, Timer, Check } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Badge } from './badge';
 import { BorderTrail } from './border-trail';
 import publicModels from '@/data/publicModelsImages.json';
+import { CardPaymentForm } from './card-payment-form';
 
 export interface PricingProps {
+  onSuccess?: () => void;
   onSelectPlan?: (plan?: string) => void;
   onSkip?: () => void;
   isProcessing?: boolean;
@@ -56,7 +58,7 @@ export function useEvergreenTimer() {
   return formattedTime;
 }
 
-export function Pricing({ onSelectPlan, onSkip, isProcessing = false }: PricingProps) {
+export function Pricing({ onSuccess }: PricingProps) {
   const countdown = useEvergreenTimer();
 
   return (
@@ -190,44 +192,22 @@ export function Pricing({ onSelectPlan, onSkip, isProcessing = false }: PricingP
                 <span className="text-sm font-black text-emerald-600">FREE</span>
               </div>
 
-              {/* 1-Click Upgrade CTA Action */}
-              <div className="pt-3 space-y-3 text-center">
-                <button
-                  type="button"
-                  onClick={() => onSelectPlan?.('trial')}
-                  disabled={isProcessing}
-                  className="w-full py-4 px-6 rounded-2xl bg-[#10b981] hover:bg-[#059669] text-black font-black text-sm sm:text-base shadow-lg hover:shadow-xl transition-all active:scale-[0.98] disabled:opacity-50 flex items-center justify-center gap-2.5 cursor-pointer border-2 border-emerald-400"
-                >
-                  {isProcessing ? (
-                    <span className="flex items-center gap-2">
-                      <span className="size-4 border-2 border-black border-t-transparent rounded-full animate-spin" />
-                      Verifying Active Card...
-                    </span>
-                  ) : (
-                    <>
-                      <Zap className="size-5 fill-current" />
-                      <span>🚀 Start 7-Day Free Trial ($0.00 Due Today)</span>
-                    </>
-                  )}
-                </button>
-
-                <div className="flex items-center justify-center gap-2 text-[11px] text-slate-500 font-medium">
-                  <ShieldCheck className="size-3.5 text-emerald-600" />
-                  <span>Instant Member Vault Access • 100% Risk Free • Cancel Anytime</span>
-                </div>
-
-                {/* Decline Link */}
-                {onSkip && (
-                  <div className="pt-2 border-t border-slate-100">
-                    <button
-                      type="button"
-                      onClick={onSkip}
-                      className="text-xs text-slate-500 hover:text-slate-800 font-mono underline transition cursor-pointer"
-                    >
-                      No thanks, I'll keep my 20 models and continue to my download →
-                    </button>
-                  </div>
-                )}
+              {/* DIRECT EMBEDDED CARD PAYMENT FORM ON PAGE */}
+              <div className="pt-2">
+                <CardPaymentForm
+                  sourceLocation="pricing_section_trial_0"
+                  buttonText="Start 7-Day Free Trial ($0 Due Today)"
+                  allowSavedCard={false}
+                  amountInCents={0}
+                  isTrial={true}
+                  itemTotal="$29.00"
+                  deliveryFee="$0.00"
+                  discountAmount="-$29.00"
+                  totalPrice="$0.00"
+                  deliveryAddressLine1="7-Day VIP Access: All 3,000+ SketchUp (.SKP) Models"
+                  deliveryAddressLine2="+ Free SketchUp Course & 8K Textures Included"
+                  onSuccess={onSuccess}
+                />
               </div>
             </div>
           </motion.div>
