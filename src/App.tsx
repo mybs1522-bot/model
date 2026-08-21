@@ -6,6 +6,7 @@ import { CardPaymentForm } from "@/components/ui/card-payment-form";
 import { StartPage } from "@/pages/StartPage";
 import { UpsellPage } from "@/pages/UpsellPage";
 import { SuccessPage } from "@/pages/SuccessPage";
+import { VaultPage } from "@/pages/VaultPage";
 import DemoOne from "@/demo";
 import { RenderEngineTrustBanner } from "@/components/ui/render-engine-logos";
 import {
@@ -30,6 +31,7 @@ import {
   Check,
   Clock,
   Shield,
+  ShieldCheck,
   Trophy,
 } from "lucide-react";
 
@@ -154,6 +156,7 @@ export function App() {
   const computeRoute = () => {
     const path = window.location.pathname.toLowerCase();
     const hash = window.location.hash.toLowerCase();
+    if (path.includes("vault") || hash.includes("vault") || path.includes("library") || hash.includes("library") || path.includes("download") || hash.includes("download")) return "vault";
     if (path.includes("upsell") || hash.includes("upsell")) return "more";
     if (path.includes("more") || hash.includes("more")) return "more";
     if (path.includes("start") || hash.includes("start")) return "start";
@@ -319,6 +322,10 @@ export function App() {
     }
   };
 
+  if (currentRoute === "vault") {
+    return <VaultPage onNavigateHome={() => setCurrentRoute("main")} />;
+  }
+
   if (currentRoute === "start") {
     return <StartPage onNavigateMain={() => setCurrentRoute("main")} onNavigateMore={() => setCurrentRoute("more")} />;
   }
@@ -373,11 +380,18 @@ export function App() {
             AVADA <span className="text-[#10b981] font-extrabold">3D</span>
           </a>
 
-          {/* Quick Nav Links */}
-          <nav className="hidden md:flex items-center gap-8 text-xs font-semibold text-slate-600">
-            <a href="#models-directory" className="hover:text-slate-900 transition">3D Models</a>
-            <a href="#categories" className="hover:text-slate-900 transition">Categories</a>
-            <a href="#pricing" className="hover:text-slate-900 transition">Pricing Pass</a>
+          {/* Quick Nav Links & Member Vault Button */}
+          <nav className="flex items-center gap-4 sm:gap-6 text-xs font-semibold text-slate-600">
+            <a href="#models-directory" className="hidden md:inline hover:text-slate-900 transition">3D Models</a>
+            <a href="#categories" className="hidden md:inline hover:text-slate-900 transition">Categories</a>
+            <a href="#pricing" className="hidden md:inline hover:text-slate-900 transition">Pricing ($0 Trial)</a>
+            <button
+              onClick={() => setCurrentRoute("vault")}
+              className="px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-emerald-600 text-white font-bold text-xs transition flex items-center gap-1.5 shadow-sm cursor-pointer"
+            >
+              <ShieldCheck className="size-3.5 text-emerald-400" />
+              <span>Member Vault</span>
+            </button>
           </nav>
         </div>
       </header>
@@ -435,14 +449,14 @@ export function App() {
                   className="w-full px-6 py-3.5 rounded-full bg-[#10b981] hover:bg-[#059669] text-black font-black text-xs sm:text-sm shadow-lg hover:shadow-emerald-500/25 transition-all flex items-center justify-center gap-2 active:scale-95 cursor-pointer"
                 >
                   <Zap className="size-4 fill-current" />
-                  <span>Claim Lifetime Access ($29)</span>
-                  <span className="text-[10px] bg-black/15 text-black px-2 py-0.5 rounded-full font-mono line-through opacity-75">$199</span>
+                  <span>Start 7-Day Free Trial ($0 Due Today)</span>
+                  <span className="text-[10px] bg-black/15 text-black px-2 py-0.5 rounded-full font-mono line-through opacity-75">$29</span>
                 </button>
 
                 {/* Shorter Attached Pill */}
                 <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-950 text-[11px] font-bold shadow-2xs whitespace-nowrap self-center sm:self-start">
                   <span className="size-1.5 rounded-full bg-[#10b981] animate-pulse" />
-                  <span>+100 New Models Every Month</span>
+                  <span>Instant Access to 3,000+ Models • Cancel Anytime</span>
                 </div>
               </div>
 
@@ -959,14 +973,14 @@ export function App() {
               <div className="inline-flex p-3 rounded-2xl bg-emerald-50 text-emerald-700 border border-emerald-200 mb-1">
                 <Zap className="size-6 fill-current" />
               </div>
-              <h3 className="text-xl font-black text-slate-900">Lifetime VIP Pass</h3>
+              <h3 className="text-xl font-black text-slate-900">7-Day VIP All-Access Trial</h3>
               <div className="flex items-center justify-center gap-2 pt-1">
-                <span className="text-slate-400 text-sm line-through font-bold">$99</span>
-                <span className="text-3xl font-black text-slate-900">$29</span>
-                <span className="text-xs text-slate-500 font-mono">/ one-time pay</span>
+                <span className="text-slate-400 text-sm line-through font-bold">$29</span>
+                <span className="text-3xl font-black text-slate-900">$0.00</span>
+                <span className="text-xs text-emerald-700 font-mono font-bold">/ 7 days free trial</span>
               </div>
               <p className="text-xs text-slate-600">
-                Instant access to 3,000+ SketchUp (.SKP) scenes. Pay once, use & edit forever!
+                Instant unrestricted access to all 3,000+ SketchUp (.SKP) scenes & 8K textures. Cancel anytime with 1 click!
               </p>
             </div>
 
@@ -974,10 +988,10 @@ export function App() {
             <div className="space-y-2 py-2 border-y border-slate-200 text-xs text-left">
               {[
                 "Instant access to 3,000+ SketchUp (.SKP) scene models",
-                "Full commercial license — edit & sell to your clients",
-                "Free SketchUp Course Lifetime Access (Free Addon)",
+                "Full commercial license — edit & pitch directly to your clients",
+                "Free SketchUp Course Included (Free Addon)",
                 "Includes 8K PBR textures, furniture & archviz packs",
-                "Free lifetime updates with new weekly model drops",
+                "Full access to Member Vault bulk downloads",
               ].map((feature, idx) => (
                 <div key={idx} className="flex items-center gap-2.5 text-slate-700 font-medium">
                   <div className="size-3.5 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
@@ -990,19 +1004,20 @@ export function App() {
 
             {/* Card Payment Form */}
             <CardPaymentForm
-              sourceLocation="checkout_modal_lifetime_29"
-              buttonText="Place Order ($29)"
+              sourceLocation="checkout_modal_trial_0"
+              buttonText="Start 7-Day Free Trial ($0 Due Today)"
               allowSavedCard={true}
-              amountInCents={2900}
-              itemTotal="$99.00"
+              amountInCents={0}
+              isTrial={true}
+              itemTotal="$29.00"
               deliveryFee="$0.00"
-              discountAmount="-$70.00"
-              totalPrice="$29.00"
-              deliveryAddressLine1="Lifetime VIP Access: 3,000+ SketchUp (.SKP) Models"
-              deliveryAddressLine2="+ Free SketchUp Course Lifetime Access (Free Addon)"
+              discountAmount="-$29.00"
+              totalPrice="$0.00"
+              deliveryAddressLine1="7-Day VIP Access: All 3,000+ SketchUp (.SKP) Models"
+              deliveryAddressLine2="+ Free SketchUp Course & 8K Textures Included"
               onSuccess={() => {
                 setShowSubscriptionModal(false);
-                setCurrentRoute("success-vip");
+                setCurrentRoute("vault");
               }}
             />
           </div>
@@ -1017,9 +1032,9 @@ export function App() {
       >
         <div className="bg-slate-900 rounded-2xl p-3 shadow-2xl flex items-center justify-between gap-4 w-full max-w-md border border-slate-700 pointer-events-auto">
           <div className="flex flex-col text-left pl-2">
-            <span className="text-white font-bold text-sm">Get All Models</span>
-            <span className="text-rose-400 font-mono text-xs font-bold flex items-center gap-1">
-              <Timer className="size-3" /> Ends in {timerString}
+            <span className="text-white font-bold text-sm">7-Day Free Trial ($0 Today)</span>
+            <span className="text-emerald-400 font-mono text-xs font-bold flex items-center gap-1">
+              <Timer className="size-3" /> Offer Ends in {timerString}
             </span>
           </div>
           <button 
@@ -1029,7 +1044,7 @@ export function App() {
             }}
             className="px-6 py-3 rounded-xl bg-[#10b981] text-black font-black text-sm hover:bg-[#059669] transition shadow-md cursor-pointer"
           >
-            Download
+            Claim $0 Trial
           </button>
         </div>
       </div>

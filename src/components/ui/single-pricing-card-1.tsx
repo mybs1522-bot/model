@@ -1,6 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { PlusIcon, Sparkles, Timer, Check, Zap, CreditCard, ShieldCheck } from 'lucide-react';
+import { PlusIcon, Sparkles, Timer, Check, Zap, ShieldCheck } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Badge } from './badge';
 import { BorderTrail } from './border-trail';
@@ -58,8 +58,6 @@ export function useEvergreenTimer() {
 
 export function Pricing({ onSelectPlan, onSkip, isProcessing = false }: PricingProps) {
   const countdown = useEvergreenTimer();
-  const savedLast4 = typeof window !== 'undefined' ? (localStorage.getItem('avada_user_last4') || '4242') : '4242';
-  const savedEmail = typeof window !== 'undefined' ? (localStorage.getItem('avada_user_email') || '') : '';
 
   return (
     <section id="pricing" className="relative overflow-hidden py-16 sm:py-24 text-slate-900 border-t border-slate-200">
@@ -74,14 +72,14 @@ export function Pricing({ onSelectPlan, onSkip, isProcessing = false }: PricingP
         >
           <div className="flex justify-center">
             <div className="inline-flex items-center gap-2 rounded-full border border-emerald-300 bg-emerald-50 px-4 py-1.5 font-mono text-xs font-bold text-emerald-700 shadow-xs">
-              <Sparkles className="size-3.5 text-emerald-600" /> Single One-Time Payment • No Subscription
+              <Sparkles className="size-3.5 text-emerald-600" /> $0.00 Due Today • 7-Day All Access Trial
             </div>
           </div>
           <h2 className="text-2xl font-black tracking-tight sm:text-4xl text-slate-900">
-            Get Full Lifetime Access Today
+            Start Your 7-Day Free Trial
           </h2>
           <p className="text-slate-600 text-xs sm:text-sm max-w-md mx-auto">
-            Unlimited access to 3,000+ SketchUp (.SKP) scene files, furniture models & 8K PBR textures.
+            Instant unrestricted access to 3,000+ SketchUp (.SKP) scene files, furniture models & 8K PBR textures. Cancel anytime with 1 click.
           </p>
         </motion.div>
 
@@ -113,7 +111,7 @@ export function Pricing({ onSelectPlan, onSkip, isProcessing = false }: PricingP
               <div className="flex items-center justify-between p-3 rounded-2xl bg-slate-50 border border-slate-200 text-xs">
                 <div className="flex items-center gap-2 text-slate-700 font-bold">
                   <Timer className="size-4 text-emerald-600 animate-pulse" />
-                  <span>Mega Discount Ends In:</span>
+                  <span>Free Trial Offer Reserved For:</span>
                 </div>
                 <div className="font-mono font-black text-sm text-emerald-700 tracking-wider bg-white px-3 py-1 rounded-xl border border-emerald-300 shadow-2xs">
                   {countdown}
@@ -134,7 +132,7 @@ export function Pricing({ onSelectPlan, onSkip, isProcessing = false }: PricingP
                 </div>
                 <div className="flex justify-center">
                   <span className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-slate-700 bg-slate-100 px-3 py-1 rounded-full border border-slate-200">
-                    <Sparkles className="size-3.5 text-emerald-600" /> 3,000+ SketchUp (.SKP) scenes
+                    <Sparkles className="size-3.5 text-emerald-600" /> 3,000+ SketchUp (.SKP) scenes unlocked
                   </span>
                 </div>
               </div>
@@ -143,29 +141,29 @@ export function Pricing({ onSelectPlan, onSkip, isProcessing = false }: PricingP
               <div className="space-y-3 text-center sm:text-left">
                 <div className="flex items-center justify-between flex-wrap gap-2">
                   <h3 className="text-xl font-black text-slate-900 flex items-center gap-2">
-                    Lifetime VIP Pass
+                    7-Day VIP All-Access Trial
                   </h3>
                   <div className="flex items-center gap-2">
-                    <span className="text-slate-400 text-base font-bold line-through">$99</span>
-                    <Badge className="bg-[#10b981] text-black font-extrabold text-xs">70% OFF</Badge>
+                    <span className="text-slate-400 text-base font-bold line-through">$29</span>
+                    <Badge className="bg-[#10b981] text-black font-extrabold text-xs">100% FREE TODAY</Badge>
                   </div>
                 </div>
 
                 <div className="flex items-baseline gap-2">
                   <span className="text-slate-500 text-2xl font-bold">$</span>
-                  <span className="text-5xl sm:text-6xl font-black text-slate-900 tracking-tight">29</span>
-                  <span className="text-slate-500 text-xs font-mono font-semibold">/ one-time pay</span>
+                  <span className="text-5xl sm:text-6xl font-black text-slate-900 tracking-tight">0</span>
+                  <span className="text-emerald-700 text-xs font-mono font-bold">/ 7 days free ($29 after trial)</span>
                 </div>
-                <p className="text-slate-600 text-xs font-medium">Pay once, download forever. No recurring monthly fees.</p>
+                <p className="text-slate-600 text-xs font-medium">Download everything immediately. Cancel anytime with 1 click before day 7.</p>
               </div>
 
               {/* Included Features List */}
               <div className="space-y-2.5 pt-2 border-t border-slate-200 text-xs text-left">
                 {[
-                  'Instant access to 3,000+ SketchUp (.SKP) scene models',
-                  'Full commercial license — edit & sell to your clients',
+                  'Instant access to all 3,000+ SketchUp (.SKP) scene models',
+                  'Full commercial license — edit & pitch directly to your clients',
                   'Includes 8K PBR textures, furniture & archviz packs',
-                  'Free lifetime updates with new weekly model drops',
+                  'Full access to Master Vault bulk downloads & category .ZIPs',
                 ].map((feature, idx) => (
                   <div key={idx} className="flex items-center gap-2.5 text-slate-700 font-medium">
                     <div className="size-4 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
@@ -186,7 +184,7 @@ export function Pricing({ onSelectPlan, onSkip, isProcessing = false }: PricingP
                 </div>
                 <div className="flex-1">
                   <p className="text-sm font-bold text-slate-900 leading-snug">Free SketchUp Course</p>
-                  <p className="text-xs text-emerald-700 font-semibold">Lifetime Access</p>
+                  <p className="text-xs text-emerald-700 font-semibold">Included in Free Trial</p>
                 </div>
                 <span className="text-sm font-bold text-emerald-600 line-through opacity-70 mr-1">$49</span>
                 <span className="text-sm font-black text-emerald-600">FREE</span>
@@ -196,35 +194,26 @@ export function Pricing({ onSelectPlan, onSkip, isProcessing = false }: PricingP
               <div className="pt-3 space-y-3 text-center">
                 <button
                   type="button"
-                  onClick={() => onSelectPlan?.('lifetime')}
+                  onClick={() => onSelectPlan?.('trial')}
                   disabled={isProcessing}
                   className="w-full py-4 px-6 rounded-2xl bg-[#10b981] hover:bg-[#059669] text-black font-black text-sm sm:text-base shadow-lg hover:shadow-xl transition-all active:scale-[0.98] disabled:opacity-50 flex items-center justify-center gap-2.5 cursor-pointer border-2 border-emerald-400"
                 >
                   {isProcessing ? (
                     <span className="flex items-center gap-2">
                       <span className="size-4 border-2 border-black border-t-transparent rounded-full animate-spin" />
-                      Charging Card on File...
+                      Verifying Active Card...
                     </span>
                   ) : (
                     <>
                       <Zap className="size-5 fill-current" />
-                      <span>⚡️ 1-Click Upgrade • Charge $29</span>
+                      <span>🚀 Start 7-Day Free Trial ($0.00 Due Today)</span>
                     </>
                   )}
                 </button>
 
-                {/* Card on file indicator */}
-                <div className="flex items-center justify-center gap-2 text-xs text-slate-600 font-medium">
-                  <CreditCard className="size-3.5 text-emerald-600" />
-                  <span>Charge to card on file: <strong className="font-mono text-slate-900">•••• {savedLast4}</strong></span>
-                  {savedEmail && (
-                    <span className="hidden sm:inline text-slate-400">({savedEmail})</span>
-                  )}
-                </div>
-
-                <div className="flex items-center justify-center gap-2 text-[11px] text-slate-400">
+                <div className="flex items-center justify-center gap-2 text-[11px] text-slate-500 font-medium">
                   <ShieldCheck className="size-3.5 text-emerald-600" />
-                  <span>Instant 1-Click Activation • 256-Bit Encrypted</span>
+                  <span>Instant Member Vault Access • 100% Risk Free • Cancel Anytime</span>
                 </div>
 
                 {/* Decline Link */}

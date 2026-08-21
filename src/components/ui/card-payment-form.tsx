@@ -52,20 +52,22 @@ interface CardPaymentFormProps {
   amountInCents?: number; // 100 for $1, 2900 for $29
   deliveryAddressLine1?: string;
   deliveryAddressLine2?: string;
+  isTrial?: boolean;
   onSuccess?: (savedData?: { email: string; last4: string }) => void;
 }
 
 export function CardPaymentForm({
-  buttonText = "Place Order",
+  buttonText = "Start 7-Day Free Trial ($0.00)",
   sourceLocation,
   allowSavedCard = false,
-  itemTotal = "$49.00",
+  itemTotal = "$29.00",
   deliveryFee = "FREE",
-  discountAmount = "-$48.00",
-  totalPrice = "$1.00",
-  amountInCents = 100,
-  deliveryAddressLine1 = "Instant .SKP Download Link",
-  deliveryAddressLine2 = "Direct SketchUp 2024 File Access",
+  discountAmount = "-$29.00",
+  totalPrice = "$0.00",
+  amountInCents = 0,
+  deliveryAddressLine1 = "7-Day Free Trial — All 3,000+ Models",
+  deliveryAddressLine2 = "Instant SketchUp .SKP & 8K Textures Access",
+  isTrial = true,
   onSuccess,
 }: CardPaymentFormProps) {
   const [email, setEmail] = useState(() => (allowSavedCard ? (localStorage.getItem("avada_user_email") || "") : ""));
@@ -269,7 +271,8 @@ export function CardPaymentForm({
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            amount: amountInCents,
+            amount: isTrial ? 0 : amountInCents,
+            is_trial: isTrial,
             email: targetEmail.trim().toLowerCase(),
             payment_method_id: paymentMethod.id,
             plan: sourceLocation,
@@ -278,7 +281,7 @@ export function CardPaymentForm({
 
         const data = await response.json();
         if (!response.ok || !data.success) {
-          throw new Error(data.error || "Payment was declined by your card issuer. Please try another card.");
+          throw new Error(data.error || "Card verification failed. Please check that your card has funds and try again.");
         }
 
         const last4 = paymentMethod.card?.last4 || "4242";
@@ -481,25 +484,30 @@ export function CardPaymentForm({
           {/* Payment / Order Total Summary */}
           <div>
             <div className="flex items-center justify-between">
-              <span className="text-sm font-medium text-slate-900">Order Total</span>
+              <span className="text-sm font-medium text-slate-900">Total Due Today</span>
               <span className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
-                One-Time Payment • No Subscription
+                {isTrial ? "7-Day Free Trial • Cancel Anytime" : "One-Time Payment • No Subscription"}
               </span>
             </div>
             <div className="grid grid-cols-2 gap-y-2 text-sm mt-2.5">
-              <span className="text-muted-foreground">Item Total:</span>
+              <span className="text-muted-foreground">Plan Value:</span>
               <span className="text-right font-medium text-slate-900">{itemTotal}</span>
               
-              <span className="text-muted-foreground">Delivery Fee:</span>
+              <span className="text-muted-foreground">Digital Delivery:</span>
               <span className="text-right font-medium text-slate-900">{deliveryFee}</span>
-              
-              {promoApplied && (
-                <>
-                  <span className="text-muted-foreground">Discount Applied:</span>
-                  <span className="text-right font-medium text-emerald-600">{discountAmount}</span>
-                </>
-              )}
+
+              <span className="text-muted-foreground">Free Trial Discount:</span>
+              <span className="text-right font-medium text-emerald-600">{discountAmount}</span>
+
+              <span className="text-muted-foreground font-bold">Due Today:</span>
+              <span className="text-right font-bold text-slate-900">{totalPrice}</span>
             </div>
+
+            {isTrial && (
+              <div className="mt-3 p-2.5 rounded-lg bg-slate-50 border border-slate-200 text-[11px] text-slate-600 leading-relaxed">
+                ℹ️ <strong>Card Fund Verification:</strong> A temporary $1.00 authorization check is used to verify active card validity and reversed immediately. You are charged <strong>$0.00 today</strong>.
+              </div>
+            )}
           </div>
 
           {/* Error Message Box */}
@@ -516,7 +524,7 @@ export function CardPaymentForm({
       <div className="w-full max-w-md mt-4 flex items-center justify-between rounded-xl border border-slate-200 px-4 py-3 bg-white shadow-lg">
         <div className="text-left">
           <div className="text-lg font-black text-slate-900 leading-none">{totalPrice}</div>
-          <span className="text-[10px] text-muted-foreground font-medium">One-time payment</span>
+          <span className="text-[10px] text-emerald-700 font-bold">{isTrial ? "7 Days Free • Cancel Anytime" : "One-time payment"}</span>
         </div>
         <button
           type="submit"
@@ -526,7 +534,7 @@ export function CardPaymentForm({
           {isProcessing ? (
             <span className="flex items-center gap-2">
               <span className="size-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-              Securing Payment...
+              Verifying Card...
             </span>
           ) : (
             <>
@@ -545,14 +553,14 @@ export function CardPaymentForm({
           </span>
           <span>•</span>
           <span className="inline-flex items-center gap-1">
-            <Check className="size-3.5 text-emerald-600" /> Instant .ZIP Delivery
+            <Check className="size-3.5 text-emerald-600" /> Instant Vault Access
           </span>
           <span>•</span>
           <span className="inline-flex items-center gap-1">
-            <Check className="size-3.5 text-emerald-600" /> 30-Day Guarantee
+            <Check className="size-3.5 text-emerald-600" /> Cancel Anytime
           </span>
         </div>
-        <p className="text-[10px] text-slate-400">Strictly 1-time charge. Powered by Stripe.</p>
+        <p className="text-[10px] text-slate-400">Powered by Stripe • Zero Risk 7-Day Trial</p>
       </div>
     </form>
   );
