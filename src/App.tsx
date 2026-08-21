@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/animated-state-icons";
 import manifestData from "@/data/modelsManifest.json";
 import publicModels from "@/data/publicModelsImages.json";
+import vaultDriveData from "@/data/vaultDriveModels.json";
 import {
   Building2,
   Bath,
@@ -227,6 +228,24 @@ export function App() {
       ? manifestData
       : ((manifestData as any)?.models || []);
 
+    const driveModels: ModelItem[] = ((vaultDriveData as any)?.models || []).map((m: any) => {
+      const categoryKey = m.categoryKey === "bathroom" ? "washroom" : m.categoryKey;
+      return {
+        id: m.id,
+        title: m.title || m.baseName,
+        rawName: m.skpName || `${m.baseName}.SKP`,
+        categoryKey,
+        categoryName: m.category,
+        subCategoryKey: undefined,
+        src: m.imageSrc,
+        renderEngine: m.renderEngine || "V-Ray 6",
+        format: "SketchUp (.SKP)",
+        polyCount: m.polyCount || "~120K Polys",
+        fileSize: `${m.sizeMb} MB`,
+        featured: true,
+      };
+    });
+
     const scannedModels: ModelItem[] = rawManifestList.map((model: any) => {
       let categoryKey = (model.categoryKey || model.folder || "apartment").toLowerCase();
       if (categoryKey === "bathroom") categoryKey = "washroom";
@@ -275,7 +294,7 @@ export function App() {
       };
     });
 
-    return [...scannedModels, ...DEDICATED_FURNITURE, ...extraPublicModels];
+    return [...driveModels, ...scannedModels, ...DEDICATED_FURNITURE, ...extraPublicModels];
   }, []);
 
   // Filtered models based on category and sub-category
