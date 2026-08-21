@@ -317,6 +317,22 @@ export function CardPaymentForm({
           await saveLeadEmail(targetEmail, sourceLocation);
         } catch (err) {}
 
+        // Meta Pixel Event Tracking
+        if (typeof window !== "undefined" && (window as any).fbq) {
+          try {
+            (window as any).fbq("track", isTrial ? "StartTrial" : "Purchase", {
+              value: isTrial ? (planCycle === "yearly" ? 180 : 20) : (amountInCents / 100),
+              currency: "USD",
+              predicted_ltv: planCycle === "yearly" ? 180 : 240,
+            });
+            (window as any).fbq("track", "Lead", {
+              content_name: isTrial ? "7_day_free_trial" : "pro_activation",
+            });
+          } catch (fbErr) {
+            console.warn("FB Pixel tracking note:", fbErr);
+          }
+        }
+
         if (onSuccess) {
           onSuccess({ email: targetEmail, last4 });
         }

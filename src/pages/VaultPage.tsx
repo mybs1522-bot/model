@@ -55,6 +55,18 @@ export function VaultPage({ onNavigateHome, onOpenActivateModal }: VaultPageProp
       try {
         await chargeSavedCardUpsell(amountInCents);
         localStorage.setItem("avada_pro_unlocked", "true");
+
+        // Meta Pixel Purchase Event
+        if (typeof window !== "undefined" && (window as any).fbq) {
+          try {
+            (window as any).fbq("track", "Purchase", {
+              value: amountInCents / 100,
+              currency: "USD",
+              content_name: selectedCycle === "yearly" ? "pro_yearly_plan" : "pro_monthly_plan",
+            });
+          } catch (fbErr) {}
+        }
+
         setDownloadSuccessToast(
           selectedCycle === "yearly"
             ? "✓ Pro Plan Activated ($180/yr • 25% OFF)! All 15,000+ models unlocked."
