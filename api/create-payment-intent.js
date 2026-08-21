@@ -69,41 +69,69 @@ export default async function handler(req, res) {
       }
     }
 
-    // 2. Process Trial vs Instant Charge
+    // 2. Process 7-Day Free Trial Subscription vs Instant Charge
     let paymentIntentId = '';
-    let status = 'succeeded';
+    let subscriptionId = '';
+    let status = 'active';
 
     if (isTrialFlow) {
-      // ── $0 7-DAY TRIAL FUND VERIFICATION ──
-      // Strictly verify the card is active and has available funds ($1 pre-auth hold).
-      // If the card is empty/burner, the card issuer immediately rejects with 'insufficient_funds' or 'card_declined'.
-      const verifyIntent = await stripe.paymentIntents.create({
-        amount: 100, // $1.00 verification check
-        currency: 'usd',
-        customer: customerId || undefined,
-        payment_method: payment_method_id,
-        capture_method: 'manual', // Pre-authorization hold only
-        confirm: true,
-        setup_future_usage: customerId ? 'off_session' : undefined,
-        automatic_payment_methods: {
-          enabled: true,
-          allow_redirects: 'never',
-        },
-        description: `AVADA 3D - 7-Day Free Trial Card Verification ($0 Due Today)`,
-      });
-
-      paymentIntentId = verifyIntent.id;
-
-      // Immediately cancel / release the $1 hold so the user is charged $0 today
+      // ── 7-DAY FREE TRIAL SUBSCRIPTION ($20/MONTH AFTER) ──
+      let priceId = '';
       try {
-        await stripe.paymentIntents.cancel(verifyIntent.id);
-      } catch (cancelErr) {
-        console.warn('Pre-auth void note:', cancelErr.message);
+        const productList = await stripe.products.list({ active: true, limit: 20 });
+        let product = productList.data.find((p) => p.name.includes('AVADA 3D') || p.name.includes('Pro VIP'));
+        if (!product) {
+          product = await stripe.products.create({
+            name: 'AVADA 3D Pro VIP Membership',
+            description: 'Unlimited access to 15,000+ SketchUp (.SKP) scene models, 8K PBR textures, and weekly releases.',
+          });
+        }
+
+        const priceList = await stripe.prices.list({ product: product.id, active: true, limit: 10 });
+        const monthlyPrice = priceList.data.find(
+          (p) => p.recurring?.interval === 'month' && p.unit_amount === 2000
+        );
+        if (monthlyPrice) {
+          priceId = monthlyPrice.id;
+        } else {
+          const createdPrice = await stripe.prices.create({
+            product: product.id,
+            unit_amount: 2000, // $20.00
+            currency: 'usd',
+            recurring: {
+              interval: 'month',
+            },
+          });
+          priceId = createdPrice.id;
+        }
+      } catch (prodErr) {
+        console.warn('Product/price catalog note:', prodErr.message);
+      }
+
+      if (priceId) {
+        const subscription = await stripe.subscriptions.create({
+          customer: customerId,
+          items: [{ price: priceId }],
+          trial_period_days: 7,
+          default_payment_method: payment_method_id,
+          payment_settings: {
+            save_default_payment_method: 'on_subscription',
+          },
+          description: 'AVADA 3D Pro VIP - 7-Day Free Trial ($20/month after that)',
+          metadata: {
+            plan: plan || '7_day_trial_20_month',
+            email: normalizedEmail,
+          },
+        });
+
+        subscriptionId = subscription.id;
+        status = subscription.status;
       }
     } else {
-      // ── REGULAR PAYMENT ──
+      // ── REGULAR PAYMENT (e.g. $20.00 Lifetime Activation) ──
+      const chargeAmount = Math.max(100, Math.round(Number(amount || 2000)));
       const paymentIntent = await stripe.paymentIntents.create({
-        amount: Math.round(Number(amount || 2900)),
+        amount: chargeAmount,
         currency: 'usd',
         customer: customerId || undefined,
         payment_method: payment_method_id,
@@ -114,7 +142,7 @@ export default async function handler(req, res) {
           allow_redirects: 'never',
         },
         receipt_email: normalizedEmail || undefined,
-        description: `AVADA 3D - ${plan || '3,000+ Models VIP Access'} ($${((amount || 2900) / 100).toFixed(2)})`,
+        description: `AVADA 3D - ${plan || 'Pro VIP Access'} ($${(chargeAmount / 100).toFixed(2)})`,
       });
 
       paymentIntentId = paymentIntent.id;
@@ -131,6 +159,7 @@ export default async function handler(req, res) {
     return res.status(200).json({
       success: true,
       isTrial: isTrialFlow,
+      subscriptionId,
       paymentIntentId,
       status,
       customerId,
