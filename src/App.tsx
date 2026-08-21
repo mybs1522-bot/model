@@ -1006,7 +1006,7 @@ export function App() {
             <CardPaymentForm
               sourceLocation="checkout_modal_trial_0"
               buttonText="Start 7-Day Free Trial ($0 Due Today)"
-              allowSavedCard={true}
+              allowSavedCard={false}
               amountInCents={0}
               isTrial={true}
               itemTotal="$29.00"

@@ -84,12 +84,12 @@ export function CardPaymentForm({
   const cardNumberElementRef = useRef<any>(null);
   const paymentRequestRef = useRef<any>(null);
   const [walletAvailable, setWalletAvailable] = useState(false);
-  // Track which wallet types are available (returned by canMakePayment)
   const [walletType, setWalletType] = useState<{ applePay: boolean; googlePay: boolean }>({ applePay: false, googlePay: false });
+  const [useNewCard, setUseNewCard] = useState(false);
 
   const savedEmail = localStorage.getItem("avada_user_email");
   const savedLast4 = localStorage.getItem("avada_user_last4") || "4242";
-  const hasSavedCard = Boolean(allowSavedCard && savedEmail && localStorage.getItem("avada_has_saved_card") === "true");
+  const hasSavedCard = Boolean(allowSavedCard && !useNewCard && savedEmail && localStorage.getItem("avada_has_saved_card") === "true");
 
   // Mount Official Stripe Elements + Payment Request Button (Apple Pay / Google Pay)
   useEffect(() => {
@@ -382,14 +382,27 @@ export function CardPaymentForm({
 
             {hasSavedCard ? (
               /* 1-Click Saved Card View */
-              <div className="p-3.5 rounded-xl bg-emerald-50/80 border border-emerald-300 text-xs space-y-1.5 shadow-2xs">
+              <div className="p-3.5 rounded-xl bg-emerald-50/80 border border-emerald-300 text-xs space-y-2 shadow-2xs">
                 <div className="flex items-center justify-between font-mono text-slate-900">
                   <span className="font-bold flex items-center gap-1.5">
                     <CreditCard className="size-3.5 text-emerald-600" /> Card on File
                   </span>
                   <span className="font-bold text-emerald-700">•••• •••• •••• {savedLast4}</span>
                 </div>
-                <p className="text-[11px] text-slate-600 font-medium">1-Click charge to <span className="font-mono font-bold text-slate-800">{savedEmail}</span></p>
+                <p className="text-[11px] text-slate-600 font-medium">1-Click verification for <span className="font-mono font-bold text-slate-800">{savedEmail}</span></p>
+                <div className="pt-1.5 border-t border-emerald-200/80 flex justify-end">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      localStorage.removeItem("avada_has_saved_card");
+                      localStorage.removeItem("avada_user_last4");
+                      setUseNewCard(true);
+                    }}
+                    className="text-[11px] text-emerald-800 hover:text-emerald-950 font-bold underline cursor-pointer"
+                  >
+                    Enter a different / new card →
+                  </button>
+                </div>
               </div>
             ) : (
               <div className="space-y-3">
