@@ -95,7 +95,7 @@ export function Pricing({ onSuccess }: PricingProps) {
             className="mx-auto w-full max-w-lg"
           >
             {/* Card Shell */}
-            <div className="relative bg-white border-2 border-emerald-500/60 rounded-3xl p-6 sm:p-8 shadow-xl space-y-6">
+            <div className="relative bg-white border-2 border-emerald-500/60 rounded-3xl p-5 sm:p-7 shadow-xl space-y-4 sm:space-y-5">
               <BorderTrail
                 style={{
                   boxShadow:
@@ -110,96 +110,81 @@ export function Pricing({ onSuccess }: PricingProps) {
               <PlusIcon className="absolute -right-3 -bottom-3 size-5 text-slate-400" />
 
               {/* EVERGREEN 2-HOUR DISCOUNT TIMER BADGE */}
-              <div className="flex items-center justify-between p-3 rounded-2xl bg-slate-50 border border-slate-200 text-xs">
+              <div className="flex items-center justify-between p-2.5 rounded-2xl bg-slate-50 border border-slate-200 text-xs">
                 <div className="flex items-center gap-2 text-slate-700 font-bold">
                   <Timer className="size-4 text-emerald-600 animate-pulse" />
                   <span>Free Trial Offer Reserved For:</span>
                 </div>
-                <div className="font-mono font-black text-sm text-emerald-700 tracking-wider bg-white px-3 py-1 rounded-xl border border-emerald-300 shadow-2xs">
+                <div className="font-mono font-black text-xs text-emerald-700 tracking-wider bg-white px-2.5 py-0.5 rounded-xl border border-emerald-300 shadow-2xs">
                   {countdown}
                 </div>
               </div>
 
               {/* 20+ OVERLAPPING CIRCULAR MODEL THUMBNAILS STRIP */}
-              <div className="space-y-2 py-1 text-center">
-                <div className="flex items-center justify-center -space-x-2.5 overflow-x-auto scrollbar-none py-1.5 px-2 max-w-full">
-                  {publicModels.slice(0, 24).map((item, idx) => (
+              <div className="space-y-1 py-0.5 text-center">
+                <div className="flex items-center justify-center -space-x-2 overflow-x-auto scrollbar-none py-1 px-1 max-w-full">
+                  {publicModels.slice(0, 18).map((item, idx) => (
                     <img
                       key={idx}
                       src={item.relPath}
                       alt="Model thumbnail"
-                      className="size-7.5 sm:size-8 rounded-full border-2 border-white object-cover shrink-0 shadow-sm hover:scale-125 hover:z-30 transition-transform duration-300"
+                      className="size-6.5 sm:size-7.5 rounded-full border-2 border-white object-cover shrink-0 shadow-sm hover:scale-125 hover:z-30 transition-transform duration-300"
                     />
                   ))}
                 </div>
                 <div className="flex justify-center">
-                  <span className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-slate-700 bg-slate-100 px-3 py-1 rounded-full border border-slate-200">
-                    <Sparkles className="size-3.5 text-emerald-600" /> 3,000+ SketchUp (.SKP) scenes unlocked
+                  <span className="inline-flex items-center gap-1.5 text-[11px] font-mono font-bold text-slate-700 bg-slate-100 px-2.5 py-0.5 rounded-full border border-slate-200">
+                    <Sparkles className="size-3 text-emerald-600" /> 3,000+ SketchUp (.SKP) scenes unlocked
                   </span>
                 </div>
               </div>
 
               {/* Plan Title & Price */}
-              <div className="space-y-3 text-center sm:text-left">
+              <div className="space-y-2 text-center sm:text-left">
                 <div className="flex items-center justify-between flex-wrap gap-2">
-                  <h3 className="text-xl font-black text-slate-900 flex items-center gap-2">
+                  <h3 className="text-lg sm:text-xl font-black text-slate-900 flex items-center gap-2">
                     7-Day VIP All-Access Trial
                   </h3>
                   <div className="flex items-center gap-2">
-                    <span className="text-slate-400 text-base font-bold line-through">$29</span>
-                    <Badge className="bg-[#10b981] text-black font-extrabold text-xs">100% FREE TODAY</Badge>
+                    <span className="text-slate-400 text-sm font-bold line-through">$29</span>
+                    <Badge className="bg-[#10b981] text-black font-extrabold text-[10px] sm:text-xs">100% FREE TODAY</Badge>
                   </div>
                 </div>
 
-                <div className="flex items-baseline gap-2">
-                  <span className="text-slate-500 text-2xl font-bold">$</span>
-                  <span className="text-5xl sm:text-6xl font-black text-slate-900 tracking-tight">0</span>
+                <div className="flex items-baseline gap-1.5">
+                  <span className="text-slate-500 text-xl font-bold">$</span>
+                  <span className="text-4xl sm:text-5xl font-black text-slate-900 tracking-tight">0</span>
                   <span className="text-emerald-700 text-xs font-mono font-bold">/ 7 days free ($29 after trial)</span>
                 </div>
                 <p className="text-slate-600 text-xs font-medium">Download everything immediately. Cancel anytime with 1 click before day 7.</p>
               </div>
 
               {/* Included Features List */}
-              <div className="space-y-2.5 pt-2 border-t border-slate-200 text-xs text-left">
+              <div className="space-y-2 pt-1 border-t border-slate-200 text-xs text-left">
                 {[
                   'Instant access to all 3,000+ SketchUp (.SKP) scene models',
-                  'Full commercial license — edit & pitch directly to your clients',
-                  'Includes 8K PBR textures, furniture & archviz packs',
+                  'Full commercial license — edit & pitch directly to clients',
+                  'Includes 8K PBR textures + Free SketchUp Course Included',
                   'Full access to Master Vault bulk downloads & category .ZIPs',
                 ].map((feature, idx) => (
-                  <div key={idx} className="flex items-center gap-2.5 text-slate-700 font-medium">
-                    <div className="size-4 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
-                      <Check className="size-3 stroke-[3]" />
+                  <div key={idx} className="flex items-center gap-2 text-slate-700 font-medium">
+                    <div className="size-3.5 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
+                      <Check className="size-2.5 stroke-[3]" />
                     </div>
-                    <span>{feature}</span>
+                    <span className="text-[11px] sm:text-xs">{feature}</span>
                   </div>
                 ))}
               </div>
 
-              {/* Free Addon Visual Block */}
-              <div className="flex items-center gap-3 p-3 rounded-xl bg-emerald-50 border border-emerald-200 relative overflow-hidden text-left mt-3">
-                <div className="absolute top-0 right-0 px-2 py-0.5 bg-emerald-500 text-white text-[9px] font-black uppercase tracking-wider rounded-bl-lg">
-                  Free Addon
-                </div>
-                <div className="bg-white size-10 rounded-lg border border-emerald-200 flex items-center justify-center shrink-0 overflow-hidden shadow-sm">
-                  <img src="/sketchup-logo.png" alt="SketchUp Logo" className="w-6 h-6 object-contain" />
-                </div>
-                <div className="flex-1">
-                  <p className="text-sm font-bold text-slate-900 leading-snug">Free SketchUp Course</p>
-                  <p className="text-xs text-emerald-700 font-semibold">Included in Free Trial</p>
-                </div>
-                <span className="text-sm font-bold text-emerald-600 line-through opacity-70 mr-1">$49</span>
-                <span className="text-sm font-black text-emerald-600">FREE</span>
-              </div>
-
-              {/* DIRECT EMBEDDED CARD PAYMENT FORM ON PAGE */}
-              <div className="pt-2">
+              {/* DIRECT EMBEDDED COMPACT CARD PAYMENT FORM */}
+              <div className="pt-1">
                 <CardPaymentForm
                   sourceLocation="pricing_section_trial_0"
                   buttonText="Start 7-Day Free Trial ($0 Due Today)"
                   allowSavedCard={false}
                   amountInCents={0}
                   isTrial={true}
+                  hideOrderDetails={true}
                   itemTotal="$29.00"
                   deliveryFee="$0.00"
                   discountAmount="-$29.00"

@@ -53,6 +53,7 @@ interface CardPaymentFormProps {
   deliveryAddressLine1?: string;
   deliveryAddressLine2?: string;
   isTrial?: boolean;
+  hideOrderDetails?: boolean;
   onSuccess?: (savedData?: { email: string; last4: string }) => void;
 }
 
@@ -68,6 +69,7 @@ export function CardPaymentForm({
   deliveryAddressLine1 = "7-Day Free Trial — All 3,000+ Models",
   deliveryAddressLine2 = "Instant SketchUp .SKP & 8K Textures Access",
   isTrial = true,
+  hideOrderDetails = false,
   onSuccess,
 }: CardPaymentFormProps) {
   const [email, setEmail] = useState(() => (allowSavedCard ? (localStorage.getItem("avada_user_email") || "") : ""));
@@ -313,6 +315,156 @@ export function CardPaymentForm({
       setIsProcessing(false);
     }
   };
+
+  if (hideOrderDetails) {
+    return (
+      <form onSubmit={handleSubmit} className="w-full text-left space-y-3.5 pt-1">
+        {/* Payment Method / Card Entry */}
+        <div className="space-y-3">
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2">
+              <CreditCard className="h-4 w-4 text-emerald-600" />
+              <span className="text-xs font-bold text-slate-900">Payment & Access Email</span>
+            </div>
+            {/* Payment Method Logos */}
+            <div className="flex items-center gap-1.5">
+              <VisaLogo className="h-4 w-auto rounded shadow-2xs" />
+              <MastercardLogo className="h-4 w-auto rounded shadow-2xs" />
+              <AmexLogo className="h-4 w-auto rounded shadow-2xs" />
+              {walletType.applePay && <ApplePayLogo className="h-4 w-auto rounded shadow-2xs" />}
+              {walletType.googlePay && <GooglePayLogo className="h-4 w-auto rounded shadow-2xs" />}
+            </div>
+          </div>
+
+          {hasSavedCard ? (
+            /* 1-Click Saved Card View */
+            <div className="p-3 rounded-xl bg-emerald-50/80 border border-emerald-300 text-xs space-y-1.5 shadow-2xs">
+              <div className="flex items-center justify-between font-mono text-slate-900">
+                <span className="font-bold flex items-center gap-1.5">
+                  <CreditCard className="size-3.5 text-emerald-600" /> Card on File
+                </span>
+                <span className="font-bold text-emerald-700">•••• •••• •••• {savedLast4}</span>
+              </div>
+              <p className="text-[11px] text-slate-600 font-medium">1-Click verification for <span className="font-mono font-bold text-slate-800">{savedEmail}</span></p>
+              <div className="pt-1 border-t border-emerald-200/80 flex justify-end">
+                <button
+                  type="button"
+                  onClick={() => {
+                    localStorage.removeItem("avada_has_saved_card");
+                    localStorage.removeItem("avada_user_last4");
+                    setUseNewCard(true);
+                  }}
+                  className="text-[11px] text-emerald-800 hover:text-emerald-950 font-bold underline cursor-pointer"
+                >
+                  Enter a different / new card →
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div className="space-y-2.5">
+              {/* Native Apple Pay / Google Pay Button */}
+              <div ref={paymentRequestButtonRef} id="payment-request-button" className={walletAvailable ? "w-full min-h-[44px]" : "hidden"} />
+
+              {walletAvailable && (
+                <div className="flex items-center gap-3">
+                  <div className="flex-1 h-px bg-slate-200" />
+                  <span className="text-[10px] font-medium text-slate-400 uppercase tracking-wide">or pay with card</span>
+                  <div className="flex-1 h-px bg-slate-200" />
+                </div>
+              )}
+
+              {/* Email Input */}
+              <div>
+                <input
+                  type="email"
+                  required
+                  placeholder="Enter your email for access"
+                  value={email}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    setErrorMessage(null);
+                  }}
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:border-emerald-500 transition shadow-2xs"
+                />
+              </div>
+
+              {/* Stripe Card Number Element */}
+              <div className="relative">
+                <div
+                  ref={cardNumberRef}
+                  className="w-full pl-9 pr-3.5 py-2.5 rounded-xl border border-slate-300 bg-white text-xs sm:text-sm text-slate-900 transition shadow-2xs focus-within:ring-2 focus-within:ring-emerald-500 focus-within:border-emerald-500 min-h-[40px]"
+                />
+                <CreditCard className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-slate-400 pointer-events-none" />
+              </div>
+
+              {/* Expiry & CVC Stripe Elements */}
+              <div className="grid grid-cols-2 gap-2">
+                <div
+                  ref={cardExpiryRef}
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white text-xs sm:text-sm text-slate-900 transition shadow-2xs focus-within:ring-2 focus-within:ring-emerald-500 focus-within:border-emerald-500 min-h-[40px]"
+                />
+                <div className="relative">
+                  <div
+                    ref={cardCvcRef}
+                    className="w-full pl-3.5 pr-8 py-2.5 rounded-xl border border-slate-300 bg-white text-xs sm:text-sm text-slate-900 transition shadow-2xs focus-within:ring-2 focus-within:ring-emerald-500 focus-within:border-emerald-500 min-h-[40px]"
+                  />
+                  <Lock className="absolute right-3 top-1/2 -translate-y-1/2 size-3.5 text-slate-400 pointer-events-none" />
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Compact Total & Card Fund Verification Disclaimer */}
+        <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs space-y-1">
+          <div className="flex items-center justify-between font-bold">
+            <span className="text-slate-700">Total Due Today:</span>
+            <span className="text-emerald-700 font-mono text-sm">{totalPrice} <span className="text-[10px] text-slate-500 font-normal">($0 for 7 days)</span></span>
+          </div>
+          {isTrial && (
+            <p className="text-[10px] text-slate-500 leading-tight pt-0.5">
+              ℹ️ Temporary $1 bank pre-auth check is reversed immediately. <strong>$0.00 charged today</strong>. Cancel anytime in 1 click.
+            </p>
+          )}
+        </div>
+
+        {/* Error Message Box */}
+        {errorMessage && (
+          <div className="p-2.5 rounded-xl bg-red-50 border border-red-200 text-xs text-red-700 flex items-start gap-2 animate-in fade-in">
+            <AlertCircle className="size-4 text-red-600 shrink-0 mt-0.5" />
+            <span>{errorMessage}</span>
+          </div>
+        )}
+
+        {/* High Conversion CTA Action Button */}
+        <button
+          type="submit"
+          disabled={isProcessing}
+          className="w-full py-3.5 sm:py-4 px-6 rounded-2xl bg-[#10b981] hover:bg-[#059669] text-black font-black text-sm sm:text-base shadow-lg hover:shadow-emerald-500/25 transition-all active:scale-[0.98] disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer border-2 border-emerald-400"
+        >
+          {isProcessing ? (
+            <span className="flex items-center gap-2">
+              <span className="size-4 border-2 border-black border-t-transparent rounded-full animate-spin" />
+              Verifying Card...
+            </span>
+          ) : (
+            <>
+              <Lock className="size-4" />
+              <span>{buttonText}</span>
+            </>
+          )}
+        </button>
+
+        {/* Compact Trust Indicators */}
+        <div className="text-center pt-1 space-y-1">
+          <div className="flex items-center justify-center gap-2 text-[11px] text-slate-500 font-medium">
+            <ShieldCheck className="size-3.5 text-emerald-600" />
+            <span>256-Bit SSL Encrypted • Powered by Stripe</span>
+          </div>
+        </div>
+      </form>
+    );
+  }
 
   return (
     <form onSubmit={handleSubmit} className="w-full flex flex-col items-center">
