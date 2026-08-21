@@ -3,27 +3,23 @@ import { Resend } from 'resend';
 const resendApiKey = process.env.RESEND_API_KEY;
 const resend = resendApiKey ? new Resend(resendApiKey) : null;
 
-const STARTER_URL = process.env.VITE_STARTER_DOWNLOAD_URL || 'https://drive.google.com/drive/u/0/folders/1n8fSTVtySXMHbPd1nhlqA6yIijNqrqUK';
-const VIP_URL = process.env.VITE_VIP_DOWNLOAD_URL || 'https://drive.google.com/drive/u/0/folders/1n8fSTVtySXMHbPd1nhlqA6yIijNqrqUK';
+const VAULT_URL = process.env.VITE_VAULT_URL || 'https://www.avada3d.com/vault';
 
 /**
  * Send access delivery email via Resend
  * @param {string} toEmail - Buyer's email address
- * @param {'starter' | 'vip'} planType - Plan purchased
+ * @param {'starter' | 'vip' | 'vip_trial'} planType - Plan purchased
  */
-export async function sendDeliveryEmail(toEmail, planType = 'starter') {
+export async function sendDeliveryEmail(toEmail, planType = 'vip_trial') {
   if (!resend || !toEmail) {
     console.warn('Resend not configured or missing recipient email');
     return { success: false, reason: 'Resend not configured or missing email' };
   }
 
-  const isVip = planType === 'vip' || planType.includes('upsell') || planType.includes('lifetime');
-  const downloadUrl = isVip ? VIP_URL : STARTER_URL;
   const accessKey = `AVADA-VIP-${toEmail.split('@')[0].toUpperCase()}-2026`;
+  const vaultLink = VAULT_URL;
 
-  const subject = isVip
-    ? '🔥 Lifetime VIP Pass Activated - AVADA 3D Master Vault Access'
-    : '🎉 Your AVADA 3D SketchUp (.SKP) Models Download Link';
+  const subject = '🔥 Your AVADA 3D Member Vault Access is Ready — Instant Unlocked Link';
 
   const htmlContent = `
     <!DOCTYPE html>
@@ -39,49 +35,50 @@ export async function sendDeliveryEmail(toEmail, planType = 'starter') {
           <!-- Header -->
           <div style="background: #09090b; padding: 28px 32px; text-align: center;">
             <h1 style="color: #ffffff; margin: 0; font-size: 22px; font-weight: 800; letter-spacing: -0.5px;">
-              AVADA <span style="color: #10b981;">3D</span>
+              AVADA <span style="color: #10b981;">3D VAULT</span>
             </h1>
             <p style="color: #a1a1aa; font-size: 13px; margin: 6px 0 0 0;">
-              ${isVip ? 'VIP Lifetime Access Confirmed' : 'Order Receipt & Download Access'}
+              Private Member Vault Access Unlocked
             </p>
           </div>
 
           <!-- Content Body -->
           <div style="padding: 32px;">
             <h2 style="font-size: 18px; font-weight: 700; color: #0f172a; margin: 0 0 12px 0;">
-              Thank you for your purchase! 🚀
+              Welcome to Your SketchUp Master Vault! 🚀
             </h2>
             <p style="font-size: 14px; line-height: 1.6; color: #475569; margin: 0 0 24px 0;">
-              ${isVip 
-                ? 'Your payment was successful. You now have lifetime access to the entire master vault of 3,000+ SketchUp (.SKP) scene models, high-res textures, and weekly library drops.' 
-                : 'Your payment was successful. Your 20 SketchUp (.SKP) Scenes + 8K Textures are ready for instant download.'}
+              Your trial / VIP membership is now active! You have instant unrestricted access to browse, preview, and download all <strong>15,000+ SketchUp (.SKP) scene models</strong>, 8K PBR textures, and weekly additions directly inside your private Member Vault.
             </p>
 
-            <!-- Download Button -->
+            <!-- Vault Access CTA Button -->
             <div style="text-align: center; margin: 28px 0;">
-              <a href="${downloadUrl}" target="_blank" style="display: inline-block; background-color: #059669; color: #ffffff; text-decoration: none; font-size: 15px; font-weight: 700; padding: 14px 28px; border-radius: 10px; box-shadow: 0 2px 4px rgba(5, 150, 105, 0.2);">
-                📥 Download Your Models (${isVip ? '3,000+ VIP Vault' : 'Starter Pack'})
+              <a href="${vaultLink}" target="_blank" style="display: inline-block; background-color: #10b981; color: #000000; text-decoration: none; font-size: 15px; font-weight: 800; padding: 14px 28px; border-radius: 12px; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);">
+                🔓 Open AVADA 3D Member Vault
               </a>
             </div>
 
             <!-- Details Box -->
             <div style="background: #f1f5f9; border-radius: 12px; padding: 18px 20px; margin: 24px 0; font-size: 13px;">
               <div style="margin-bottom: 8px;">
-                <strong style="color: #334155;">Delivery Format:</strong> Direct Google Drive Folder (.SKP / Textures)
+                <strong style="color: #334155;">Vault Access URL:</strong> 
+                <a href="${vaultLink}" target="_blank" style="color: #059669; font-weight: 700; text-decoration: none;">${vaultLink}</a>
               </div>
               <div style="margin-bottom: 8px;">
-                <strong style="color: #334155;">Customer Email:</strong> ${toEmail}
+                <strong style="color: #334155;">Registered Member Email:</strong> ${toEmail}
               </div>
-              ${isVip ? `
-                <div>
-                  <strong style="color: #334155;">VIP Access Key:</strong> 
-                  <code style="background: #e2e8f0; padding: 2px 6px; border-radius: 4px; font-family: monospace; font-weight: bold; color: #0f172a;">${accessKey}</code>
-                </div>
-              ` : ''}
+              <div style="margin-bottom: 8px;">
+                <strong style="color: #334155;">Access Level:</strong> 
+                <span style="background: #dcfce7; color: #166534; padding: 2px 8px; border-radius: 9999px; font-weight: bold; font-size: 12px;">Full VIP Unlocked (15,000+ Models)</span>
+              </div>
+              <div>
+                <strong style="color: #334155;">Member Key:</strong> 
+                <code style="background: #e2e8f0; padding: 2px 6px; border-radius: 4px; font-family: monospace; font-weight: bold; color: #0f172a;">${accessKey}</code>
+              </div>
             </div>
 
             <p style="font-size: 12px; color: #64748b; line-height: 1.5; margin: 20px 0 0 0;">
-              💡 <em>Tip: Bookmark your download link to access future updates anytime. Need support? Reply directly to this email.</em>
+              💡 <em>Tip: Bookmark the Member Vault link (<a href="${vaultLink}" style="color: #059669; font-weight: 600;">${vaultLink}</a>) to download new scene models and weekly drops anytime. Need help? Reply directly to this email.</em>
             </p>
           </div>
 
