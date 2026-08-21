@@ -80,7 +80,7 @@ export function Pricing({ onSelectPlan }: PricingProps) {
             Start Your 7-Day Free Trial
           </h2>
           <p className="text-slate-600 text-xs sm:text-sm max-w-md mx-auto">
-            Instant unrestricted access to 3,000+ SketchUp (.SKP) scene files, furniture models & 8K PBR textures. Cancel anytime with 1 click.
+            Instant unrestricted access to all SketchUp (.SKP) scene files, furniture models & 8K PBR textures. Cancel anytime with 1 click.
           </p>
         </motion.div>
 
@@ -119,7 +119,7 @@ export function Pricing({ onSelectPlan }: PricingProps) {
                 </div>
               </div>
 
-              {/* 20+ OVERLAPPING CIRCULAR MODEL THUMBNAILS STRIP */}
+              {/* OVERLAPPING CIRCULAR MODEL THUMBNAILS STRIP */}
               <div className="space-y-1 py-0.5 text-center">
                 <div className="flex items-center justify-center -space-x-2 overflow-x-auto scrollbar-none py-1 px-1 max-w-full">
                   {publicModels.slice(0, 18).map((item, idx) => (
@@ -133,7 +133,7 @@ export function Pricing({ onSelectPlan }: PricingProps) {
                 </div>
                 <div className="flex justify-center">
                   <span className="inline-flex items-center gap-1.5 text-[11px] font-mono font-bold text-slate-700 bg-slate-100 px-2.5 py-0.5 rounded-full border border-slate-200">
-                    <Sparkles className="size-3 text-emerald-600" /> 3,000+ SketchUp (.SKP) scenes unlocked
+                    <Sparkles className="size-3 text-emerald-600" /> Complete SketchUp (.SKP) scenes unlocked
                   </span>
                 </div>
               </div>
@@ -161,7 +161,7 @@ export function Pricing({ onSelectPlan }: PricingProps) {
               {/* Included Features List */}
               <div className="space-y-2 pt-1 border-t border-slate-200 text-xs text-left">
                 {[
-                  'Instant access to all 3,000+ SketchUp (.SKP) scene models',
+                  'Instant access to all SketchUp (.SKP) scene models',
                   'Full commercial license — edit & pitch directly to clients',
                   'Includes 8K PBR textures + Free SketchUp Course Included',
                   'Full access to Master Vault bulk downloads & category .ZIPs',

@@ -32,6 +32,7 @@ import {
   Shield,
   ShieldCheck,
   Trophy,
+  Sparkles,
 } from "lucide-react";
 
 export interface ModelItem {
@@ -53,32 +54,30 @@ export interface CategoryMeta {
   name: string;
   key: string;
   icon: string;
-  countDisplay: string;
 }
 
 export interface SubCategoryMeta {
   name: string;
   key: string;
-  countDisplay: string;
 }
 
 const CATEGORIES: CategoryMeta[] = [
-  { name: "Apartments", key: "apartment", icon: "Building2", countDisplay: "960+" },
-  { name: "Furniture", key: "furniture", icon: "Armchair", countDisplay: "1,450+" },
-  { name: "Washrooms", key: "washroom", icon: "Droplets", countDisplay: "1,180+" },
-  { name: "Bedrooms", key: "bedroom", icon: "Bed", countDisplay: "350+" },
-  { name: "Exteriors", key: "exterior", icon: "Home", countDisplay: "250+" },
-  { name: "Kitchens", key: "kitchen", icon: "Utensils", countDisplay: "1,020+" },
+  { name: "Apartments", key: "apartment", icon: "Building2" },
+  { name: "Furniture", key: "furniture", icon: "Armchair" },
+  { name: "Washrooms", key: "washroom", icon: "Droplets" },
+  { name: "Bedrooms", key: "bedroom", icon: "Bed" },
+  { name: "Exteriors", key: "exterior", icon: "Home" },
+  { name: "Kitchens", key: "kitchen", icon: "Utensils" },
 ];
 
 const FURNITURE_SUBCATEGORIES: SubCategoryMeta[] = [
-  { name: "All Furniture", key: "all-furniture", countDisplay: "1,450+" },
-  { name: "Sofas & Lounges", key: "sofas", countDisplay: "340+" },
-  { name: "Chairs & Armchairs", key: "chairs", countDisplay: "280+" },
-  { name: "Tables & Desks", key: "tables", countDisplay: "310+" },
-  { name: "Beds & Headboards", key: "beds", countDisplay: "190+" },
-  { name: "Cabinets & Shelving", key: "cabinets", countDisplay: "180+" },
-  { name: "Lighting Fixtures", key: "lighting", countDisplay: "150+" },
+  { name: "All Furniture", key: "all-furniture" },
+  { name: "Sofas & Lounges", key: "sofas" },
+  { name: "Chairs & Armchairs", key: "chairs" },
+  { name: "Tables & Desks", key: "tables" },
+  { name: "Beds & Headboards", key: "beds" },
+  { name: "Cabinets & Shelving", key: "cabinets" },
+  { name: "Lighting Fixtures", key: "lighting" },
 ];
 
 const DEDICATED_FURNITURE: ModelItem[] = [
@@ -206,6 +205,7 @@ export function App() {
   const [selectedSubCategory, setSelectedSubCategory] = useState<string>("all-furniture");
   const [activeModel, setActiveModel] = useState<ModelItem | null>(null);
   const [showCheckoutModal, setShowCheckoutModal] = useState(false);
+  const [showActivateModal, setShowActivateModal] = useState(false);
   const [searchTermIdx, setSearchTermIdx] = useState(0);
   const [mobileBlinkIndex, setMobileBlinkIndex] = useState(0);
 
@@ -337,8 +337,22 @@ export function App() {
     }
   };
 
+  const navigateTo = (route: string) => {
+    setCurrentRoute(route);
+    if (route === "vault") {
+      window.history.pushState(null, "", "/vault");
+    } else {
+      window.history.pushState(null, "", "/");
+    }
+  };
+
   if (currentRoute === "vault") {
-    return <VaultPage onNavigateHome={() => setCurrentRoute("main")} />;
+    return (
+      <VaultPage
+        onNavigateHome={() => navigateTo("main")}
+        onOpenActivateModal={() => setShowActivateModal(true)}
+      />
+    );
   }
 
   if (currentRoute === "start") {
@@ -401,7 +415,7 @@ export function App() {
             <a href="#categories" className="hidden md:inline hover:text-slate-900 transition">Categories</a>
             <a href="#pricing" className="hidden md:inline hover:text-slate-900 transition">Pricing ($0 Trial)</a>
             <button
-              onClick={() => setCurrentRoute("vault")}
+              onClick={() => navigateTo("vault")}
               className="px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-emerald-600 text-white font-bold text-xs transition flex items-center gap-1.5 shadow-sm cursor-pointer"
             >
               <ShieldCheck className="size-3.5 text-emerald-400" />
@@ -423,7 +437,7 @@ export function App() {
               </div>
 
               <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-slate-900 leading-[1.08]">
-                3,000+ High Detailed Models for SketchUp, <br className="hidden sm:inline" />
+                High Detailed Models for SketchUp, <br className="hidden sm:inline" />
                 <span className="bg-gradient-to-r from-slate-950 via-emerald-800 to-[#10b981] bg-clip-text text-transparent">
                   Create Anything. Copy & Paste.
                 </span>
@@ -435,7 +449,7 @@ export function App() {
               </div>
 
               <p className="text-slate-600 text-sm sm:text-base max-w-xl font-medium leading-relaxed">
-                Unlock <strong className="text-slate-950 font-black">3,000+ Production-Ready SketchUp Scenes</strong>. Complete with 8K PBR textures, calibrated lighting, and 100% Commercial License. Drag, drop, render in minutes, and <strong className="text-emerald-700 font-bold">win $5,000+ client projects effortlessly</strong>.
+                Unlock <strong className="text-slate-950 font-black">Complete Production-Ready SketchUp Scenes</strong>. Complete with 8K PBR textures, calibrated lighting, and 100% Commercial License. Drag, drop, render in minutes, and <strong className="text-emerald-700 font-bold">win $5,000+ client projects effortlessly</strong>.
               </p>
 
               {/* 3 High-Conversion ROI Micro-Badges */}
@@ -468,7 +482,7 @@ export function App() {
                 {/* Shorter Attached Pill */}
                 <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-950 text-[11px] font-bold shadow-2xs whitespace-nowrap self-center sm:self-start">
                   <span className="size-1.5 rounded-full bg-[#10b981] animate-pulse" />
-                  <span>Instant Access to 3,000+ Models • Cancel Anytime</span>
+                  <span>Instant Access to All Models • Cancel Anytime</span>
                 </div>
               </div>
 
@@ -490,7 +504,7 @@ export function App() {
             <h2 className="text-base sm:text-lg font-black text-slate-900 tracking-tight flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-[#10b981]" />
               {selectedCategory === "all"
-                ? "3,000+ Models Biggest Library"
+                ? "Complete SketchUp Model Library"
                 : `${CATEGORIES.find((c) => c.key === selectedCategory)?.name || "Models"} Collection`}
             </h2>
           </div>
@@ -546,7 +560,7 @@ export function App() {
           `}} />
 
           {/* MOBILE: 2 Smaller Side-by-Side Blinking Cards */}
-          <div className="sm:hidden w-full max-w-lg mx-auto px-1 py-2">
+          <div className="sm:hidden w-full max-w-lg mx-auto px-1 py-2 space-y-2">
             {(() => {
               const showcaseModels = filteredModels.slice(0, 100);
               if (showcaseModels.length === 0) return null;
@@ -601,6 +615,25 @@ export function App() {
                 </div>
               );
             })()}
+
+            {/* Mobile More Models Callout Link */}
+            <div
+              onClick={() => setShowActivateModal(true)}
+              className="p-3 rounded-2xl bg-gradient-to-r from-emerald-950 via-slate-900 to-black border-2 border-emerald-500 text-white flex items-center justify-between shadow-md cursor-pointer hover:border-emerald-400 transition"
+            >
+              <div className="flex items-center gap-2">
+                <div className="size-7 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold">
+                  <Sparkles className="size-4" />
+                </div>
+                <div>
+                  <div className="text-xs font-black text-white">More Models</div>
+                  <div className="text-[10px] text-slate-300">Lifetime access • $20 only</div>
+                </div>
+              </div>
+              <span className="px-3 py-1 rounded-xl bg-[#10b981] text-black font-black text-[10px] shadow-sm">
+                Pay $20 →
+              </span>
+            </div>
           </div>
 
           {/* DESKTOP: Fast Scrolling Marquee */}
@@ -651,6 +684,26 @@ export function App() {
                   </div>
                 </div>
               ))}
+
+              {/* Desktop More Models Link Card in Marquee */}
+              <div
+                onClick={() => setShowActivateModal(true)}
+                className="w-[260px] sm:w-[280px] flex-none group rounded-2xl bg-gradient-to-br from-emerald-950 via-slate-900 to-black border-2 border-emerald-500 hover:border-emerald-400 transition duration-300 overflow-hidden flex flex-col justify-between shadow-xl cursor-pointer p-4"
+              >
+                <div className="space-y-2">
+                  <div className="size-9 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 flex items-center justify-center font-black">
+                    <Sparkles className="size-5" />
+                  </div>
+                  <h4 className="text-sm font-black text-white">Unlock More Models</h4>
+                  <p className="text-xs text-slate-300">Permanent lifetime access to all models, full category packs & textures.</p>
+                </div>
+                <button
+                  type="button"
+                  className="w-full mt-3 py-2.5 rounded-xl bg-[#10b981] hover:bg-[#059669] text-black font-black text-xs transition flex items-center justify-center gap-1 shadow-md"
+                >
+                  <span>Pay $20 to Activate →</span>
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -707,7 +760,7 @@ export function App() {
                 selectedCategory === "all" ? "text-slate-900 underline" : "text-slate-500 hover:text-slate-900"
               }`}
             >
-              All Categories ({ALL_MODELS.length})
+              All Categories
             </button>
           </div>
 
@@ -992,7 +1045,7 @@ export function App() {
                 <div className="flex justify-center">
                   <span className="inline-flex items-center gap-1.5 text-[10px] sm:text-[11px] font-mono font-bold text-slate-700 bg-slate-100 px-2.5 py-0.5 rounded-full border border-slate-200">
                     <span className="size-1.5 rounded-full bg-[#10b981] animate-pulse" />
-                    <span>3,000+ Models</span>
+                    <span>Complete SketchUp Library</span>
                     <span>•</span>
                     <span className="text-emerald-700 font-extrabold">+100 Added Every Week</span>
                   </span>
@@ -1000,7 +1053,7 @@ export function App() {
               </div>
 
               <h3 className="text-base sm:text-lg font-black text-slate-900 tracking-tight">
-                Unlock 3,000+ SketchUp Models
+                Unlock SketchUp Master Library
               </h3>
               <p className="text-[11px] sm:text-xs text-slate-500 leading-tight">
                 Instant unrestricted access to all .SKP scenes & 8K textures. Cancel anytime in 1 click.
@@ -1019,11 +1072,60 @@ export function App() {
               deliveryFee="$0.00"
               discountAmount="-$29.00"
               totalPrice="$0.00"
-              deliveryAddressLine1="7-Day VIP Access: All 3,000+ SketchUp (.SKP) Models"
+              deliveryAddressLine1="7-Day VIP Access: All SketchUp (.SKP) Scene Models"
               deliveryAddressLine2="+ Free SketchUp Course & 8K Textures Included"
               onSuccess={() => {
                 setShowCheckoutModal(false);
-                setCurrentRoute("vault");
+                navigateTo("vault");
+              }}
+            />
+          </div>
+        </div>
+      )}
+
+      {/* ══════ $20 ACTIVATION POPUP MODAL ══════ */}
+      {showActivateModal && (
+        <div className="fixed inset-0 z-[300] bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+          <div className="relative bg-white rounded-2xl sm:rounded-3xl max-w-md w-full p-4 sm:p-6 border-2 border-emerald-500 shadow-2xl space-y-3 my-auto max-h-[94vh] overflow-y-auto text-slate-900 animate-in fade-in zoom-in-95">
+            {/* Close Button */}
+            <button
+              type="button"
+              onClick={() => setShowActivateModal(false)}
+              className="absolute top-3.5 right-3.5 p-1.5 rounded-full bg-slate-100 text-slate-500 hover:text-slate-900 hover:bg-slate-200 transition cursor-pointer"
+            >
+              <X className="size-4" />
+            </button>
+
+            {/* Modal Header */}
+            <div className="text-center space-y-2 pr-6 sm:pr-0">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-bold">
+                <Sparkles className="size-3 text-emerald-600" /> One-Time Lifetime Pass • $20 Only
+              </div>
+              <h3 className="text-lg sm:text-xl font-black text-slate-900 tracking-tight">
+                Activate Full Master Library
+              </h3>
+              <p className="text-[11px] sm:text-xs text-slate-500 leading-tight">
+                Pay $20 to permanently activate and download all SketchUp (.SKP) scene models, furniture sets & 8K textures.
+              </p>
+            </div>
+
+            {/* Embedded Payment Form */}
+            <CardPaymentForm
+              sourceLocation="activate_20_popup_modal"
+              buttonText="Pay $20 & Activate Full Library"
+              allowSavedCard={false}
+              amountInCents={2000}
+              isTrial={false}
+              hideOrderDetails={true}
+              itemTotal="$20.00"
+              deliveryFee="$0.00"
+              discountAmount="$0.00"
+              totalPrice="$20.00"
+              deliveryAddressLine1="Lifetime VIP Access: All SketchUp Scene Models"
+              deliveryAddressLine2="+ Free SketchUp Course & 8K Textures Included"
+              onSuccess={() => {
+                setShowActivateModal(false);
+                navigateTo("vault");
               }}
             />
           </div>

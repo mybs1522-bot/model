@@ -20,11 +20,14 @@ import publicModels from "@/data/publicModelsImages.json";
 import manifestData from "@/data/modelsManifest.json";
 import vaultDriveData from "@/data/vaultDriveModels.json";
 
+import { CardPaymentForm } from "@/components/ui/card-payment-form";
+
 interface VaultPageProps {
   onNavigateHome?: () => void;
+  onOpenActivateModal?: () => void;
 }
 
-export function VaultPage({ onNavigateHome }: VaultPageProps) {
+export function VaultPage({ onNavigateHome, onOpenActivateModal }: VaultPageProps) {
   const [email, setEmail] = useState<string>(() => {
     return localStorage.getItem("avada_user_email") || "";
   });
@@ -36,12 +39,21 @@ export function VaultPage({ onNavigateHome }: VaultPageProps) {
   const [downloadingItem, setDownloadingItem] = useState<string | null>(null);
   const [downloadSuccessToast, setDownloadSuccessToast] = useState<string | null>(null);
   const [activePreviewModel, setActivePreviewModel] = useState<any | null>(null);
+  const [showActivateModal, setShowActivateModal] = useState(false);
+
+  const handleOpenActivate = () => {
+    if (onOpenActivateModal) {
+      onOpenActivateModal();
+    } else {
+      setShowActivateModal(true);
+    }
+  };
 
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "instant" });
   }, []);
 
-  // 90 Real Paired Google Drive Models (.SKP + Render Previews)
+  // Real Paired Google Drive Models (.SKP + Render Previews)
   const ALL_MODELS = useMemo(() => {
     if (vaultDriveData && vaultDriveData.models && vaultDriveData.models.length > 0) {
       return vaultDriveData.models.map((m: any) => ({
@@ -145,13 +157,13 @@ export function VaultPage({ onNavigateHome }: VaultPageProps) {
   };
 
   const CATEGORIES = [
-    { key: "all", label: "All Models", count: `${ALL_MODELS.length}` },
-    { key: "apartment", label: "Apartments", count: `${ALL_MODELS.filter(m => m.categoryKey === 'apartment').length}` },
-    { key: "bathroom", label: "Bathrooms", count: `${ALL_MODELS.filter(m => m.categoryKey === 'bathroom').length}` },
-    { key: "bedroom", label: "Bedrooms", count: `${ALL_MODELS.filter(m => m.categoryKey === 'bedroom').length}` },
-    { key: "exterior", label: "Exteriors", count: `${ALL_MODELS.filter(m => m.categoryKey === 'exterior').length}` },
-    { key: "kitchen", label: "Kitchens", count: `${ALL_MODELS.filter(m => m.categoryKey === 'kitchen').length}` },
-    { key: "washroom", label: "Washrooms", count: `${ALL_MODELS.filter(m => m.categoryKey === 'washroom').length}` },
+    { key: "all", label: "All Models" },
+    { key: "apartment", label: "Apartments" },
+    { key: "bathroom", label: "Bathrooms" },
+    { key: "kitchen", label: "Kitchens" },
+    { key: "bedroom", label: "Bedrooms" },
+    { key: "exterior", label: "Exteriors" },
+    { key: "washroom", label: "Washrooms" },
   ];
 
   const filteredModels = useMemo(() => {
@@ -344,11 +356,33 @@ export function VaultPage({ onNavigateHome }: VaultPageProps) {
 
       {/* MAIN VAULT CONTENT */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 space-y-10">
+        {/* $20 ACTIVATION CALLOUT BANNER */}
+        <div className="p-4 sm:p-6 rounded-3xl bg-gradient-to-r from-emerald-950/80 via-slate-900 to-slate-900 border-2 border-emerald-500 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-2xl">
+          <div className="space-y-1.5">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-mono font-bold border border-emerald-500/30">
+              <Sparkles className="size-3.5" /> LIFETIME ACTIVATION • $20 ONLY
+            </div>
+            <h3 className="text-base sm:text-xl font-black text-white tracking-tight">
+              Want More Models & Permanent Lifetime Access?
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-2xl">
+              Pay $20 to permanently activate unlimited lifetime downloads of all SketchUp scenes, furniture assets & 8K PBR textures.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={handleOpenActivate}
+            className="px-6 py-3 rounded-2xl bg-[#10b981] hover:bg-[#059669] text-black font-black text-xs sm:text-sm shadow-xl hover:shadow-emerald-500/25 transition active:scale-95 whitespace-nowrap cursor-pointer flex items-center gap-2 border border-emerald-300"
+          >
+            <span>Pay $20 to Activate →</span>
+          </button>
+        </div>
+
         {/* HERO VAULT WELCOME BANNER */}
         <div className="p-6 sm:p-10 rounded-3xl bg-gradient-to-br from-slate-900 via-slate-900/90 to-emerald-950/30 border border-slate-800 relative overflow-hidden shadow-2xl">
           <div className="relative z-10 space-y-4 max-w-3xl">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/40 text-emerald-400 text-xs font-mono font-bold">
-              <Sparkles className="size-3.5" /> 3,000+ SKETCHUP ASSETS READY
+              <Sparkles className="size-3.5" /> SKETCHUP MASTER ARCHIVE
             </div>
             <h1 className="text-2xl sm:text-4xl font-black text-white tracking-tight">
               Welcome to Your <span className="text-[#10b981]">SketchUp Master Library</span>
@@ -363,14 +397,14 @@ export function VaultPage({ onNavigateHome }: VaultPageProps) {
               <button
                 onClick={() =>
                   handleDownload(
-                    "AVADA-3D-Master-Vault-Complete-3000-Models-Archive.zip",
-                    "Complete 85 GB Master Vault"
+                    "AVADA-3D-Master-Vault-Archive.zip",
+                    "Complete Master Vault"
                   )
                 }
                 className="px-6 py-3.5 rounded-2xl bg-[#10b981] hover:bg-[#059669] text-black font-black text-xs sm:text-sm shadow-xl flex items-center justify-center gap-2.5 transition active:scale-95 cursor-pointer border border-emerald-400"
               >
                 <FolderDown className="size-5" />
-                <span>Download Complete 3,000+ Master Vault (.ZIP — 85 GB)</span>
+                <span>Download Complete Master Vault (.ZIP)</span>
               </button>
 
               <div className="px-4 py-2.5 rounded-xl bg-slate-950/60 border border-slate-800 text-slate-400 text-xs font-mono flex items-center justify-center gap-2">
@@ -383,10 +417,18 @@ export function VaultPage({ onNavigateHome }: VaultPageProps) {
 
         {/* ══════ 6 REAL GOOGLE DRIVE CATEGORY PACKS ══════ */}
         <div className="space-y-4">
-          <h2 className="text-lg sm:text-xl font-black text-white tracking-tight flex items-center gap-2">
-            <Package className="size-5 text-[#10b981]" />
-            <span>6 Complete Category Packs (All .SKP Scene Files & 8K Textures)</span>
-          </h2>
+          <div className="flex items-center justify-between">
+            <h2 className="text-lg sm:text-xl font-black text-white tracking-tight flex items-center gap-2">
+              <Package className="size-5 text-[#10b981]" />
+              <span>Category Packs (All .SKP Scene Files & 8K Textures)</span>
+            </h2>
+            <button
+              onClick={handleOpenActivate}
+              className="text-xs font-bold text-emerald-400 hover:text-emerald-300 underline flex items-center gap-1"
+            >
+              <span>More Models ($20 Activation) →</span>
+            </button>
+          </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {vaultDriveData.categoryPacks.map((pack: any, idx: number) => {
@@ -406,9 +448,9 @@ export function VaultPage({ onNavigateHome }: VaultPageProps) {
                 >
                   <div className="space-y-1.5">
                     <div className="flex items-center justify-between text-xs font-mono">
-                      <span className="text-emerald-400 font-bold">{pack.badge}</span>
+                      <span className="text-emerald-400 font-bold">Category Pack</span>
                       <span className="text-slate-400 bg-slate-950/80 px-2.5 py-0.5 rounded-md border border-slate-800">
-                        {pack.fileCount} .SKP Scenes
+                        .SKP + Textures
                       </span>
                     </div>
                     <h3 className="text-lg font-black text-white group-hover:text-emerald-400 transition">
@@ -429,10 +471,10 @@ export function VaultPage({ onNavigateHome }: VaultPageProps) {
                       className="flex-1 py-2.5 rounded-xl bg-slate-800 hover:bg-[#10b981] text-white hover:text-black font-bold text-xs transition flex items-center justify-center gap-1.5 shadow-sm cursor-pointer"
                     >
                       <Layers className="size-3.5" />
-                      <span>Explore ({pack.fileCount})</span>
+                      <span>Explore</span>
                     </button>
                     <button
-                      onClick={() => handleDownload(`${pack.folderName}-Complete-Pack.zip`, `${pack.fileCount} Models`, pack.downloadUrl)}
+                      onClick={() => handleDownload(`${pack.folderName}-Complete-Pack.zip`, "Category Pack", pack.downloadUrl)}
                       className="px-3 py-2.5 rounded-xl bg-emerald-500/20 hover:bg-emerald-500 text-emerald-400 hover:text-black border border-emerald-500/40 text-xs font-bold transition flex items-center justify-center gap-1 cursor-pointer"
                       title="Download Category Pack"
                     >
@@ -451,7 +493,7 @@ export function VaultPage({ onNavigateHome }: VaultPageProps) {
             <div className="space-y-1">
               <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight flex items-center gap-2">
                 <Layers className="size-6 text-[#10b981]" />
-                <span>Browse All 90+ Drive SketchUp Models</span>
+                <span>Browse All SketchUp Models</span>
               </h2>
               <p className="text-xs text-slate-400">
                 Click any scene to preview render details or trigger instant .SKP file download.
@@ -484,9 +526,6 @@ export function VaultPage({ onNavigateHome }: VaultPageProps) {
                 }`}
               >
                 <span>{cat.label}</span>
-                <span className="text-[10px] font-mono opacity-80 bg-black/20 px-1.5 py-0.5 rounded-md">
-                  {cat.count}
-                </span>
               </button>
             ))}
           </div>
@@ -541,6 +580,36 @@ export function VaultPage({ onNavigateHome }: VaultPageProps) {
                 </div>
               </div>
             ))}
+
+            {/* INLINE "MORE MODELS" ACTIVATION CARD */}
+            <div
+              onClick={handleOpenActivate}
+              className="group rounded-2xl bg-gradient-to-br from-emerald-950/90 via-slate-900 to-black border-2 border-emerald-500 p-4 flex flex-col justify-between hover:border-emerald-400 transition-all duration-300 shadow-xl cursor-pointer hover:scale-[1.02]"
+            >
+              <div className="space-y-2.5">
+                <div className="size-9 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 flex items-center justify-center font-black text-sm shadow-inner">
+                  <Sparkles className="size-4" />
+                </div>
+                <div className="space-y-1">
+                  <span className="text-[9px] font-mono font-bold text-emerald-400 tracking-wider uppercase block">
+                    VIP Library
+                  </span>
+                  <h4 className="text-xs sm:text-sm font-black text-white leading-tight">
+                    More Models
+                  </h4>
+                  <p className="text-[10px] text-slate-300 leading-snug">
+                    Unlock all models, texture archives & lifetime updates.
+                  </p>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                className="w-full mt-3 py-2 rounded-xl bg-[#10b981] hover:bg-[#059669] text-black font-black text-[11px] transition flex items-center justify-center gap-1 shadow-md"
+              >
+                <span>Pay $20 to Activate →</span>
+              </button>
+            </div>
           </div>
 
           {filteredModels.length === 0 && (
@@ -560,6 +629,52 @@ export function VaultPage({ onNavigateHome }: VaultPageProps) {
           )}
         </div>
       </main>
+
+      {/* ══════ $20 ACTIVATION CHECKOUT MODAL ══════ */}
+      {showActivateModal && (
+        <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+          <div className="relative bg-white text-slate-900 border-2 border-emerald-500 rounded-3xl max-w-md w-full p-4 sm:p-6 shadow-2xl space-y-3 my-auto max-h-[94vh] overflow-y-auto animate-in fade-in zoom-in-95">
+            <button
+              type="button"
+              onClick={() => setShowActivateModal(false)}
+              className="absolute top-3.5 right-3.5 p-1.5 rounded-full bg-slate-100 text-slate-500 hover:text-slate-900 hover:bg-slate-200 transition cursor-pointer"
+            >
+              <X className="size-4" />
+            </button>
+
+            <div className="text-center space-y-1.5 pr-6 sm:pr-0">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-bold">
+                <Sparkles className="size-3 text-emerald-600" /> One-Time Lifetime Access • $20
+              </div>
+              <h3 className="text-lg sm:text-xl font-black text-slate-900 tracking-tight">
+                Activate Full Master Library
+              </h3>
+              <p className="text-xs text-slate-500 leading-tight">
+                Pay $20 to permanently activate and download all SketchUp (.SKP) scenes, furniture sets & 8K textures.
+              </p>
+            </div>
+
+            <CardPaymentForm
+              sourceLocation="vault_activate_20_modal"
+              buttonText="Pay $20 & Activate Full Library"
+              allowSavedCard={false}
+              amountInCents={2000}
+              isTrial={false}
+              hideOrderDetails={true}
+              itemTotal="$20.00"
+              deliveryFee="$0.00"
+              discountAmount="$0.00"
+              totalPrice="$20.00"
+              deliveryAddressLine1="Lifetime VIP Access: All SketchUp Scene Models"
+              deliveryAddressLine2="+ Free SketchUp Course & 8K Textures Included"
+              onSuccess={() => {
+                setShowActivateModal(false);
+                setDownloadSuccessToast("✓ Master Library Activated! Unlimited downloads unlocked.");
+              }}
+            />
+          </div>
+        </div>
+      )}
 
       {/* ══════ FULLSCREEN PREVIEW MODAL ══════ */}
       {activePreviewModel && (
