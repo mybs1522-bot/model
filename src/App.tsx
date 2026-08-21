@@ -617,25 +617,6 @@ export function App() {
                 </div>
               );
             })()}
-
-            {/* Mobile Pro Plan Activation Callout Link */}
-            <div
-              onClick={() => setShowActivateModal(true)}
-              className="p-3 rounded-2xl bg-gradient-to-r from-emerald-950 via-slate-900 to-black border-2 border-emerald-500 text-white flex items-center justify-between shadow-md cursor-pointer hover:border-emerald-400 transition"
-            >
-              <div className="flex items-center gap-2">
-                <div className="size-7 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold">
-                  <Sparkles className="size-4" />
-                </div>
-                <div>
-                  <div className="text-xs font-black text-white">Activate Pro Plan</div>
-                  <div className="text-[10px] text-slate-300">To see all models (15,000+ Models)</div>
-                </div>
-              </div>
-              <span className="px-3 py-1 rounded-xl bg-[#10b981] text-black font-black text-[10px] shadow-sm">
-                Activate →
-              </span>
-            </div>
           </div>
 
           {/* DESKTOP: Fast Scrolling Marquee */}
@@ -686,26 +667,6 @@ export function App() {
                   </div>
                 </div>
               ))}
-
-              {/* Desktop Pro Plan Link Card in Marquee */}
-              <div
-                onClick={() => setShowActivateModal(true)}
-                className="w-[260px] sm:w-[280px] flex-none group rounded-2xl bg-gradient-to-br from-emerald-950 via-slate-900 to-black border-2 border-emerald-500 hover:border-emerald-400 transition duration-300 overflow-hidden flex flex-col justify-between shadow-xl cursor-pointer p-4"
-              >
-                <div className="space-y-2">
-                  <div className="size-9 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 flex items-center justify-center font-black">
-                    <Sparkles className="size-5" />
-                  </div>
-                  <h4 className="text-sm font-black text-white">Activate Pro Plan</h4>
-                  <p className="text-xs text-slate-300">Activate Pro Plan to see all models (15,000+ Models) with unlimited downloads & textures.</p>
-                </div>
-                <button
-                  type="button"
-                  className="w-full mt-3 py-2.5 rounded-xl bg-[#10b981] hover:bg-[#059669] text-black font-black text-xs transition flex items-center justify-center gap-1 shadow-md"
-                >
-                  <span>Activate Pro Plan →</span>
-                </button>
-              </div>
             </div>
           </div>
         </div>
