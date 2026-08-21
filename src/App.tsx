@@ -958,10 +958,33 @@ export function App() {
             </button>
 
             {/* Modal Header */}
-            <div className="text-center space-y-1 pr-6 sm:pr-0">
+            <div className="text-center space-y-2 pr-6 sm:pr-0">
               <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 text-[10px] sm:text-xs font-bold">
                 <Sparkles className="size-3 text-emerald-600" /> 7-Day Free Trial • $0.00 Due Today
               </div>
+
+              {/* Overlapping Circular Model Thumbnails Strip */}
+              <div className="space-y-1.5 py-0.5">
+                <div className="flex items-center justify-center -space-x-2 overflow-x-auto scrollbar-none py-0.5 px-1 max-w-full">
+                  {publicModels.slice(0, 14).map((item, idx) => (
+                    <img
+                      key={idx}
+                      src={item.relPath}
+                      alt="Model thumbnail"
+                      className="size-6 sm:size-7 rounded-full border-2 border-white object-cover shrink-0 shadow-xs hover:scale-125 hover:z-30 transition-transform duration-300"
+                    />
+                  ))}
+                </div>
+                <div className="flex justify-center">
+                  <span className="inline-flex items-center gap-1.5 text-[10px] sm:text-[11px] font-mono font-bold text-slate-700 bg-slate-100 px-2.5 py-0.5 rounded-full border border-slate-200">
+                    <span className="size-1.5 rounded-full bg-[#10b981] animate-pulse" />
+                    <span>3,000+ Models</span>
+                    <span>•</span>
+                    <span className="text-emerald-700 font-extrabold">+100 Added Every Week</span>
+                  </span>
+                </div>
+              </div>
+
               <h3 className="text-base sm:text-lg font-black text-slate-900 tracking-tight">
                 Unlock 3,000+ SketchUp Models
               </h3>
