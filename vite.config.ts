@@ -139,34 +139,40 @@ function stripeApiPlugin(secretKey: string): Plugin {
               }
 
               // ── 7-DAY FREE TRIAL SUBSCRIPTION ($20/MO OR $180/YR) ──
-              // Ensure recurring product and price exist
-              let priceId = ''
-              try {
-                const productList = await stripe.products.list({ active: true, limit: 20 })
-                let product = productList.data.find((p) => p.name.includes('AVADA 3D') || p.name.includes('Pro VIP'))
-                if (!product) {
-                  product = await stripe.products.create({
-                    name: 'AVADA 3D Pro VIP Membership',
-                    description: 'Unlimited access to 15,000+ SketchUp (.SKP) scene models, 8K PBR textures, and weekly releases.',
-                  })
-                }
+              // Use verified Stripe Price IDs directly with dynamic fallback
+              const MONTHLY_PRICE_ID = 'price_1U6zDTGGsoQTkhyvOU4AS6u0' // $20.00 / month
+              const YEARLY_PRICE_ID = 'price_1U70HFGGsoQTkhyvN9A2wPkv'  // $180.00 / year (25% OFF)
+              let priceId = isYearly ? YEARLY_PRICE_ID : MONTHLY_PRICE_ID
 
-                const priceList = await stripe.prices.list({ product: product.id, active: true, limit: 10 })
-                const matchedPrice = priceList.data.find(
-                  (p) => p.recurring?.interval === targetInterval && p.unit_amount === targetUnitAmount
-                )
-                if (matchedPrice) {
-                  priceId = matchedPrice.id
-                } else {
-                  const createdPrice = await stripe.prices.create({
-                    product: product.id,
-                    unit_amount: targetUnitAmount,
-                    currency: 'usd',
-                    recurring: {
-                      interval: targetInterval,
-                    },
-                  })
-                  priceId = createdPrice.id
+              try {
+                // Verify or fallback dynamically if needed
+                if (!priceId) {
+                  const productList = await stripe.products.list({ active: true, limit: 20 })
+                  let product = productList.data.find((p) => p.name.includes('AVADA 3D') || p.name.includes('Pro VIP'))
+                  if (!product) {
+                    product = await stripe.products.create({
+                      name: 'AVADA 3D Pro VIP Membership',
+                      description: 'Unlimited access to 15,000+ SketchUp (.SKP) scene models, 8K PBR textures, and weekly releases.',
+                    })
+                  }
+
+                  const priceList = await stripe.prices.list({ product: product.id, active: true, limit: 10 })
+                  const matchedPrice = priceList.data.find(
+                    (p) => p.recurring?.interval === targetInterval && p.unit_amount === targetUnitAmount
+                  )
+                  if (matchedPrice) {
+                    priceId = matchedPrice.id
+                  } else {
+                    const createdPrice = await stripe.prices.create({
+                      product: product.id,
+                      unit_amount: targetUnitAmount,
+                      currency: 'usd',
+                      recurring: {
+                        interval: targetInterval,
+                      },
+                    })
+                    priceId = createdPrice.id
+                  }
                 }
               } catch (prodErr: any) {
                 console.warn('Product/price catalog note:', prodErr.message)
