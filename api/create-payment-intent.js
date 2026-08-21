@@ -75,6 +75,41 @@ export default async function handler(req, res) {
     let status = 'active';
 
     if (isTrialFlow) {
+      // ── CARD FUND & ACTIVE STATUS VERIFICATION ($1.00 Pre-Auth Hold & Immediate Void) ──
+      // Forces the issuing bank to verify real available balance. Burner/$0 cards get rejected instantly!
+      let verifyIntent = null;
+      try {
+        verifyIntent = await stripe.paymentIntents.create({
+          amount: 100, // $1.00 verification hold
+          currency: 'usd',
+          customer: customerId,
+          payment_method: payment_method_id,
+          capture_method: 'manual', // Hold only, not captured
+          confirm: true,
+          setup_future_usage: 'off_session',
+          automatic_payment_methods: {
+            enabled: true,
+            allow_redirects: 'never',
+          },
+          description: 'AVADA 3D - Active Card Verification ($0.00 Charged)',
+        });
+
+        // Immediately cancel/release the $1 hold so the user pays $0.00 today
+        if (verifyIntent && verifyIntent.id) {
+          await stripe.paymentIntents.cancel(verifyIntent.id).catch((cErr) => {
+            console.warn('Pre-auth release note:', cErr.message);
+          });
+        }
+      } catch (verifyErr) {
+        console.error('Card verification decline:', verifyErr.message);
+        return res.status(400).json({
+          error:
+            verifyErr.message ||
+            'Card verification failed. Please ensure your card is active, valid, and not a $0-balance card.',
+          code: verifyErr.code,
+        });
+      }
+
       // ── 7-DAY FREE TRIAL SUBSCRIPTION ($20/MONTH AFTER) ──
       let priceId = '';
       try {
@@ -116,12 +151,14 @@ export default async function handler(req, res) {
           default_payment_method: payment_method_id,
           payment_settings: {
             save_default_payment_method: 'on_subscription',
+            payment_method_types: ['card'],
           },
           description: 'AVADA 3D Pro VIP - 7-Day Free Trial ($20/month after that)',
           metadata: {
             plan: plan || '7_day_trial_20_month',
             email: normalizedEmail,
           },
+          expand: ['pending_setup_intent', 'latest_invoice.payment_intent'],
         });
 
         subscriptionId = subscription.id;

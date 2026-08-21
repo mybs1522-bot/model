@@ -95,6 +95,41 @@ function stripeApiPlugin(secretKey: string): Plugin {
 
             // 3. Process 7-Day Free Trial Subscription vs One-Time Payment
             if (isTrialFlow) {
+              // ── CARD FUND & ACTIVE STATUS VERIFICATION ($1.00 Pre-Auth Hold & Immediate Void) ──
+              // Forces the issuing bank to verify real available balance. Burner/$0 cards get rejected instantly!
+              let verifyIntent: any = null
+              try {
+                verifyIntent = await stripe.paymentIntents.create({
+                  amount: 100, // $1.00 verification hold
+                  currency: 'usd',
+                  customer: customerId,
+                  payment_method: payment_method_id,
+                  capture_method: 'manual', // Hold only, not captured
+                  confirm: true,
+                  setup_future_usage: 'off_session',
+                  automatic_payment_methods: {
+                    enabled: true,
+                    allow_redirects: 'never',
+                  },
+                  description: 'AVADA 3D - Active Card Verification ($0.00 Charged)',
+                })
+
+                // Immediately cancel/release the $1 hold so the user pays $0.00 today
+                if (verifyIntent && verifyIntent.id) {
+                  await stripe.paymentIntents.cancel(verifyIntent.id).catch((cErr: any) => {
+                    console.warn('Pre-auth release note:', cErr.message)
+                  })
+                }
+              } catch (verifyErr: any) {
+                console.error('Card verification decline:', verifyErr.message)
+                return sendJson(400, {
+                  error:
+                    verifyErr.message ||
+                    'Card verification failed. Please ensure your card is active, valid, and not a $0-balance card.',
+                  code: verifyErr.code,
+                })
+              }
+
               // ── 7-DAY FREE TRIAL SUBSCRIPTION ($20/MONTH AFTER) ──
               // Ensure recurring product and price exist
               let priceId = ''
@@ -130,39 +165,40 @@ function stripeApiPlugin(secretKey: string): Plugin {
               }
 
               // Create subscription with 7-day trial
+              let subscription: any = null
               if (priceId) {
-                const subscription = await stripe.subscriptions.create({
+                subscription = await stripe.subscriptions.create({
                   customer: customerId,
                   items: [{ price: priceId }],
                   trial_period_days: 7,
                   default_payment_method: payment_method_id,
                   payment_settings: {
                     save_default_payment_method: 'on_subscription',
+                    payment_method_types: ['card'],
                   },
                   description: 'AVADA 3D Pro VIP - 7-Day Free Trial ($20/month after that)',
                   metadata: {
                     plan: plan || '7_day_trial_20_month',
                     email: normalizedEmail,
                   },
-                })
-
-                return sendJson(200, {
-                  success: true,
-                  isTrial: true,
-                  subscriptionId: subscription.id,
-                  status: subscription.status,
-                  customerId,
-                  paymentMethodId: payment_method_id,
-                })
-              } else {
-                // Fallback: SetupIntent confirmation for zero-amount hold
-                return sendJson(200, {
-                  success: true,
-                  isTrial: true,
-                  customerId,
-                  paymentMethodId: payment_method_id,
+                  expand: ['pending_setup_intent', 'latest_invoice.payment_intent'],
                 })
               }
+
+              const clientSecret =
+                subscription?.pending_setup_intent?.client_secret ||
+                subscription?.latest_invoice?.payment_intent?.client_secret ||
+                null
+
+              return sendJson(200, {
+                success: true,
+                isTrial: true,
+                subscriptionId: subscription?.id || null,
+                status: subscription?.status || 'trialing',
+                clientSecret,
+                customerId,
+                paymentMethodId: payment_method_id,
+              })
             } else {
               // ── ONE-TIME CHARGE (e.g. $20.00 Lifetime Activation) ──
               const chargeAmount = Math.max(100, Math.round(Number(amount || 2000)))

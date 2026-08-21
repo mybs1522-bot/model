@@ -286,6 +286,16 @@ export function CardPaymentForm({
           throw new Error(data.error || "Card verification failed. Please check that your card has funds and try again.");
         }
 
+        // Handle 3D Secure / SCA popup if required by issuing bank
+        if (data.clientSecret && (data.status === "requires_action" || data.status === "incomplete")) {
+          const { error: actionError } = await (stripe as any).handleNextAction({
+            clientSecret: data.clientSecret,
+          });
+          if (actionError) {
+            throw new Error(actionError.message || "Card authentication failed. Please verify with your bank.");
+          }
+        }
+
         const last4 = paymentMethod.card?.last4 || "4242";
 
         // Save session in localStorage for seamless 1-click upsell
