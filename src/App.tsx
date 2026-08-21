@@ -616,7 +616,7 @@ export function App() {
               );
             })()}
 
-            {/* Mobile More Models Callout Link */}
+            {/* Mobile Pro Plan Activation Callout Link */}
             <div
               onClick={() => setShowActivateModal(true)}
               className="p-3 rounded-2xl bg-gradient-to-r from-emerald-950 via-slate-900 to-black border-2 border-emerald-500 text-white flex items-center justify-between shadow-md cursor-pointer hover:border-emerald-400 transition"
@@ -626,12 +626,12 @@ export function App() {
                   <Sparkles className="size-4" />
                 </div>
                 <div>
-                  <div className="text-xs font-black text-white">More Models</div>
-                  <div className="text-[10px] text-slate-300">Lifetime access • $20 only</div>
+                  <div className="text-xs font-black text-white">Activate Pro Plan</div>
+                  <div className="text-[10px] text-slate-300">To see all models (15,000+ Models)</div>
                 </div>
               </div>
               <span className="px-3 py-1 rounded-xl bg-[#10b981] text-black font-black text-[10px] shadow-sm">
-                Pay $20 →
+                Activate →
               </span>
             </div>
           </div>
@@ -685,7 +685,7 @@ export function App() {
                 </div>
               ))}
 
-              {/* Desktop More Models Link Card in Marquee */}
+              {/* Desktop Pro Plan Link Card in Marquee */}
               <div
                 onClick={() => setShowActivateModal(true)}
                 className="w-[260px] sm:w-[280px] flex-none group rounded-2xl bg-gradient-to-br from-emerald-950 via-slate-900 to-black border-2 border-emerald-500 hover:border-emerald-400 transition duration-300 overflow-hidden flex flex-col justify-between shadow-xl cursor-pointer p-4"
@@ -694,14 +694,14 @@ export function App() {
                   <div className="size-9 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 flex items-center justify-center font-black">
                     <Sparkles className="size-5" />
                   </div>
-                  <h4 className="text-sm font-black text-white">Unlock More Models</h4>
-                  <p className="text-xs text-slate-300">Permanent lifetime access to all models, full category packs & textures.</p>
+                  <h4 className="text-sm font-black text-white">Activate Pro Plan</h4>
+                  <p className="text-xs text-slate-300">Activate Pro Plan to see all models (15,000+ Models) with unlimited downloads & textures.</p>
                 </div>
                 <button
                   type="button"
                   className="w-full mt-3 py-2.5 rounded-xl bg-[#10b981] hover:bg-[#059669] text-black font-black text-xs transition flex items-center justify-center gap-1 shadow-md"
                 >
-                  <span>Pay $20 to Activate →</span>
+                  <span>Activate Pro Plan →</span>
                 </button>
               </div>
             </div>
@@ -1083,7 +1083,7 @@ export function App() {
         </div>
       )}
 
-      {/* ══════ $20 ACTIVATION POPUP MODAL ══════ */}
+      {/* ══════ PRO PLAN ACTIVATION POPUP MODAL ══════ */}
       {showActivateModal && (
         <div className="fixed inset-0 z-[300] bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
           <div className="relative bg-white rounded-2xl sm:rounded-3xl max-w-md w-full p-4 sm:p-6 border-2 border-emerald-500 shadow-2xl space-y-3 my-auto max-h-[94vh] overflow-y-auto text-slate-900 animate-in fade-in zoom-in-95">
@@ -1099,20 +1099,20 @@ export function App() {
             {/* Modal Header */}
             <div className="text-center space-y-2 pr-6 sm:pr-0">
               <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-bold">
-                <Sparkles className="size-3 text-emerald-600" /> One-Time Lifetime Pass • $20 Only
+                <Sparkles className="size-3 text-emerald-600" /> Pro Plan Access • 15,000+ Models
               </div>
               <h3 className="text-lg sm:text-xl font-black text-slate-900 tracking-tight">
-                Activate Full Master Library
+                Activate Pro Plan to See All Models
               </h3>
               <p className="text-[11px] sm:text-xs text-slate-500 leading-tight">
-                Pay $20 to permanently activate and download all SketchUp (.SKP) scene models, furniture sets & 8K textures.
+                Unlock instant access to all 15,000+ SketchUp (.SKP) scene models, complete furniture packs & 8K PBR textures.
               </p>
             </div>
 
             {/* Embedded Payment Form */}
             <CardPaymentForm
-              sourceLocation="activate_20_popup_modal"
-              buttonText="Pay $20 & Activate Full Library"
+              sourceLocation="activate_pro_popup_modal"
+              buttonText="Activate Pro Plan (15,000+ Models)"
               allowSavedCard={false}
               amountInCents={2000}
               isTrial={false}
@@ -1121,7 +1121,7 @@ export function App() {
               deliveryFee="$0.00"
               discountAmount="$0.00"
               totalPrice="$20.00"
-              deliveryAddressLine1="Lifetime VIP Access: All SketchUp Scene Models"
+              deliveryAddressLine1="Pro Plan VIP Access: 15,000+ SketchUp Scene Models"
               deliveryAddressLine2="+ Free SketchUp Course & 8K Textures Included"
               onSuccess={() => {
                 setShowActivateModal(false);

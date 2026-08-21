@@ -366,7 +366,7 @@ export function VaultPage({ onNavigateHome, onOpenActivateModal }: VaultPageProp
               onClick={handleOpenActivate}
               className="text-xs font-bold text-emerald-400 hover:text-emerald-300 underline flex items-center gap-1"
             >
-              <span>More Models ($20 Activation) →</span>
+              <span>Activate Pro Plan to see all models (15,000+ Models) →</span>
             </button>
           </div>
 
@@ -521,7 +521,7 @@ export function VaultPage({ onNavigateHome, onOpenActivateModal }: VaultPageProp
               </div>
             ))}
 
-            {/* INLINE "MORE MODELS" ACTIVATION CARD */}
+            {/* INLINE "ACTIVATE PRO PLAN" CARD */}
             <div
               onClick={handleOpenActivate}
               className="group rounded-2xl bg-gradient-to-br from-emerald-950/90 via-slate-900 to-black border-2 border-emerald-500 p-4 flex flex-col justify-between hover:border-emerald-400 transition-all duration-300 shadow-xl cursor-pointer hover:scale-[1.02]"
@@ -532,13 +532,13 @@ export function VaultPage({ onNavigateHome, onOpenActivateModal }: VaultPageProp
                 </div>
                 <div className="space-y-1">
                   <span className="text-[9px] font-mono font-bold text-emerald-400 tracking-wider uppercase block">
-                    VIP Library
+                    Pro Plan Library
                   </span>
                   <h4 className="text-xs sm:text-sm font-black text-white leading-tight">
-                    More Models
+                    Activate Pro Plan
                   </h4>
                   <p className="text-[10px] text-slate-300 leading-snug">
-                    Unlock all models, texture archives & lifetime updates.
+                    Activate Pro Plan to see all models (15,000+ Models) & lifetime updates.
                   </p>
                 </div>
               </div>
@@ -547,7 +547,7 @@ export function VaultPage({ onNavigateHome, onOpenActivateModal }: VaultPageProp
                 type="button"
                 className="w-full mt-3 py-2 rounded-xl bg-[#10b981] hover:bg-[#059669] text-black font-black text-[11px] transition flex items-center justify-center gap-1 shadow-md"
               >
-                <span>Pay $20 to Activate →</span>
+                <span>Activate Pro Plan (15,000+ Models) →</span>
               </button>
             </div>
           </div>
@@ -570,7 +570,7 @@ export function VaultPage({ onNavigateHome, onOpenActivateModal }: VaultPageProp
         </div>
       </main>
 
-      {/* ══════ $20 ACTIVATION CHECKOUT MODAL ══════ */}
+      {/* ══════ PRO PLAN ACTIVATION CHECKOUT MODAL ══════ */}
       {showActivateModal && (
         <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
           <div className="relative bg-white text-slate-900 border-2 border-emerald-500 rounded-3xl max-w-md w-full p-4 sm:p-6 shadow-2xl space-y-3 my-auto max-h-[94vh] overflow-y-auto animate-in fade-in zoom-in-95">
@@ -584,19 +584,19 @@ export function VaultPage({ onNavigateHome, onOpenActivateModal }: VaultPageProp
 
             <div className="text-center space-y-1.5 pr-6 sm:pr-0">
               <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-bold">
-                <Sparkles className="size-3 text-emerald-600" /> One-Time Lifetime Access • $20
+                <Sparkles className="size-3 text-emerald-600" /> Pro Plan Access • 15,000+ Models
               </div>
               <h3 className="text-lg sm:text-xl font-black text-slate-900 tracking-tight">
-                Activate Full Master Library
+                Activate Pro Plan to See All Models
               </h3>
               <p className="text-xs text-slate-500 leading-tight">
-                Pay $20 to permanently activate and download all SketchUp (.SKP) scenes, furniture sets & 8K textures.
+                Activate Pro Plan to permanently unlock and download all 15,000+ SketchUp (.SKP) scenes, furniture sets & 8K textures.
               </p>
             </div>
 
             <CardPaymentForm
-              sourceLocation="vault_activate_20_modal"
-              buttonText="Pay $20 & Activate Full Library"
+              sourceLocation="vault_activate_pro_modal"
+              buttonText="Activate Pro Plan (15,000+ Models)"
               allowSavedCard={false}
               amountInCents={2000}
               isTrial={false}
@@ -605,11 +605,11 @@ export function VaultPage({ onNavigateHome, onOpenActivateModal }: VaultPageProp
               deliveryFee="$0.00"
               discountAmount="$0.00"
               totalPrice="$20.00"
-              deliveryAddressLine1="Lifetime VIP Access: All SketchUp Scene Models"
+              deliveryAddressLine1="Pro Plan VIP Access: 15,000+ SketchUp Scene Models"
               deliveryAddressLine2="+ Free SketchUp Course & 8K Textures Included"
               onSuccess={() => {
                 setShowActivateModal(false);
-                setDownloadSuccessToast("✓ Master Library Activated! Unlimited downloads unlocked.");
+                setDownloadSuccessToast("✓ Pro Plan Activated! Unlimited downloads unlocked.");
               }}
             />
           </div>
