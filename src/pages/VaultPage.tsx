@@ -21,6 +21,7 @@ import manifestData from "@/data/modelsManifest.json";
 import vaultDriveData from "@/data/vaultDriveModels.json";
 
 import { CardPaymentForm } from "@/components/ui/card-payment-form";
+import { chargeSavedCardUpsell } from "@/lib/stripe";
 
 interface VaultPageProps {
   onNavigateHome?: () => void;
@@ -40,12 +41,42 @@ export function VaultPage({ onNavigateHome, onOpenActivateModal }: VaultPageProp
   const [downloadSuccessToast, setDownloadSuccessToast] = useState<string | null>(null);
   const [activePreviewModel, setActivePreviewModel] = useState<any | null>(null);
   const [showActivateModal, setShowActivateModal] = useState(false);
+  const [isActivating, setIsActivating] = useState(false);
 
-  const handleOpenActivate = () => {
-    if (onOpenActivateModal) {
-      onOpenActivateModal();
+  const handleOpenActivate = async () => {
+    const savedEmail = localStorage.getItem("avada_user_email") || email;
+    const hasSavedCard = localStorage.getItem("avada_has_saved_card") === "true";
+    const selectedCycle = localStorage.getItem("avada_selected_cycle") || "monthly";
+    const amountInCents = selectedCycle === "yearly" ? 18000 : 2000;
+
+    // 1-Click Instant Charge with the card saved during trial sign-up (Zero notifications / Zero second step)
+    if (savedEmail && (hasSavedCard || localStorage.getItem("avada_stripe_customer_id"))) {
+      setIsActivating(true);
+      try {
+        await chargeSavedCardUpsell(amountInCents);
+        localStorage.setItem("avada_pro_unlocked", "true");
+        setDownloadSuccessToast(
+          selectedCycle === "yearly"
+            ? "✓ Pro Plan Activated ($180/yr • 25% OFF)! All 15,000+ models unlocked."
+            : "✓ Pro Plan Activated ($20/mo)! All 15,000+ models unlocked."
+        );
+      } catch (err: any) {
+        console.warn("1-click charge note:", err);
+        // Fallback: If saved card fails, show modal
+        if (onOpenActivateModal) {
+          onOpenActivateModal();
+        } else {
+          setShowActivateModal(true);
+        }
+      } finally {
+        setIsActivating(false);
+      }
     } else {
-      setShowActivateModal(true);
+      if (onOpenActivateModal) {
+        onOpenActivateModal();
+      } else {
+        setShowActivateModal(true);
+      }
     }
   };
 
@@ -390,9 +421,10 @@ export function VaultPage({ onNavigateHome, onOpenActivateModal }: VaultPageProp
             </h2>
             <button
               onClick={handleOpenActivate}
-              className="text-xs font-bold text-emerald-400 hover:text-emerald-300 underline flex items-center gap-1"
+              disabled={isActivating}
+              className="text-xs font-bold text-emerald-400 hover:text-emerald-300 underline flex items-center gap-1 disabled:opacity-50"
             >
-              <span>Activate Pro Plan to see all models (15,000+ Models) →</span>
+              <span>{isActivating ? "Activating Pro Plan..." : "Activate Pro Plan to see all models (15,000+ Models) →"}</span>
             </button>
           </div>
 
@@ -571,9 +603,10 @@ export function VaultPage({ onNavigateHome, onOpenActivateModal }: VaultPageProp
 
               <button
                 type="button"
-                className="w-full mt-3 py-2 rounded-xl bg-[#10b981] hover:bg-[#059669] text-black font-black text-[11px] transition flex items-center justify-center gap-1 shadow-md"
+                disabled={isActivating}
+                className="w-full mt-3 py-2 rounded-xl bg-[#10b981] hover:bg-[#059669] text-black font-black text-[11px] transition flex items-center justify-center gap-1 shadow-md disabled:opacity-50"
               >
-                <span>Activate Pro Plan (15,000+ Models) →</span>
+                <span>{isActivating ? "Activating Pro Plan..." : "Activate Pro Plan (15,000+ Models) →"}</span>
               </button>
             </div>
           </div>

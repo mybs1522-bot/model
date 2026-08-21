@@ -262,6 +262,17 @@ function stripeApiPlugin(secretKey: string): Plugin {
               }
             }
 
+            if (!targetPaymentMethodId && targetCustomerId) {
+              try {
+                const pms = await stripe.paymentMethods.list({ customer: targetCustomerId, type: 'card', limit: 1 })
+                if (pms.data.length > 0) {
+                  targetPaymentMethodId = pms.data[0].id
+                }
+              } catch (pmErr: any) {
+                console.warn('Payment method lookup note:', pmErr.message)
+              }
+            }
+
             if (!targetCustomerId) {
               return sendJson(400, { error: 'No saved customer found for this email' })
             }

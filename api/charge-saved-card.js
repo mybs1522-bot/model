@@ -61,18 +61,30 @@ export default async function handler(req, res) {
       }
     }
 
+    if (!targetPaymentMethodId && targetCustomerId) {
+      try {
+        const pms = await stripe.paymentMethods.list({ customer: targetCustomerId, type: 'card', limit: 1 });
+        if (pms.data.length > 0) {
+          targetPaymentMethodId = pms.data[0].id;
+        }
+      } catch (pmErr) {
+        console.warn('Payment method lookup note:', pmErr.message);
+      }
+    }
+
     if (!targetCustomerId) {
       return res.status(400).json({ error: 'No saved customer found for this email' });
     }
 
+    const chargeAmount = Math.max(100, Math.round(Number(amount)));
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: Math.round(Number(amount)),
+      amount: chargeAmount,
       currency: 'usd',
       customer: targetCustomerId,
       payment_method: targetPaymentMethodId || undefined,
       off_session: true,
       confirm: true,
-      description: 'AVADA 3D - 3,000+ Models VIP Lifetime Upsell ($29.00)',
+      description: `AVADA 3D - Pro VIP Plan Activation ($${(chargeAmount / 100).toFixed(2)})`,
     });
 
     // Send instant download delivery email for VIP upsell (non-blocking)

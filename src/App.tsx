@@ -31,7 +31,6 @@ import {
   Clock,
   Shield,
   Trophy,
-  Sparkles,
 } from "lucide-react";
 
 export interface ModelItem {
@@ -204,7 +203,6 @@ export function App() {
   const [selectedSubCategory, setSelectedSubCategory] = useState<string>("all-furniture");
   const [activeModel, setActiveModel] = useState<ModelItem | null>(null);
   const [showCheckoutModal, setShowCheckoutModal] = useState(false);
-  const [showActivateModal, setShowActivateModal] = useState(false);
   const [billingCycle, setBillingCycle] = useState<"monthly" | "yearly">("monthly");
   const [searchTermIdx, setSearchTermIdx] = useState(0);
   const [mobileBlinkIndex, setMobileBlinkIndex] = useState(0);
@@ -350,7 +348,6 @@ export function App() {
     return (
       <VaultPage
         onNavigateHome={() => navigateTo("main")}
-        onOpenActivateModal={() => setShowActivateModal(true)}
       />
     );
   }
@@ -1098,57 +1095,9 @@ export function App() {
                 if (userEmail) {
                   localStorage.setItem("avada_user_email", userEmail);
                 }
+                localStorage.setItem("avada_selected_cycle", billingCycle);
                 localStorage.setItem("avada_trial_active", "true");
                 setShowCheckoutModal(false);
-                navigateTo("vault");
-              }}
-            />
-          </div>
-        </div>
-      )}
-
-      {/* ══════ PRO PLAN ACTIVATION POPUP MODAL ══════ */}
-      {showActivateModal && (
-        <div className="fixed inset-0 z-[300] bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
-          <div className="relative bg-white rounded-2xl sm:rounded-3xl max-w-md w-full p-4 sm:p-6 border-2 border-emerald-500 shadow-2xl space-y-3 my-auto max-h-[94vh] overflow-y-auto text-slate-900 animate-in fade-in zoom-in-95">
-            {/* Close Button */}
-            <button
-              type="button"
-              onClick={() => setShowActivateModal(false)}
-              className="absolute top-3.5 right-3.5 p-1.5 rounded-full bg-slate-100 text-slate-500 hover:text-slate-900 hover:bg-slate-200 transition cursor-pointer"
-            >
-              <X className="size-4" />
-            </button>
-
-            {/* Modal Header */}
-            <div className="text-center space-y-2 pr-6 sm:pr-0">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-bold">
-                <Sparkles className="size-3 text-emerald-600" /> Pro Plan Access • 15,000+ Models
-              </div>
-              <h3 className="text-lg sm:text-xl font-black text-slate-900 tracking-tight">
-                Activate Pro Plan to See All Models
-              </h3>
-              <p className="text-[11px] sm:text-xs text-slate-500 leading-tight">
-                Unlock instant access to all 15,000+ SketchUp (.SKP) scene models, complete furniture packs & 8K PBR textures.
-              </p>
-            </div>
-
-            {/* Embedded Payment Form */}
-            <CardPaymentForm
-              sourceLocation="activate_pro_popup_modal"
-              buttonText="Activate Pro Plan (15,000+ Models)"
-              allowSavedCard={false}
-              amountInCents={2000}
-              isTrial={false}
-              hideOrderDetails={true}
-              itemTotal="$20.00"
-              deliveryFee="$0.00"
-              discountAmount="$0.00"
-              totalPrice="$20.00"
-              deliveryAddressLine1="Pro Plan VIP Access: 15,000+ SketchUp Scene Models"
-              deliveryAddressLine2="+ Free SketchUp Course & 8K Textures Included"
-              onSuccess={() => {
-                setShowActivateModal(false);
                 navigateTo("vault");
               }}
             />
