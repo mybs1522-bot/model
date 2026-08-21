@@ -415,19 +415,6 @@ export function CardPaymentForm({
           )}
         </div>
 
-        {/* Compact Total & Card Fund Verification Disclaimer */}
-        <div className="p-2 sm:p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-[11px] sm:text-xs space-y-1">
-          <div className="flex items-center justify-between font-bold">
-            <span className="text-slate-700">Total Due Today:</span>
-            <span className="text-emerald-700 font-mono text-xs sm:text-sm">{totalPrice} <span className="text-[10px] text-slate-500 font-normal">($0 for 7 days)</span></span>
-          </div>
-          {isTrial && (
-            <p className="text-[10px] text-slate-500 leading-tight pt-0.5">
-              ℹ️ Temporary $1 bank pre-auth check is reversed immediately. <strong>$0.00 charged today</strong>. Cancel anytime in 1 click.
-            </p>
-          )}
-        </div>
-
         {/* Error Message Box */}
         {errorMessage && (
           <div className="p-2 rounded-xl bg-red-50 border border-red-200 text-[11px] sm:text-xs text-red-700 flex items-start gap-2 animate-in fade-in">

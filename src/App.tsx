@@ -22,7 +22,6 @@ import {
   Utensils,
   Droplets,
   Box,
-  Sparkles,
   X,
   Zap,
   Timer,
@@ -959,10 +958,6 @@ export function App() {
 
             {/* Modal Header */}
             <div className="text-center space-y-2 pr-6 sm:pr-0">
-              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 text-[10px] sm:text-xs font-bold">
-                <Sparkles className="size-3 text-emerald-600" /> 7-Day Free Trial • $0.00 Due Today
-              </div>
-
               {/* Overlapping Circular Model Thumbnails Strip */}
               <div className="space-y-1.5 py-0.5">
                 <div className="flex items-center justify-center -space-x-2 overflow-x-auto scrollbar-none py-0.5 px-1 max-w-full">
@@ -996,7 +991,7 @@ export function App() {
             {/* Embedded Compact Payment Form */}
             <CardPaymentForm
               sourceLocation="checkout_popup_modal"
-              buttonText="Start 7-Day Free Trial ($0.00 Due Today)"
+              buttonText="Start 7-Day Free Trial"
               allowSavedCard={false}
               amountInCents={0}
               isTrial={true}
