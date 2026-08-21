@@ -320,5 +320,29 @@ export default defineConfig(({ mode }) => {
         '@': path.resolve(import.meta.dirname, './src'),
       },
     },
+    build: {
+      target: 'esnext',
+      minify: 'esbuild',
+      cssMinify: true,
+      sourcemap: false,
+      chunkSizeWarningLimit: 1000,
+      rollupOptions: {
+        output: {
+          manualChunks(id: string) {
+            if (id.includes('node_modules')) {
+              if (id.includes('react') || id.includes('scheduler')) {
+                return 'vendor-react'
+              }
+              if (id.includes('@stripe')) {
+                return 'vendor-stripe'
+              }
+              if (id.includes('lucide-react')) {
+                return 'vendor-icons'
+              }
+            }
+          },
+        },
+      },
+    },
   }
 })

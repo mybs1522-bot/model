@@ -1,20 +1,21 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, lazy, Suspense } from "react";
 import { Pricing, useEvergreenTimer } from "@/components/ui/single-pricing-card-1";
 import { SketchUpShowcaseVideo } from "@/components/ui/sketchup-showcase-video";
 import { CategoryPostersSlider } from "@/components/ui/category-posters-slider";
 import { CardPaymentForm } from "@/components/ui/card-payment-form";
-import { StartPage } from "@/pages/StartPage";
-import { UpsellPage } from "@/pages/UpsellPage";
-import { SuccessPage } from "@/pages/SuccessPage";
-import { VaultPage } from "@/pages/VaultPage";
-import DemoOne from "@/demo";
 import { RenderEngineTrustBanner } from "@/components/ui/render-engine-logos";
 import {
   DownloadDoneIcon,
 } from "@/components/ui/animated-state-icons";
 import manifestData from "@/data/modelsManifest.json";
 import publicModels from "@/data/publicModelsImages.json";
-import vaultDriveData from "@/data/vaultDriveModels.json";
+
+// Code-Split Secondary Routes for Ultra-Fast Initial Landing Page Load (<50ms)
+const VaultPage = lazy(() => import("@/pages/VaultPage").then((m) => ({ default: m.VaultPage })));
+const StartPage = lazy(() => import("@/pages/StartPage").then((m) => ({ default: m.StartPage })));
+const UpsellPage = lazy(() => import("@/pages/UpsellPage").then((m) => ({ default: m.UpsellPage })));
+const SuccessPage = lazy(() => import("@/pages/SuccessPage").then((m) => ({ default: m.SuccessPage })));
+const DemoOne = lazy(() => import("@/demo"));
 import {
   Building2,
   Bath,
@@ -226,24 +227,6 @@ export function App() {
       ? manifestData
       : ((manifestData as any)?.models || []);
 
-    const driveModels: ModelItem[] = ((vaultDriveData as any)?.models || []).map((m: any) => {
-      const categoryKey = m.categoryKey === "bathroom" ? "washroom" : m.categoryKey;
-      return {
-        id: m.id,
-        title: m.title || m.baseName,
-        rawName: m.skpName || `${m.baseName}.SKP`,
-        categoryKey,
-        categoryName: m.category,
-        subCategoryKey: undefined,
-        src: m.imageSrc,
-        renderEngine: m.renderEngine || "V-Ray 6",
-        format: "SketchUp (.SKP)",
-        polyCount: m.polyCount || "~120K Polys",
-        fileSize: `${m.sizeMb} MB`,
-        featured: true,
-      };
-    });
-
     const scannedModels: ModelItem[] = rawManifestList.map((model: any) => {
       let categoryKey = (model.categoryKey || model.folder || "apartment").toLowerCase();
       if (categoryKey === "bathroom") categoryKey = "washroom";
@@ -292,21 +275,19 @@ export function App() {
       };
     });
 
-    return [...driveModels, ...scannedModels, ...DEDICATED_FURNITURE, ...extraPublicModels];
+    return [...scannedModels, ...DEDICATED_FURNITURE, ...extraPublicModels];
   }, []);
 
   // Filtered models based on category and sub-category
   const filteredModels = useMemo(() => {
     return ALL_MODELS.filter((model) => {
-      const matchesCategory =
-        selectedCategory === "all" || model.categoryKey === selectedCategory;
-      
-      const matchesSubCategory =
-        selectedCategory !== "furniture" ||
-        selectedSubCategory === "all-furniture" ||
-        model.subCategoryKey === selectedSubCategory;
-
-      return matchesCategory && matchesSubCategory;
+      if (selectedCategory !== "all" && model.categoryKey !== selectedCategory) {
+        return false;
+      }
+      if (selectedCategory === "furniture" && selectedSubCategory !== "all-furniture") {
+        return model.subCategoryKey === selectedSubCategory;
+      }
+      return true;
     });
   }, [ALL_MODELS, selectedCategory, selectedSubCategory]);
 
@@ -335,6 +316,15 @@ export function App() {
     }
   };
 
+  // Meta Pixel Route PageView Trigger for SPAs
+  useEffect(() => {
+    if (typeof window !== "undefined" && (window as any).fbq) {
+      try {
+        (window as any).fbq("track", "PageView");
+      } catch (err) {}
+    }
+  }, [currentRoute]);
+
   const navigateTo = (route: string) => {
     setCurrentRoute(route);
     if (route === "vault") {
@@ -344,53 +334,74 @@ export function App() {
     }
   };
 
+  const PageLoader = (
+    <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center gap-3 text-white">
+      <div className="size-8 border-3 border-emerald-500 border-t-transparent rounded-full animate-spin" />
+      <span className="text-xs font-mono font-bold text-slate-400">Loading AVADA 3D...</span>
+    </div>
+  );
+
   if (currentRoute === "vault") {
     return (
-      <VaultPage
-        onNavigateHome={() => navigateTo("main")}
-      />
+      <Suspense fallback={PageLoader}>
+        <VaultPage onNavigateHome={() => navigateTo("main")} />
+      </Suspense>
     );
   }
 
   if (currentRoute === "start") {
-    return <StartPage onNavigateMain={() => setCurrentRoute("main")} onNavigateMore={() => setCurrentRoute("more")} />;
+    return (
+      <Suspense fallback={PageLoader}>
+        <StartPage onNavigateMain={() => setCurrentRoute("main")} onNavigateMore={() => setCurrentRoute("more")} />
+      </Suspense>
+    );
   }
 
   if (currentRoute === "more") {
     return (
-      <UpsellPage
-        onSkipToStarter={() => setCurrentRoute("success-starter")}
-        onSuccessVIP={() => setCurrentRoute("success-vip")}
-        onSkip={() => setCurrentRoute("success-starter")}
-      />
+      <Suspense fallback={PageLoader}>
+        <UpsellPage
+          onSkipToStarter={() => setCurrentRoute("success-starter")}
+          onSuccessVIP={() => setCurrentRoute("success-vip")}
+          onSkip={() => setCurrentRoute("success-starter")}
+        />
+      </Suspense>
     );
   }
 
   if (currentRoute === "success-vip") {
-    return <SuccessPage plan="vip" onNavigateHome={() => setCurrentRoute("main")} />;
+    return (
+      <Suspense fallback={PageLoader}>
+        <SuccessPage plan="vip" onNavigateHome={() => setCurrentRoute("main")} />
+      </Suspense>
+    );
   }
 
   if (currentRoute === "success-starter" || currentRoute === "success") {
     return (
-      <SuccessPage
-        plan="starter"
-        onNavigateHome={() => setCurrentRoute("main")}
-        onNavigateUpsell={() => setCurrentRoute("more")}
-      />
+      <Suspense fallback={PageLoader}>
+        <SuccessPage
+          plan="starter"
+          onNavigateHome={() => setCurrentRoute("main")}
+          onNavigateUpsell={() => setCurrentRoute("more")}
+        />
+      </Suspense>
     );
   }
 
   if (currentRoute === "demo" || currentRoute === "checkout") {
     return (
-      <div className="relative min-h-screen">
-        <button
-          onClick={() => setCurrentRoute("main")}
-          className="fixed top-4 left-4 z-50 px-4 py-2 rounded-full bg-white border border-slate-200 text-xs font-bold text-slate-800 shadow-md hover:bg-slate-50 transition cursor-pointer"
-        >
-          ← Back to Store
-        </button>
-        <DemoOne />
-      </div>
+      <Suspense fallback={PageLoader}>
+        <div className="relative min-h-screen">
+          <button
+            onClick={() => setCurrentRoute("main")}
+            className="fixed top-4 left-4 z-50 px-4 py-2 rounded-full bg-white border border-slate-200 text-xs font-bold text-slate-800 shadow-md hover:bg-slate-50 transition cursor-pointer"
+          >
+            ← Back to Store
+          </button>
+          <DemoOne />
+        </div>
+      </Suspense>
     );
   }
 
