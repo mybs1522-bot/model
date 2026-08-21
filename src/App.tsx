@@ -205,6 +205,7 @@ export function App() {
   const [activeModel, setActiveModel] = useState<ModelItem | null>(null);
   const [showCheckoutModal, setShowCheckoutModal] = useState(false);
   const [showActivateModal, setShowActivateModal] = useState(false);
+  const [billingCycle, setBillingCycle] = useState<"monthly" | "yearly">("monthly");
   const [searchTermIdx, setSearchTermIdx] = useState(0);
   const [mobileBlinkIndex, setMobileBlinkIndex] = useState(0);
 
@@ -420,7 +421,7 @@ export function App() {
               }}
               className="px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-emerald-600 text-white font-bold text-xs transition shadow-sm cursor-pointer"
             >
-              <span>Claim Free Trial ($0)</span>
+              <span>Start 7-Day Free Trial</span>
             </a>
           </nav>
         </div>
@@ -839,7 +840,7 @@ export function App() {
               className="px-8 py-3.5 rounded-full bg-[#10b981] hover:bg-[#059669] text-black font-black text-xs sm:text-sm shadow-md hover:shadow-emerald-500/20 transition-all inline-flex items-center gap-2 cursor-pointer active:scale-95"
             >
               <Zap className="size-4 fill-current" />
-              <span>Get The Entire All-In-One Bundle for $20</span>
+              <span>Start 7-Day Free Trial</span>
             </button>
           </div>
         </div>
@@ -1013,7 +1014,7 @@ export function App() {
             onClick={() => setShowCheckoutModal(true)}
             className="px-3.5 sm:px-5 py-2.5 rounded-xl bg-[#10b981] text-black font-black text-xs sm:text-sm hover:bg-[#059669] transition shadow-md cursor-pointer whitespace-nowrap shrink-0"
           >
-            Start Free Trial
+            Start 7-Day Free Trial
           </button>
         </div>
       </div>
@@ -1059,23 +1060,77 @@ export function App() {
                 Unlock SketchUp Master Library
               </h3>
               <p className="text-[11px] sm:text-xs text-slate-500 leading-tight">
-                7 days free, then $20/month. Instant unrestricted access to all .SKP scenes & 8K textures. Cancel anytime in 1 click.
+                {billingCycle === "yearly"
+                  ? "7 days free, then $180/year (25% OFF • $15/mo). Unrestricted access to all models & 8K textures. Cancel anytime."
+                  : "7 days free, then $20/month. Unrestricted access to all models & 8K textures. Cancel anytime in 1 click."}
               </p>
+            </div>
+
+            {/* ══ 2-OPTION PLAN SELECTION (MONTHLY $20 vs YEARLY $180) ══ */}
+            <div className="grid grid-cols-2 gap-2 p-1 bg-slate-100 rounded-2xl border border-slate-200 text-left">
+              {/* Monthly Option */}
+              <button
+                type="button"
+                onClick={() => setBillingCycle("monthly")}
+                className={`p-2.5 rounded-xl transition-all cursor-pointer flex flex-col justify-between ${
+                  billingCycle === "monthly"
+                    ? "bg-white text-slate-900 shadow-sm border-2 border-emerald-500"
+                    : "text-slate-600 hover:text-slate-900 border-2 border-transparent"
+                }`}
+              >
+                <div className="flex items-center justify-between w-full">
+                  <span className="text-xs font-black text-slate-900">Monthly</span>
+                  <span className="text-[11px] font-mono font-bold text-slate-700">$20/mo</span>
+                </div>
+                <div className="text-[10px] text-slate-500 font-medium mt-0.5">
+                  7 Days Free • Then $20/mo
+                </div>
+              </button>
+
+              {/* Yearly Option */}
+              <button
+                type="button"
+                onClick={() => setBillingCycle("yearly")}
+                className={`relative p-2.5 rounded-xl transition-all cursor-pointer flex flex-col justify-between ${
+                  billingCycle === "yearly"
+                    ? "bg-white text-slate-900 shadow-sm border-2 border-emerald-500"
+                    : "text-slate-600 hover:text-slate-900 border-2 border-transparent"
+                }`}
+              >
+                <span className="absolute -top-2 right-2 bg-[#10b981] text-black text-[9px] font-black px-1.5 py-0.2 rounded-full uppercase tracking-wider shadow-2xs">
+                  25% OFF
+                </span>
+                <div className="flex items-center justify-between w-full">
+                  <span className="text-xs font-black text-slate-900">Yearly</span>
+                  <div className="flex items-center gap-1">
+                    <span className="text-[10px] text-slate-400 line-through font-mono">$240</span>
+                    <span className="text-[11px] font-mono font-bold text-emerald-700">$180/yr</span>
+                  </div>
+                </div>
+                <div className="text-[10px] text-emerald-700 font-bold mt-0.5">
+                  $15/mo • Save $60/yr
+                </div>
+              </button>
             </div>
 
             {/* Embedded Compact Payment Form */}
             <CardPaymentForm
-              sourceLocation="checkout_popup_modal"
+              sourceLocation={billingCycle === "yearly" ? "checkout_popup_modal_yearly" : "checkout_popup_modal_monthly"}
               buttonText="Start 7-Day Free Trial"
+              planCycle={billingCycle}
               allowSavedCard={false}
               amountInCents={0}
               isTrial={true}
               hideOrderDetails={true}
-              itemTotal="$20.00"
+              itemTotal={billingCycle === "yearly" ? "$180.00" : "$20.00"}
               deliveryFee="$0.00"
-              discountAmount="-$20.00"
+              discountAmount={billingCycle === "yearly" ? "-$180.00" : "-$20.00"}
               totalPrice="$0.00"
-              deliveryAddressLine1="7-Day VIP Access: All SketchUp (.SKP) Scene Models ($20/mo after)"
+              deliveryAddressLine1={
+                billingCycle === "yearly"
+                  ? "7-Day VIP Access: All SketchUp (.SKP) Scene Models ($180/yr after • 25% OFF)"
+                  : "7-Day VIP Access: All SketchUp (.SKP) Scene Models ($20/mo after)"
+              }
               deliveryAddressLine2="+ Free SketchUp Course & 8K Textures Included"
               onSuccess={(savedData) => {
                 const userEmail = savedData?.email || "";

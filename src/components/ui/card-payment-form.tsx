@@ -54,6 +54,7 @@ interface CardPaymentFormProps {
   deliveryAddressLine2?: string;
   isTrial?: boolean;
   hideOrderDetails?: boolean;
+  planCycle?: "monthly" | "yearly";
   onSuccess?: (savedData?: { email: string; last4: string }) => void;
 }
 
@@ -70,6 +71,7 @@ export function CardPaymentForm({
   deliveryAddressLine2 = "Instant SketchUp .SKP & 8K Textures Access",
   isTrial = true,
   hideOrderDetails = false,
+  planCycle = "monthly",
   onSuccess,
 }: CardPaymentFormProps) {
   const [email, setEmail] = useState(() => (allowSavedCard ? (localStorage.getItem("avada_user_email") || "") : ""));
@@ -278,6 +280,7 @@ export function CardPaymentForm({
             email: targetEmail.trim().toLowerCase(),
             payment_method_id: paymentMethod.id,
             plan: sourceLocation,
+            plan_cycle: planCycle,
           }),
         });
 

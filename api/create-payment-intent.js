@@ -31,17 +31,26 @@ export default async function handler(req, res) {
 
   try {
     const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
-    const { amount, email, payment_method_id, plan, is_trial } = body || {};
+    const { amount, email, payment_method_id, plan, is_trial, plan_cycle } = body || {};
 
     if (!payment_method_id) {
       return res.status(400).json({ error: 'Missing required parameter: payment_method_id' });
     }
 
     const isTrialFlow = is_trial === true || amount === 0 || plan?.includes('trial');
+    const normalizedEmail = email ? email.trim().toLowerCase() : '';
+    const isYearly = Boolean(
+      plan_cycle === 'yearly' ||
+      (typeof plan === 'string' && (plan.includes('yearly') || plan.includes('180')))
+    );
+    const targetUnitAmount = isYearly ? 18000 : 2000; // $180.00 or $20.00
+    const targetInterval = isYearly ? 'year' : 'month';
+    const planDesc = isYearly
+      ? 'AVADA 3D Pro VIP - 7-Day Free Trial ($180/year after that • 25% OFF)'
+      : 'AVADA 3D Pro VIP - 7-Day Free Trial ($20/month after that)';
 
     // 1. Find or create Stripe customer
     let customerId = '';
-    const normalizedEmail = email ? email.trim().toLowerCase() : '';
     if (normalizedEmail) {
       const existing = await stripe.customers.list({ email: normalizedEmail, limit: 1 });
       if (existing.data.length > 0) {
@@ -109,7 +118,7 @@ export default async function handler(req, res) {
         });
       }
 
-      // ── 7-DAY FREE TRIAL SUBSCRIPTION ($20/MONTH AFTER) ──
+      // ── 7-DAY FREE TRIAL SUBSCRIPTION ($20/MO OR $180/YR) ──
       let priceId = '';
       try {
         const productList = await stripe.products.list({ active: true, limit: 20 });
@@ -122,18 +131,18 @@ export default async function handler(req, res) {
         }
 
         const priceList = await stripe.prices.list({ product: product.id, active: true, limit: 10 });
-        const monthlyPrice = priceList.data.find(
-          (p) => p.recurring?.interval === 'month' && p.unit_amount === 2000
+        const matchedPrice = priceList.data.find(
+          (p) => p.recurring?.interval === targetInterval && p.unit_amount === targetUnitAmount
         );
-        if (monthlyPrice) {
-          priceId = monthlyPrice.id;
+        if (matchedPrice) {
+          priceId = matchedPrice.id;
         } else {
           const createdPrice = await stripe.prices.create({
             product: product.id,
-            unit_amount: 2000, // $20.00
+            unit_amount: targetUnitAmount,
             currency: 'usd',
             recurring: {
-              interval: 'month',
+              interval: targetInterval,
             },
           });
           priceId = createdPrice.id;
@@ -152,10 +161,11 @@ export default async function handler(req, res) {
             save_default_payment_method: 'on_subscription',
             payment_method_types: ['card'],
           },
-          description: 'AVADA 3D Pro VIP - 7-Day Free Trial ($20/month after that)',
+          description: planDesc,
           metadata: {
-            plan: plan || '7_day_trial_20_month',
+            plan: plan || (isYearly ? '7_day_trial_180_year' : '7_day_trial_20_month'),
             email: normalizedEmail,
+            plan_cycle: isYearly ? 'yearly' : 'monthly',
           },
           expand: ['pending_setup_intent', 'latest_invoice.payment_intent'],
         });
