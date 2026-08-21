@@ -1,15 +1,14 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { PlusIcon, Sparkles, Timer, Check } from 'lucide-react';
+import { PlusIcon, Sparkles, Timer, Check, Zap, ShieldCheck } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Badge } from './badge';
 import { BorderTrail } from './border-trail';
 import publicModels from '@/data/publicModelsImages.json';
-import { CardPaymentForm } from './card-payment-form';
 
 export interface PricingProps {
-  onSuccess?: () => void;
   onSelectPlan?: (plan?: string) => void;
+  onSuccess?: () => void;
   onSkip?: () => void;
   isProcessing?: boolean;
 }
@@ -58,11 +57,11 @@ export function useEvergreenTimer() {
   return formattedTime;
 }
 
-export function Pricing({ onSuccess }: PricingProps) {
+export function Pricing({ onSelectPlan }: PricingProps) {
   const countdown = useEvergreenTimer();
 
   return (
-    <section id="pricing" className="relative overflow-hidden py-16 sm:py-24 text-slate-900 border-t border-slate-200">
+    <section id="pricing" className="relative overflow-hidden py-12 sm:py-20 text-slate-900 border-t border-slate-200">
       <div className="mx-auto w-full max-w-5xl space-y-6 px-4">
         {/* Header Title */}
         <motion.div
@@ -176,23 +175,20 @@ export function Pricing({ onSuccess }: PricingProps) {
                 ))}
               </div>
 
-              {/* DIRECT EMBEDDED COMPACT CARD PAYMENT FORM */}
-              <div className="pt-1">
-                <CardPaymentForm
-                  sourceLocation="pricing_section_trial_0"
-                  buttonText="Start 7-Day Free Trial ($0 Due Today)"
-                  allowSavedCard={false}
-                  amountInCents={0}
-                  isTrial={true}
-                  hideOrderDetails={true}
-                  itemTotal="$29.00"
-                  deliveryFee="$0.00"
-                  discountAmount="-$29.00"
-                  totalPrice="$0.00"
-                  deliveryAddressLine1="7-Day VIP Access: All 3,000+ SketchUp (.SKP) Models"
-                  deliveryAddressLine2="+ Free SketchUp Course & 8K Textures Included"
-                  onSuccess={onSuccess}
-                />
+              {/* CTA Action Button */}
+              <div className="pt-2 space-y-2 text-center">
+                <button
+                  type="button"
+                  onClick={() => onSelectPlan?.('trial')}
+                  className="w-full py-3.5 sm:py-4 px-6 rounded-2xl bg-[#10b981] hover:bg-[#059669] text-black font-black text-sm sm:text-base shadow-lg hover:shadow-emerald-500/25 transition-all active:scale-[0.98] flex items-center justify-center gap-2 cursor-pointer border-2 border-emerald-400"
+                >
+                  <Zap className="size-4 fill-current" />
+                  <span>Start 7-Day Free Trial ($0 Due Today)</span>
+                </button>
+                <div className="flex items-center justify-center gap-2 text-[10px] sm:text-[11px] text-slate-500 font-medium">
+                  <ShieldCheck className="size-3.5 text-emerald-600" />
+                  <span>Instant Access • 100% Risk Free • Cancel Anytime</span>
+                </div>
               </div>
             </div>
           </motion.div>

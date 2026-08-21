@@ -2,6 +2,7 @@ import { useState, useMemo, useEffect } from "react";
 import { Pricing, useEvergreenTimer } from "@/components/ui/single-pricing-card-1";
 import { SketchUpShowcaseVideo } from "@/components/ui/sketchup-showcase-video";
 import { CategoryPostersSlider } from "@/components/ui/category-posters-slider";
+import { CardPaymentForm } from "@/components/ui/card-payment-form";
 import { StartPage } from "@/pages/StartPage";
 import { UpsellPage } from "@/pages/UpsellPage";
 import { SuccessPage } from "@/pages/SuccessPage";
@@ -21,6 +22,7 @@ import {
   Utensils,
   Droplets,
   Box,
+  Sparkles,
   X,
   Zap,
   Timer,
@@ -203,6 +205,7 @@ export function App() {
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [selectedSubCategory, setSelectedSubCategory] = useState<string>("all-furniture");
   const [activeModel, setActiveModel] = useState<ModelItem | null>(null);
+  const [showCheckoutModal, setShowCheckoutModal] = useState(false);
   const [searchTermIdx, setSearchTermIdx] = useState(0);
   const [mobileBlinkIndex, setMobileBlinkIndex] = useState(0);
 
@@ -436,10 +439,7 @@ export function App() {
               {/* Attached CTA Action + Compact Pill */}
               <div className="flex flex-col items-center sm:items-start gap-2 pt-2 w-full max-w-md">
                 <button
-                  onClick={() => {
-                    const el = document.getElementById("pricing");
-                    if (el) el.scrollIntoView({ behavior: "smooth" });
-                  }}
+                  onClick={() => setShowCheckoutModal(true)}
                   className="w-full px-6 py-3.5 rounded-full bg-[#10b981] hover:bg-[#059669] text-black font-black text-xs sm:text-sm shadow-lg hover:shadow-emerald-500/25 transition-all flex items-center justify-center gap-2 active:scale-95 cursor-pointer"
                 >
                   <Zap className="size-4 fill-current" />
@@ -858,8 +858,8 @@ export function App() {
         </div>
       </section>
 
-      {/* SINGLE PRICING CARD COMPONENT (DIRECTLY EMBEDDED ON PAGE) */}
-      <Pricing onSuccess={() => setCurrentRoute("vault")} />
+      {/* SINGLE PRICING CARD COMPONENT */}
+      <Pricing onSelectPlan={() => setShowCheckoutModal(true)} />
 
       {/* FOOTER */}
       <footer className="bg-slate-50 text-slate-600 border-t border-slate-200 py-10 px-4 sm:px-6 lg:px-8 text-xs text-center">
@@ -895,7 +895,7 @@ export function App() {
                 <button
                   onClick={() => {
                     setActiveModel(null);
-                    scrollToPricing();
+                    setShowCheckoutModal(true);
                   }}
                   className="px-5 py-2.5 rounded-full bg-[#10b981] text-black text-xs font-black hover:bg-[#059669] cursor-pointer shadow-sm"
                 >
@@ -936,16 +936,62 @@ export function App() {
             </span>
           </div>
           <button 
-            onClick={() => {
-              const el = document.getElementById("pricing");
-              if (el) el.scrollIntoView({ behavior: "smooth" });
-            }}
+            onClick={() => setShowCheckoutModal(true)}
             className="px-6 py-3 rounded-xl bg-[#10b981] text-black font-black text-sm hover:bg-[#059669] transition shadow-md cursor-pointer"
           >
             Claim $0 Trial
           </button>
         </div>
       </div>
+
+      {/* ══════ CHECKOUT POPUP MODAL (OPTIMIZED FOR PHONE SCREENS) ══════ */}
+      {showCheckoutModal && (
+        <div className="fixed inset-0 z-[300] bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+          <div className="relative bg-white rounded-2xl sm:rounded-3xl max-w-md w-full p-4 sm:p-6 border-2 border-emerald-500 shadow-2xl space-y-3 my-auto max-h-[94vh] overflow-y-auto text-slate-900 animate-in fade-in zoom-in-95">
+            {/* Close Button */}
+            <button
+              type="button"
+              onClick={() => setShowCheckoutModal(false)}
+              className="absolute top-3.5 right-3.5 p-1.5 rounded-full bg-slate-100 text-slate-500 hover:text-slate-900 hover:bg-slate-200 transition cursor-pointer"
+            >
+              <X className="size-4" />
+            </button>
+
+            {/* Modal Header */}
+            <div className="text-center space-y-1 pr-6 sm:pr-0">
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 text-[10px] sm:text-xs font-bold">
+                <Sparkles className="size-3 text-emerald-600" /> 7-Day Free Trial • $0.00 Due Today
+              </div>
+              <h3 className="text-base sm:text-lg font-black text-slate-900 tracking-tight">
+                Unlock 3,000+ SketchUp Models
+              </h3>
+              <p className="text-[11px] sm:text-xs text-slate-500 leading-tight">
+                Instant unrestricted access to all .SKP scenes & 8K textures. Cancel anytime in 1 click.
+              </p>
+            </div>
+
+            {/* Embedded Compact Payment Form */}
+            <CardPaymentForm
+              sourceLocation="checkout_popup_modal"
+              buttonText="Start 7-Day Free Trial ($0.00 Due Today)"
+              allowSavedCard={false}
+              amountInCents={0}
+              isTrial={true}
+              hideOrderDetails={true}
+              itemTotal="$29.00"
+              deliveryFee="$0.00"
+              discountAmount="-$29.00"
+              totalPrice="$0.00"
+              deliveryAddressLine1="7-Day VIP Access: All 3,000+ SketchUp (.SKP) Models"
+              deliveryAddressLine2="+ Free SketchUp Course & 8K Textures Included"
+              onSuccess={() => {
+                setShowCheckoutModal(false);
+                setCurrentRoute("vault");
+              }}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

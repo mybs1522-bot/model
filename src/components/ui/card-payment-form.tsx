@@ -384,7 +384,7 @@ export function CardPaymentForm({
                     setEmail(e.target.value);
                     setErrorMessage(null);
                   }}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:border-emerald-500 transition shadow-2xs"
+                  className="w-full px-3 py-2 sm:py-2.5 rounded-xl border border-slate-300 bg-white text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:border-emerald-500 transition shadow-2xs"
                 />
               </div>
 
@@ -392,23 +392,23 @@ export function CardPaymentForm({
               <div className="relative">
                 <div
                   ref={cardNumberRef}
-                  className="w-full pl-9 pr-3.5 py-2.5 rounded-xl border border-slate-300 bg-white text-xs sm:text-sm text-slate-900 transition shadow-2xs focus-within:ring-2 focus-within:ring-emerald-500 focus-within:border-emerald-500 min-h-[40px]"
+                  className="w-full pl-8 pr-3 py-2 sm:py-2.5 rounded-xl border border-slate-300 bg-white text-xs sm:text-sm text-slate-900 transition shadow-2xs focus-within:ring-2 focus-within:ring-emerald-500 focus-within:border-emerald-500 min-h-[38px]"
                 />
-                <CreditCard className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-slate-400 pointer-events-none" />
+                <CreditCard className="absolute left-2.5 top-1/2 -translate-y-1/2 size-3.5 text-slate-400 pointer-events-none" />
               </div>
 
               {/* Expiry & CVC Stripe Elements */}
               <div className="grid grid-cols-2 gap-2">
                 <div
                   ref={cardExpiryRef}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white text-xs sm:text-sm text-slate-900 transition shadow-2xs focus-within:ring-2 focus-within:ring-emerald-500 focus-within:border-emerald-500 min-h-[40px]"
+                  className="w-full px-3 py-2 sm:py-2.5 rounded-xl border border-slate-300 bg-white text-xs sm:text-sm text-slate-900 transition shadow-2xs focus-within:ring-2 focus-within:ring-emerald-500 focus-within:border-emerald-500 min-h-[38px]"
                 />
                 <div className="relative">
                   <div
                     ref={cardCvcRef}
-                    className="w-full pl-3.5 pr-8 py-2.5 rounded-xl border border-slate-300 bg-white text-xs sm:text-sm text-slate-900 transition shadow-2xs focus-within:ring-2 focus-within:ring-emerald-500 focus-within:border-emerald-500 min-h-[40px]"
+                    className="w-full pl-3 pr-7 py-2 sm:py-2.5 rounded-xl border border-slate-300 bg-white text-xs sm:text-sm text-slate-900 transition shadow-2xs focus-within:ring-2 focus-within:ring-emerald-500 focus-within:border-emerald-500 min-h-[38px]"
                   />
-                  <Lock className="absolute right-3 top-1/2 -translate-y-1/2 size-3.5 text-slate-400 pointer-events-none" />
+                  <Lock className="absolute right-2.5 top-1/2 -translate-y-1/2 size-3 text-slate-400 pointer-events-none" />
                 </div>
               </div>
             </div>
@@ -416,10 +416,10 @@ export function CardPaymentForm({
         </div>
 
         {/* Compact Total & Card Fund Verification Disclaimer */}
-        <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs space-y-1">
+        <div className="p-2 sm:p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-[11px] sm:text-xs space-y-1">
           <div className="flex items-center justify-between font-bold">
             <span className="text-slate-700">Total Due Today:</span>
-            <span className="text-emerald-700 font-mono text-sm">{totalPrice} <span className="text-[10px] text-slate-500 font-normal">($0 for 7 days)</span></span>
+            <span className="text-emerald-700 font-mono text-xs sm:text-sm">{totalPrice} <span className="text-[10px] text-slate-500 font-normal">($0 for 7 days)</span></span>
           </div>
           {isTrial && (
             <p className="text-[10px] text-slate-500 leading-tight pt-0.5">
@@ -430,8 +430,8 @@ export function CardPaymentForm({
 
         {/* Error Message Box */}
         {errorMessage && (
-          <div className="p-2.5 rounded-xl bg-red-50 border border-red-200 text-xs text-red-700 flex items-start gap-2 animate-in fade-in">
-            <AlertCircle className="size-4 text-red-600 shrink-0 mt-0.5" />
+          <div className="p-2 rounded-xl bg-red-50 border border-red-200 text-[11px] sm:text-xs text-red-700 flex items-start gap-2 animate-in fade-in">
+            <AlertCircle className="size-3.5 text-red-600 shrink-0 mt-0.5" />
             <span>{errorMessage}</span>
           </div>
         )}
@@ -440,16 +440,16 @@ export function CardPaymentForm({
         <button
           type="submit"
           disabled={isProcessing}
-          className="w-full py-3.5 sm:py-4 px-6 rounded-2xl bg-[#10b981] hover:bg-[#059669] text-black font-black text-sm sm:text-base shadow-lg hover:shadow-emerald-500/25 transition-all active:scale-[0.98] disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer border-2 border-emerald-400"
+          className="w-full py-3 sm:py-3.5 px-5 rounded-xl sm:rounded-2xl bg-[#10b981] hover:bg-[#059669] text-black font-black text-xs sm:text-sm shadow-lg hover:shadow-emerald-500/25 transition-all active:scale-[0.98] disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer border-2 border-emerald-400"
         >
           {isProcessing ? (
             <span className="flex items-center gap-2">
-              <span className="size-4 border-2 border-black border-t-transparent rounded-full animate-spin" />
+              <span className="size-3.5 border-2 border-black border-t-transparent rounded-full animate-spin" />
               Verifying Card...
             </span>
           ) : (
             <>
-              <Lock className="size-4" />
+              <Lock className="size-3.5" />
               <span>{buttonText}</span>
             </>
           )}
