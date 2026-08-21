@@ -476,8 +476,8 @@ export function App() {
                   className="w-full px-6 py-3.5 rounded-full bg-[#10b981] hover:bg-[#059669] text-black font-black text-xs sm:text-sm shadow-lg hover:shadow-emerald-500/25 transition-all flex items-center justify-center gap-2 active:scale-95 cursor-pointer"
                 >
                   <Zap className="size-4 fill-current" />
-                  <span>Start 7-Day Free Trial ($0 Due Today)</span>
-                  <span className="text-[10px] bg-black/15 text-black px-2 py-0.5 rounded-full font-mono line-through opacity-75">$29</span>
+                  <span>Start 7-Day Free Trial</span>
+                  <span className="text-[10px] bg-black/15 text-black px-2 py-0.5 rounded-full font-mono opacity-75">$20/mo after</span>
                 </button>
 
                 {/* Shorter Attached Pill */}
@@ -839,7 +839,7 @@ export function App() {
               className="px-8 py-3.5 rounded-full bg-[#10b981] hover:bg-[#059669] text-black font-black text-xs sm:text-sm shadow-md hover:shadow-emerald-500/20 transition-all inline-flex items-center gap-2 cursor-pointer active:scale-95"
             >
               <Zap className="size-4 fill-current" />
-              <span>Get The Entire All-In-One Bundle for $29</span>
+              <span>Get The Entire All-In-One Bundle for $20</span>
             </button>
           </div>
         </div>
@@ -1002,7 +1002,7 @@ export function App() {
       >
         <div className="bg-slate-900 rounded-2xl p-3 shadow-2xl flex items-center justify-between gap-4 w-full max-w-md border border-slate-700 pointer-events-auto">
           <div className="flex flex-col text-left pl-2">
-            <span className="text-white font-bold text-sm">7-Day Free Trial ($0 Today)</span>
+            <span className="text-white font-bold text-sm">7-Day Free Trial ($20/mo after)</span>
             <span className="text-emerald-400 font-mono text-xs font-bold flex items-center gap-1">
               <Timer className="size-3" /> Offer Ends in {timerString}
             </span>
@@ -1011,7 +1011,7 @@ export function App() {
             onClick={() => setShowCheckoutModal(true)}
             className="px-6 py-3 rounded-xl bg-[#10b981] text-black font-black text-sm hover:bg-[#059669] transition shadow-md cursor-pointer"
           >
-            Claim $0 Trial
+            Start Free Trial
           </button>
         </div>
       </div>
@@ -1057,7 +1057,7 @@ export function App() {
                 Unlock SketchUp Master Library
               </h3>
               <p className="text-[11px] sm:text-xs text-slate-500 leading-tight">
-                Instant unrestricted access to all .SKP scenes & 8K textures. Cancel anytime in 1 click.
+                7 days free, then $20/month. Instant unrestricted access to all .SKP scenes & 8K textures. Cancel anytime in 1 click.
               </p>
             </div>
 
@@ -1069,11 +1069,11 @@ export function App() {
               amountInCents={0}
               isTrial={true}
               hideOrderDetails={true}
-              itemTotal="$29.00"
+              itemTotal="$20.00"
               deliveryFee="$0.00"
-              discountAmount="-$29.00"
+              discountAmount="-$20.00"
               totalPrice="$0.00"
-              deliveryAddressLine1="7-Day VIP Access: All SketchUp (.SKP) Scene Models"
+              deliveryAddressLine1="7-Day VIP Access: All SketchUp (.SKP) Scene Models ($20/mo after)"
               deliveryAddressLine2="+ Free SketchUp Course & 8K Textures Included"
               onSuccess={(savedData) => {
                 const userEmail = savedData?.email || "";

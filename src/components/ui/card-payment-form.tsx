@@ -58,15 +58,15 @@ interface CardPaymentFormProps {
 }
 
 export function CardPaymentForm({
-  buttonText = "Start 7-Day Free Trial ($0.00)",
+  buttonText = "Start 7-Day Free Trial",
   sourceLocation,
   allowSavedCard = false,
-  itemTotal = "$29.00",
+  itemTotal = "$20.00",
   deliveryFee = "FREE",
-  discountAmount = "-$29.00",
+  discountAmount = "-$20.00",
   totalPrice = "$0.00",
   amountInCents = 0,
-  deliveryAddressLine1 = "7-Day Free Trial — All 3,000+ Models",
+  deliveryAddressLine1 = "7-Day Free Trial — All SketchUp (.SKP) Models ($20/mo after)",
   deliveryAddressLine2 = "Instant SketchUp .SKP & 8K Textures Access",
   isTrial = true,
   hideOrderDetails = false,

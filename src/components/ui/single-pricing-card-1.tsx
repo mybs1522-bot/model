@@ -73,7 +73,7 @@ export function Pricing({ onSelectPlan }: PricingProps) {
         >
           <div className="flex justify-center">
             <div className="inline-flex items-center gap-2 rounded-full border border-emerald-300 bg-emerald-50 px-4 py-1.5 font-mono text-xs font-bold text-emerald-700 shadow-xs">
-              <Sparkles className="size-3.5 text-emerald-600" /> $0.00 Due Today • 7-Day All Access Trial
+              <Sparkles className="size-3.5 text-emerald-600" /> 7-Day Free Trial • Then $20/month
             </div>
           </div>
           <h2 className="text-2xl font-black tracking-tight sm:text-4xl text-slate-900">
@@ -145,17 +145,17 @@ export function Pricing({ onSelectPlan }: PricingProps) {
                     7-Day VIP All-Access Trial
                   </h3>
                   <div className="flex items-center gap-2">
-                    <span className="text-slate-400 text-sm font-bold line-through">$29</span>
-                    <Badge className="bg-[#10b981] text-black font-extrabold text-[10px] sm:text-xs">100% FREE TODAY</Badge>
+                    <span className="text-slate-400 text-sm font-bold line-through">$20</span>
+                    <Badge className="bg-[#10b981] text-black font-extrabold text-[10px] sm:text-xs">7 DAYS FREE</Badge>
                   </div>
                 </div>
 
                 <div className="flex items-baseline gap-1.5">
                   <span className="text-slate-500 text-xl font-bold">$</span>
                   <span className="text-4xl sm:text-5xl font-black text-slate-900 tracking-tight">0</span>
-                  <span className="text-emerald-700 text-xs font-mono font-bold">/ 7 days free ($29 after trial)</span>
+                  <span className="text-emerald-700 text-xs font-mono font-bold">/ 7 days free ($20/month after that)</span>
                 </div>
-                <p className="text-slate-600 text-xs font-medium">Download everything immediately. Cancel anytime with 1 click before day 7.</p>
+                <p className="text-slate-600 text-xs font-medium">Download everything immediately. $20/month after 7-day trial. Cancel anytime with 1 click before day 7.</p>
               </div>
 
               {/* Included Features List */}
@@ -183,7 +183,7 @@ export function Pricing({ onSelectPlan }: PricingProps) {
                   className="w-full py-3.5 sm:py-4 px-6 rounded-2xl bg-[#10b981] hover:bg-[#059669] text-black font-black text-sm sm:text-base shadow-lg hover:shadow-emerald-500/25 transition-all active:scale-[0.98] flex items-center justify-center gap-2 cursor-pointer border-2 border-emerald-400"
                 >
                   <Zap className="size-4 fill-current" />
-                  <span>Start 7-Day Free Trial ($0 Due Today)</span>
+                  <span>Start 7-Day Free Trial</span>
                 </button>
                 <div className="flex items-center justify-center gap-2 text-[10px] sm:text-[11px] text-slate-500 font-medium">
                   <ShieldCheck className="size-3.5 text-emerald-600" />
